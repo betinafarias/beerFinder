@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BeersFinder</string>
+	<string name="AppID">2xxvTWZfbXSlBQbHBV933vc4ZZQV37N27pLQb9ik</string>
+	<string name="ClientID">ZEbD91Imn496EJDFdC7tCJUvA6Y8OjMNCcQUKIPy</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">899794110082929</string>
+    <string name="title_activity_second">secondActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_splash">Splash</string>
+</resources>
