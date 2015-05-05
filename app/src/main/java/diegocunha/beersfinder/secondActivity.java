@@ -29,11 +29,11 @@ import java.util.List;
 public class secondActivity extends ActionBarActivity {
 
     //Variáveis globais
-    ListView listView;
-    List<ParseObject> ob;
     ProgressDialog mProgressDialog;
     private TextView txt;
-    //private Spinner bares;
+    ListView listView;
+    List<ParseObject> ob;
+    ArrayAdapter<String> adapter;
     private String AppID, ClientID, Bar;
 
     @Override
@@ -41,8 +41,7 @@ public class secondActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-       // bares = (Spinner)findViewById(R.id.sBares);
-       // addItensonSpinner();
+        listView = (ListView)findViewById(R.id.listBares);
 
         //Função que permite ao usuário dar Like na página ofical
         LikeView likeView = (LikeView)findViewById(R.id.like_view);
@@ -55,6 +54,24 @@ public class secondActivity extends ActionBarActivity {
     }
 
 
+    protected void getValuesofPArse()
+    {
+       try
+       {
+           adapter = new ArrayAdapter<String>(secondActivity.this, R.layout.listview_item);
+           for(ParseObject bares : ob)
+           {
+               adapter.add((String) bares.get("NomeBAr"));
+
+           }
+           listView.setAdapter(adapter);
+
+       }
+       catch (Exception ex)
+       {
+           ex.printStackTrace();
+       }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

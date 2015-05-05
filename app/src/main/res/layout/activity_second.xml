@@ -28,7 +28,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/listBares"
         android:layout_below="@+id/like_view"
         android:layout_alignRight="@+id/like_view"
         android:layout_alignEnd="@+id/like_view" />
