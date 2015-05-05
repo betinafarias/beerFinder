@@ -26,12 +26,11 @@ import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import org.w3c.dom.Text;
-
 import java.security.MessageDigest;
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class firstActivity extends ActionBarActivity
     private LocationManager locationManager;
     private boolean conectado, load = false;
     private ConnectivityManager conectivtyManager;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -70,8 +70,9 @@ public class firstActivity extends ActionBarActivity
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
-		
-	}
+        ParseFacebookUtils.initialize(getApplicationContext());
+
+    }
 
 
     /*******************************************
@@ -165,8 +166,14 @@ public class firstActivity extends ActionBarActivity
      **********************************************/
     public void Login(View view)
     {
+        progressDialog = new ProgressDialog(firstActivity.this);
+        progressDialog.setTitle("Conectando");
+        progressDialog.setMessage("Loading. . . ");
+
         try
         {
+            progressDialog.show();
+
             if(verificaConexao())
             {
                 strLogin = login.getText().toString();
@@ -197,7 +204,11 @@ public class firstActivity extends ActionBarActivity
             ex.printStackTrace();
             Toast.makeText(getApplicationContext(), "Erro: " + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
+        finally {
+            progressDialog.dismiss();
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -221,5 +232,11 @@ public class firstActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 }
