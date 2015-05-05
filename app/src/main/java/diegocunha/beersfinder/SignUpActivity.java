@@ -1,5 +1,6 @@
 package diegocunha.beersfinder;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.support.v7.app.ActionBarActivity;
@@ -25,6 +26,7 @@ public class SignUpActivity extends ActionBarActivity {
     private EditText edLogin, edPass, edMail;
     private String login, pass, mail, AppID, ClientID, strPassMD5;
     private boolean conectado;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -110,8 +112,14 @@ public class SignUpActivity extends ActionBarActivity {
      **********************************************/
     public void sig(View view)
     {
+        progressDialog = new ProgressDialog(SignUpActivity.this);
+        progressDialog.setTitle("Conectando");
+        progressDialog.setMessage("Loading. . . ");
+
         try
         {
+            progressDialog.show();
+
             if(verificaConexao())
             {
                 login = edLogin.getText().toString();
@@ -158,6 +166,7 @@ public class SignUpActivity extends ActionBarActivity {
             edLogin.setText("");
             edPass.setText("");
             edMail.setText("");
+            progressDialog.dismiss();
         }
     }
 
