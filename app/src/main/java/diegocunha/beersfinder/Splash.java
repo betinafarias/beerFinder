@@ -1,5 +1,6 @@
 package diegocunha.beersfinder;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,7 +13,9 @@ import com.parse.ParseUser;
 
 public class Splash extends ActionBarActivity {
 
-    String AppID, ClientID;
+    //Variáveis Globais
+    private String AppID, ClientID;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +32,34 @@ public class Splash extends ActionBarActivity {
 
     protected void getUser()
     {
-        ParseUser currentUser = ParseUser.getCurrentUser();
+        try
+        {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.setTitle("Verificando");
+            progressDialog.setMessage("Carregando. . . ");
+            progressDialog.show();
 
-        if(currentUser != null)
-        {
-            Intent intent = new Intent(this, secondActivity.class);
-            startActivity(intent);
+            ParseUser currentUser = ParseUser.getCurrentUser();
+
+            if(currentUser != null)
+            {
+                progressDialog.dismiss();
+                Intent intent = new Intent(this, secondActivity.class);
+                startActivity(intent);
+            }
+            else
+            {
+                progressDialog.dismiss();
+                Intent intent = new Intent(this, firstActivity.class);
+                startActivity(intent);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Intent intent = new Intent(this, firstActivity.class);
-            startActivity(intent);
+            ex.printStackTrace();
+            progressDialog.dismiss();
         }
     }
 

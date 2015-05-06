@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,7 +40,9 @@ public class secondActivity extends ActionBarActivity {
     private String AppID, ClientID, Bar;
     private Integer count = 0;
     myLocation MeuLocal;
+    List<Double> lugares;
     double Lat, Lng, parseLat, parseLng, cResult;
+    Button btnTeste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,9 @@ public class secondActivity extends ActionBarActivity {
         //Função que permite ao usuário dar Like na página ofical
         LikeView likeView = (LikeView)findViewById(R.id.like_view);
         likeView.setObjectIdAndType("https://www.facebook.com/BeersFinder", LikeView.ObjectType.PAGE);
+
+        //Apenas para teste
+        btnTeste = (Button) findViewById(R.id.btTeste);
 
         //Parse Infos
         AppID = getString(R.string.AppID);
@@ -83,14 +89,57 @@ public class secondActivity extends ActionBarActivity {
     {
         try
         {
-            cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setTitle("Carregando");
+            mProgressDialog.setMessage("Loading. . . ");
+            mProgressDialog.show();
 
+            Lat = MeuLocal.getLatitude();
+            Lng = MeuLocal.getLongitude();
+
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("BaresLocal");
+            query.orderByAscending("NomeBar");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if (e == null)
+                    {
+                        if (list.size() > 0)
+                        {
+                            for (int i = 0; i < list.size(); i++)
+                            {
+                                ParseObject op = list.get(i);
+                                parseLat = op.getDouble("Latitude");
+                                parseLng = op.getDouble("Longitude");
+                                Bar = op.getString("NomeBar");
+
+                                cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+                                lugares.add(cResult);
+                            }
+
+                            mProgressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Foi", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Erro na lista", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
         catch (Exception ex)
         {
+            mProgressDialog.dismiss();
             ex.printStackTrace();
             Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
-            mProgressDialog.dismiss();
         }
     }
 

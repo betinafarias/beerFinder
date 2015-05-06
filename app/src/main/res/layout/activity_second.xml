@@ -23,4 +23,14 @@
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"></com.facebook.share.widget.LikeView>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Testa Lista"
+        android:id="@+id/btTeste"
+        android:layout_below="@+id/like_view"
+        android:layout_centerHorizontal="true"
+        android:onClick="BarProximo"
+        android:layout_marginTop="84dp" />
+
 </RelativeLayout>

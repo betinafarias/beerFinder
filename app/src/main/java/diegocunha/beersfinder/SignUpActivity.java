@@ -26,7 +26,7 @@ public class SignUpActivity extends ActionBarActivity {
     private EditText edLogin, edPass, edMail;
     private String login, pass, mail, AppID, ClientID, strPassMD5;
     private boolean conectado;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this);;
 
 
     @Override
@@ -113,12 +113,13 @@ public class SignUpActivity extends ActionBarActivity {
      **********************************************/
     public void sig(View view)
     {
-        progressDialog = new ProgressDialog(SignUpActivity.this);
-        progressDialog.setTitle("Conectando");
-        progressDialog.setMessage("Loading. . . ");
-
         try
         {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.setTitle("Conectando");
+            progressDialog.setMessage("Loading. . . ");
             progressDialog.show();
 
             if(verificaConexao())
@@ -133,9 +134,17 @@ public class SignUpActivity extends ActionBarActivity {
                 {
                     Toast.makeText(getApplicationContext(), "Username inválido", Toast.LENGTH_SHORT).show();
                 }
+                else if(login.length() < 6)
+                {
+                    Toast.makeText(getApplicationContext(), "Usuário deve possuír ao menos 6 caracteres", Toast.LENGTH_SHORT).show();
+                }
                 else if(pass == null || pass.equals(""))
                 {
                     Toast.makeText(getApplicationContext(), "Senha inválida", Toast.LENGTH_SHORT).show();
+                }
+                else if(pass.length() < 6 || pass.length() > 8)
+                {
+                    Toast.makeText(getApplicationContext(), "A senha deve ser maior do que 6 caracteres e menor do que 8", Toast.LENGTH_SHORT).show();
                 }
                 else if(mail == null || mail.equals(""))
                 {

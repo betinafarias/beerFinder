@@ -15,13 +15,13 @@ import android.widget.Toast;
 
 /*******************************************
  * Autores: Diego Cunha Gabriel Cataneo ****
- * Cria��o: 28/04/2015                  ****
+ * Criação: 28/04/2015                  ****
  * Classe: myLocation                   ****
- * Fun��o: Recebe informa��es do GPS    ****
-  ******************************************/
+ * Função: Recebe informações do GPS    ****
+ ******************************************/
 public class myLocation extends Service implements LocationListener
 {
-	//Variaveis Globais
+	//Variaáeis Globais
     private final Context mcontext;
 	boolean isGPS = false, isNet = false, haveLocation = false;
 	Location location;
@@ -36,14 +36,20 @@ public class myLocation extends Service implements LocationListener
 		getLocation();
 	}
 
-	//Verifica conexao com internet e GPS para prover sinal de posi��o.
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: Location getLocation            ****
+	 * Funcionalidade: Recebe infos GPS        ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	public Location getLocation()
 	{
 		try
 		{
 			locationManager = (LocationManager) mcontext.getSystemService(LOCATION_SERVICE);
 			
-			//Atribui os provedores de localiza��o
+			//Atribui os provedores de localização
 			isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 			isNet = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 			
@@ -67,7 +73,6 @@ public class myLocation extends Service implements LocationListener
 						{
 							latitude = location.getLatitude();
 							longitude = location.getLongitude();
-							toastHandlerREDE.sendEmptyMessage(0);
 						}
 					}
 				}
@@ -85,7 +90,6 @@ public class myLocation extends Service implements LocationListener
 							{
 								latitude = location.getLatitude();
 								longitude = location.getLongitude();
-								toastHandlerGPS.sendEmptyMessage(0);
 							}
 						}
 					}
@@ -106,6 +110,13 @@ public class myLocation extends Service implements LocationListener
 		return location;
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: void stopUsingGPS               ****
+	 * Funcionalidade: Encerra uso GPS         ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	public void stopUsingGPS()
 	{
 		if (locationManager != null)
@@ -114,6 +125,13 @@ public class myLocation extends Service implements LocationListener
 		}
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: double getLatitude              ****
+	 * Funcionalidade: Retorna valor latitude  ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	public double getLatitude()
 	{
 		if(location != null)
@@ -122,6 +140,14 @@ public class myLocation extends Service implements LocationListener
 		}
 		return latitude;
 	}
+
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: double getLongitude             ****
+	 * Funcionalidade: Retorna valor longitude ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	public double getLongitude()
 	{
 		if(location != null)
@@ -131,6 +157,13 @@ public class myLocation extends Service implements LocationListener
 		return longitude;
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 05/05/2015                     ****
+	 * Função: double calculaDistancia         ****
+	 * Funcionalidade: Realiza cálculo dist.   ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	public double calculaDistancia(double lat1, double lat2, double lng1, double lng2)
 	{
 		try
@@ -148,38 +181,69 @@ public class myLocation extends Service implements LocationListener
 			Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
 			dist = 0.00;
 		}
-
 		return dist;
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 05/05/2015                     ****
+	 * Função: double deg2rad                  ****
+	 * Funcionalidade: Realiza calculo dist.   ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	private double deg2rad(double deg)
 	{
 		return (deg * Math.PI / 180.0);
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 05/05/2015                     ****
+	 * Função: double rad2deg                  ****
+	 * Funcionalidade: Realiza calculo dist.   ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	private double rad2deg(double rad)
 	{
 		return (rad * 180.0 / Math.PI);
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: boolean canGetLocation          ****
+	 * Funcionalidade: Retorna se tem GPS      ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	public boolean canGetLocation()
 	{
 		return this.haveLocation;
 	}
 
-	//abrir tela ativa��o gps
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: void AbreConfigGPS              ****
+	 * Funcionalidade: Abre tela GPS           ****
+	 **********************************************/
 	public void AbreConfigGPS()
 	{
 		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		mcontext.startActivity(intent);
 	}
 
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
+	 * Função: void onLocationChanged          ****
+	 * Funcionalidade: Atualiza info GPS       ****
+	 * OBS: Não mexer					       ****
+	 **********************************************/
 	@Override
 	public void onLocationChanged(Location location)
 	{
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
-			toastHandlerGPS.sendEmptyMessage(0);
 	}
 
 	@Override
@@ -197,28 +261,12 @@ public class myLocation extends Service implements LocationListener
 		return null;
 	}
 
-	private final Handler toastHandlerREDE = new Handler()
-	{
-		@Override
-		public void handleMessage(Message msg)
-		{
-			Toast.makeText(mcontext, "REDE - Latitude: "+ latitude +" Longitude: "+ longitude, Toast.LENGTH_SHORT).show();
-		}
-	};
-	private final Handler toastHandlerGPS = new Handler()
-	{
-		@Override
-		public void handleMessage(Message msg)
-		{
-			Toast.makeText(mcontext, "GPS - Latitude: "+ latitude +" Longitude: "+ longitude, Toast.LENGTH_SHORT).show();
-		}
-	};
 	private final Handler toastHandlerGPSoff = new Handler()
 	{
 		@Override
 		public void handleMessage(Message msg)
 		{
-			Toast.makeText(mcontext, "Sem provedor de informa��es dispon�vel", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mcontext, "Sem provedor de informações disponível", Toast.LENGTH_SHORT).show();
 		}
 	};
 }

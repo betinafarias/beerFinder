@@ -67,6 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
+        android:layout_marginTop="10dp"
         android:id="@+id/btnLogin"
         android:onClick="Login"
         android:layout_centerVertical="true"
@@ -78,9 +79,8 @@
         android:text="Criar Conta"
         android:id="@+id/btnSignUP"
         android:onClick="Sigin"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true" />
-
 
 </RelativeLayout>
