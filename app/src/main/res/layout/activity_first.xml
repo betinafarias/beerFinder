@@ -79,11 +79,10 @@
         android:layout_height="wrap_content"
         android:text="Criar Conta"
         android:id="@+id/btnSignUP"
-        android:layout_marginTop="56dp"
         android:onClick="Sigin"
+        android:layout_marginTop="15dp"
         android:layout_below="@+id/btnLogin"
-        android:layout_alignLeft="@+id/edtSenha"
-        android:layout_alignStart="@+id/edtSenha" />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

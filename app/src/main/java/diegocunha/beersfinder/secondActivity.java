@@ -1,6 +1,7 @@
 package diegocunha.beersfinder;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +17,9 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.lang.annotation.Target;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +35,13 @@ public class secondActivity extends ActionBarActivity {
     //Variáveis globais
     ProgressDialog mProgressDialog;
     private TextView txt;
-    ListView listView;
-    List<ParseObject> ob;
-    ArrayAdapter<String> adapter;
     private String AppID, ClientID, Bar;
+    private Integer count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-
-        listView = (ListView)findViewById(R.id.listBares);
 
         //Função que permite ao usuário dar Like na página ofical
         LikeView likeView = (LikeView)findViewById(R.id.like_view);
@@ -51,27 +51,31 @@ public class secondActivity extends ActionBarActivity {
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
+
     }
 
-
-    protected void getValuesofPArse()
+    /*****************************************
+     Autores: Diego Cunha, Gabriel Cataneo  **
+     Função: getUser                        **
+     Funcionalidade: Verifica usuário       **
+     Data Criação: 05/05/2015               **
+     ******************************************/
+    protected void getUser()
     {
-       try
-       {
-           adapter = new ArrayAdapter<String>(secondActivity.this, R.layout.listview_item);
-           for(ParseObject bares : ob)
-           {
-               adapter.add((String) bares.get("NomeBAr"));
+        ParseUser currentUser = ParseUser.getCurrentUser();
 
-           }
-           listView.setAdapter(adapter);
-
-       }
-       catch (Exception ex)
-       {
-           ex.printStackTrace();
-       }
+        if(currentUser != null)
+        {
+            Intent intent = new Intent(this, secondActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            Intent intent = new Intent(this, firstActivity.class);
+            startActivity(intent);
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,5 +97,29 @@ public class secondActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*****************************************
+     Autores: Diego Cunha, Gabriel Cataneo  **
+     Função: getUser                        **
+     Funcionalidade: Efetua logou           **
+     Data Criação: 05/05/2015               **
+     ******************************************/
+    @Override
+    public void onBackPressed()
+    {
+        count++;
+
+        if(count < 2)
+        {
+            Toast.makeText(getApplication(), "Aperte novamente para sair", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            ParseUser.logOut();
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            Intent intent = new Intent(this, firstActivity.class);
+            startActivity(intent);
+        }
     }
 }
