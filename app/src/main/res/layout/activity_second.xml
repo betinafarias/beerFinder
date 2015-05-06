@@ -26,11 +26,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Testa Lista"
-        android:id="@+id/btTeste"
+        android:text="New Button"
+        android:id="@+id/button"
         android:layout_below="@+id/like_view"
         android:layout_centerHorizontal="true"
-        android:onClick="BarProximo"
-        android:layout_marginTop="84dp" />
+        android:layout_marginTop="62dp"
+        android:onClick="BarProximo"/>
 
 </RelativeLayout>

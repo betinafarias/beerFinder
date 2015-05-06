@@ -1,7 +1,9 @@
 package diegocunha.beersfinder;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -37,12 +39,15 @@ public class secondActivity extends ActionBarActivity {
     //Variáveis globais
     ProgressDialog mProgressDialog;
     private TextView txt;
-    private String AppID, ClientID, Bar;
+    private String AppID, ClientID;
+    String Bar;
     private Integer count = 0;
     myLocation MeuLocal;
     List<Double> lugares;
     double Lat, Lng, parseLat, parseLng, cResult;
     Button btnTeste;
+    boolean isOn, isNet;
+    ConnectivityManager conectivtyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +57,6 @@ public class secondActivity extends ActionBarActivity {
         //Função que permite ao usuário dar Like na página ofical
         LikeView likeView = (LikeView)findViewById(R.id.like_view);
         likeView.setObjectIdAndType("https://www.facebook.com/BeersFinder", LikeView.ObjectType.PAGE);
-
-        //Apenas para teste
-        btnTeste = (Button) findViewById(R.id.btTeste);
 
         //Parse Infos
         AppID = getString(R.string.AppID);
@@ -85,6 +87,24 @@ public class secondActivity extends ActionBarActivity {
         }
     }
 
+    public  boolean verificaConexao()
+    {
+        conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected())
+        {
+            isOn = true;
+        }
+        else
+        {
+            isOn = false;
+        }
+
+        return isOn;
+    }
+
     public void BarProximo(View view)
     {
         try
@@ -95,45 +115,52 @@ public class secondActivity extends ActionBarActivity {
             mProgressDialog.setMessage("Loading. . . ");
             mProgressDialog.show();
 
-            Lat = MeuLocal.getLatitude();
-            Lng = MeuLocal.getLongitude();
+            if(verificaConexao() && MeuLocal.canGetLocation())
+            {
+                Lat = MeuLocal.getLatitude();
+                Lng = MeuLocal.getLongitude();
 
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("BaresLocal");
-            query.orderByAscending("NomeBar");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if (e == null)
-                    {
-                        if (list.size() > 0)
+                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("BaresLocal");
+                query.orderByAscending("NomeBar");
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e) {
+                        if (e == null)
                         {
-                            for (int i = 0; i < list.size(); i++)
+                            if (list.size() > 0)
                             {
-                                ParseObject op = list.get(i);
-                                parseLat = op.getDouble("Latitude");
-                                parseLng = op.getDouble("Longitude");
-                                Bar = op.getString("NomeBar");
+                                for (int i = 0; i < list.size(); i++)
+                                {
+                                    ParseObject op = list.get(i);
+                                    parseLat = op.getDouble("Latitude");
+                                    parseLng = op.getDouble("Longitude");
+                                    Bar = op.getString("NomeBar");
 
-                                cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
-                                lugares.add(cResult);
+                                    cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+                                    lugares.add(cResult);
+                                }
+
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Foi", Toast.LENGTH_SHORT).show();
                             }
-
-                            mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Foi", Toast.LENGTH_SHORT).show();
+                            else
+                            {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Erro na lista", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         else
                         {
                             mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Erro na lista", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                    else
-                    {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+                });
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Sem Internet", Toast.LENGTH_SHORT).show();
+            }
         }
         catch (Exception ex)
         {
@@ -141,6 +168,7 @@ public class secondActivity extends ActionBarActivity {
             ex.printStackTrace();
             Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
         }
+
     }
 
 
