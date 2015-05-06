@@ -49,7 +49,7 @@ public class firstActivity extends ActionBarActivity
     private LocationManager locationManager;
     private boolean conectado, load = false;
     private ConnectivityManager conectivtyManager;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -166,12 +166,14 @@ public class firstActivity extends ActionBarActivity
      **********************************************/
     public void Login(View view)
     {
-        progressDialog = new ProgressDialog(firstActivity.this);
-        progressDialog.setTitle("Conectando");
-        progressDialog.setMessage("Loading. . . ");
 
         try
         {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.setTitle("Verificando");
+            progressDialog.setMessage("Carregando. . . ");
             progressDialog.show();
 
             if(verificaConexao())
@@ -185,10 +187,12 @@ public class firstActivity extends ActionBarActivity
                     public void done(ParseUser parseUser, ParseException e) {
                         if(parseUser != null)
                         {
+                            progressDialog.dismiss();
                             second();
                         }
                         else
                         {
+                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), "Erro: " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -196,16 +200,15 @@ public class firstActivity extends ActionBarActivity
             }
             else
             {
+                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Sem internet", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception ex)
         {
+            progressDialog.dismiss();
             ex.printStackTrace();
             Toast.makeText(getApplicationContext(), "Erro: " + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
-        }
-        finally {
-            progressDialog.dismiss();
         }
     }
 

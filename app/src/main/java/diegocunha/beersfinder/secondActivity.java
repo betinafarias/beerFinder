@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -37,6 +38,8 @@ public class secondActivity extends ActionBarActivity {
     private TextView txt;
     private String AppID, ClientID, Bar;
     private Integer count = 0;
+    myLocation MeuLocal;
+    double Lat, Lng, parseLat, parseLng, cResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,21 @@ public class secondActivity extends ActionBarActivity {
         {
             Intent intent = new Intent(this, firstActivity.class);
             startActivity(intent);
+        }
+    }
+
+    public void BarProximo(View view)
+    {
+        try
+        {
+            cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
+            mProgressDialog.dismiss();
         }
     }
 

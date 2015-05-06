@@ -15,17 +15,17 @@ import android.widget.Toast;
 
 /*******************************************
  * Autores: Diego Cunha Gabriel Cataneo ****
- * Criação: 28/04/2015                  ****
+ * Criaï¿½ï¿½o: 28/04/2015                  ****
  * Classe: myLocation                   ****
- * Função: Recebe informações do GPS    ****
+ * Funï¿½ï¿½o: Recebe informaï¿½ï¿½es do GPS    ****
   ******************************************/
 public class myLocation extends Service implements LocationListener
 {
-	//Variáveis Globais
+	//Variaveis Globais
     private final Context mcontext;
 	boolean isGPS = false, isNet = false, haveLocation = false;
 	Location location;
-	double latitude, longitude;
+	double latitude, longitude, teta, dist;
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 	private static final long MIN_TIME_BW_UPDATES = 0;
 	protected LocationManager locationManager;
@@ -36,14 +36,14 @@ public class myLocation extends Service implements LocationListener
 		getLocation();
 	}
 
-	//Verifica conexao com internet e GPS para prover sinal de posição.
+	//Verifica conexao com internet e GPS para prover sinal de posiï¿½ï¿½o.
 	public Location getLocation()
 	{
 		try
 		{
 			locationManager = (LocationManager) mcontext.getSystemService(LOCATION_SERVICE);
 			
-			//Atribui os provedores de localização
+			//Atribui os provedores de localizaï¿½ï¿½o
 			isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 			isNet = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 			
@@ -131,12 +131,43 @@ public class myLocation extends Service implements LocationListener
 		return longitude;
 	}
 
+	public double calculaDistancia(double lat1, double lat2, double lng1, double lng2)
+	{
+		try
+		{
+			teta = lng1 - lng2;
+			dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(teta));
+			dist = Math.acos(dist);
+			dist = rad2deg(dist);
+			dist = dist * 60 * 1.1515;
+			dist = dist * 1.609344;
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+			dist = 0.00;
+		}
+
+		return dist;
+	}
+
+	private double deg2rad(double deg)
+	{
+		return (deg * Math.PI / 180.0);
+	}
+
+	private double rad2deg(double rad)
+	{
+		return (rad * 180.0 / Math.PI);
+	}
+
 	public boolean canGetLocation()
 	{
 		return this.haveLocation;
 	}
 
-	//abrir tela ativação gps
+	//abrir tela ativaï¿½ï¿½o gps
 	public void AbreConfigGPS()
 	{
 		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -187,7 +218,7 @@ public class myLocation extends Service implements LocationListener
 		@Override
 		public void handleMessage(Message msg)
 		{
-			Toast.makeText(mcontext, "Sem provedor de informações disponível", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mcontext, "Sem provedor de informaï¿½ï¿½es disponï¿½vel", Toast.LENGTH_SHORT).show();
 		}
 	};
 }
