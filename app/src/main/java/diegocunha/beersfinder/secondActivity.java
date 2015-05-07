@@ -59,7 +59,6 @@ public class secondActivity extends ActionBarActivity {
         likeView.setObjectIdAndType("https://www.facebook.com/BeersFinder", LikeView.ObjectType.PAGE);
 
         //Parse Infos
-        ParseCrashReporting.enable(this);
 
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
@@ -111,7 +110,15 @@ public class secondActivity extends ActionBarActivity {
     {
         try
         {
-            mProgressDialog.setCanceledOnTouchOutside(true);
+            if(ParseCrashReporting.isCrashReportingEnabled())
+            {
+                Toast.makeText(getApplicationContext(),"Foi o erro", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"Ñ Foi o erro", Toast.LENGTH_SHORT).show();
+            }
+            /*mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . . ");
@@ -162,7 +169,7 @@ public class secondActivity extends ActionBarActivity {
             else
             {
                 Toast.makeText(getApplicationContext(), "Sem Internet", Toast.LENGTH_SHORT).show();
-            }
+            }*/
         }
         catch (Exception ex)
         {

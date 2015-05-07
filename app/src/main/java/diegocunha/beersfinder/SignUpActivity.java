@@ -27,12 +27,13 @@ public class SignUpActivity extends ActionBarActivity {
     private EditText edLogin, edPass, edMail;
     private String login, pass, mail, AppID, ClientID, strPassMD5;
     private boolean conectado;
-    private ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this);;
-
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_signup);
 
         //Direciona os EditText
@@ -41,7 +42,6 @@ public class SignUpActivity extends ActionBarActivity {
         edMail  = (EditText)findViewById(R.id.edtMail);
 
         //Parse Infos
-        ParseCrashReporting.enable(this);
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
