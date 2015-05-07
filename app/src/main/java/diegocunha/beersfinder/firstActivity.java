@@ -25,6 +25,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -67,6 +68,7 @@ public class firstActivity extends ActionBarActivity
         senha = (EditText)findViewById(R.id.edtSenha);
 
         //Parse Infos
+        ParseCrashReporting.enable(this);
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);

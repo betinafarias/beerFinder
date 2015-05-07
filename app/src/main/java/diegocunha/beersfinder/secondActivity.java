@@ -18,11 +18,11 @@ import android.widget.Toast;
 import com.facebook.share.widget.LikeView;
 import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import java.lang.annotation.Target;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class secondActivity extends ActionBarActivity {
     //Variáveis globais
     ProgressDialog mProgressDialog;
     private TextView txt;
-    private String AppID, ClientID;
+    String AppID, ClientID;
     String Bar;
     private Integer count = 0;
     myLocation MeuLocal;
@@ -59,6 +59,8 @@ public class secondActivity extends ActionBarActivity {
         likeView.setObjectIdAndType("https://www.facebook.com/BeersFinder", LikeView.ObjectType.PAGE);
 
         //Parse Infos
+        ParseCrashReporting.enable(this);
+
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.parse.Parse;
+import com.parse.ParseCrashReporting;
 import com.parse.ParseUser;
 import java.security.MessageDigest;
 
@@ -40,6 +41,7 @@ public class SignUpActivity extends ActionBarActivity {
         edMail  = (EditText)findViewById(R.id.edtMail);
 
         //Parse Infos
+        ParseCrashReporting.enable(this);
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);

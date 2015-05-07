@@ -13,6 +13,9 @@ import android.os.Message;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.parse.Parse;
+import com.parse.ParseCrashReporting;
+
 /*******************************************
  * Autores: Diego Cunha Gabriel Cataneo ****
  * Criação: 28/04/2015                  ****
@@ -21,7 +24,7 @@ import android.widget.Toast;
  ******************************************/
 public class myLocation extends Service implements LocationListener
 {
-	//Variaáeis Globais
+	//Variáveis Globais
     private final Context mcontext;
 	boolean isGPS = false, isNet = false, haveLocation = false;
 	Location location;
@@ -29,9 +32,16 @@ public class myLocation extends Service implements LocationListener
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 	private static final long MIN_TIME_BW_UPDATES = 0;
 	protected LocationManager locationManager;
+	private String AppID, ClientID;
 
 	public myLocation(Context context)
 	{
+		//Parse info podendo ser removido :D
+		ParseCrashReporting.enable(this);
+		AppID = getString(R.string.AppID);
+		ClientID = getString(R.string.ClientID);
+		Parse.initialize(this, AppID, ClientID);
+
 		this.mcontext = context;
 		getLocation();
 	}
