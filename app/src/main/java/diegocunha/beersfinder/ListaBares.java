@@ -6,7 +6,7 @@ import java.util.List;
 /********************************************
  * Autores: Diego Cunha Gabriel Cataneo  ****
  * Criação: 08/05/2015                   ****
- * Classe: ListaBares                ****
+ * Classe: ListaBares                    ****
  * Função: Login no Aplicativo           ****
  ********************************************/
 public class ListaBares{
