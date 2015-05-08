@@ -37,16 +37,15 @@ import java.util.List;
 public class secondActivity extends ActionBarActivity {
 
     //Variáveis globais
-    ProgressDialog mProgressDialog;
+    protected ProgressDialog mProgressDialog;
     private TextView txt;
-    String AppID, ClientID;
-    String Bar;
+    protected String AppID, ClientID, parseNomeBar;
     private Integer count = 0;
     myLocation MeuLocal;
-    double Lat, Lng, parseLat, parseLng, cResult;
-    ArrayList<Double>bares;
-    Button btnTeste;
-    boolean isOn, isNet;
+    double Lat, Lng, parseLat, parseLng;
+    protected Double cResult;
+    private Button btnTeste;
+    boolean isOn;
     ConnectivityManager conectivtyManager;
 
     @Override
@@ -88,6 +87,12 @@ public class secondActivity extends ActionBarActivity {
         }
     }
 
+    /**********************************************
+     * Autores: Diego Cunha Gabriel Cataneo    ****
+     * Criação: 28/04/2015                   ****
+     * Função: boolean VerificaConexao       ****
+     * Funcionalidade: Retorna status conexao  ****
+     **********************************************/
     public  boolean verificaConexao()
     {
         conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -106,11 +111,23 @@ public class secondActivity extends ActionBarActivity {
         return isOn;
     }
 
+    /**********************************************
+     * Autores: Diego Cunha Gabriel Cataneo    ****
+     * Criação: 08/05/2015                     ****
+     * Função: void BarProximo                 ****
+     * Funcionalidade: Busca coord bares       ****
+     **********************************************/
     public void BarProximo(View view)
     {
         try
         {
             MeuLocal = new myLocation(this);
+
+            final List<Double> distBares = new ArrayList<Double>();
+            final List<ListaBares> listadebar = new ArrayList<>();
+
+            final ListaBares listagem = new ListaBares();
+
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.setCancelable(true);
@@ -131,28 +148,32 @@ public class secondActivity extends ActionBarActivity {
                         {
                             if (list.size() > 0)
                             {
-                                for (ParseObject obj : list) {
-                                    parseLat = obj.getDouble("Latitude");
-                                    parseLng = obj.getDouble("Longitude");
-                                    cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
-                                }
-
                                 for(int i = 0; i < list.size(); i++)
                                 {
-                                    bares.add(cResult);
+                                    ParseObject pObject = list.get(i);
+                                    parseLat = pObject.getDouble("Latitude");
+                                    parseLng = pObject.getDouble("Longitude");
+                                    parseNomeBar = pObject.getString("NomeBar");
+
+                                    cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+                                    distBares.add(i, cResult);
+
+                                    listagem.setNomeBar(parseNomeBar);
+                                    listagem.setDistBar(cResult);
+
+                                    listadebar.add(i, listagem);
+                                    mProgressDialog.dismiss();
                                 }
                             }
                             else
                             {
                                 mProgressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
-                                cResult = 0.00;
                             }
                         }
                         else
                         {
                             mProgressDialog.dismiss();
-                            cResult = 0.00;
                             Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
@@ -174,7 +195,6 @@ public class secondActivity extends ActionBarActivity {
         }
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
