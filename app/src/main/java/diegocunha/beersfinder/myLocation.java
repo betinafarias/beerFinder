@@ -36,13 +36,7 @@ public class myLocation extends Service implements LocationListener
 
 	public myLocation(Context context)
 	{
-		//Parse info podendo ser removido :D
-		ParseCrashReporting.enable(this);
-		AppID = getString(R.string.AppID);
-		ClientID = getString(R.string.ClientID);
-		Parse.initialize(this, AppID, ClientID);
-
-		this.mcontext = context;
+			this.mcontext = context;
 		getLocation();
 	}
 
@@ -103,10 +97,6 @@ public class myLocation extends Service implements LocationListener
 							}
 						}
 					}
-				}
-				else
-				{
-					AbreConfigGPS();
 				}
 			}
 		}

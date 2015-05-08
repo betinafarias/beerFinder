@@ -43,7 +43,6 @@ public class secondActivity extends ActionBarActivity {
     String Bar;
     private Integer count = 0;
     myLocation MeuLocal;
-    List<Double> lugares;
     double Lat, Lng, parseLat, parseLng, cResult;
     Button btnTeste;
     boolean isOn, isNet;
@@ -110,15 +109,9 @@ public class secondActivity extends ActionBarActivity {
     {
         try
         {
-            if(ParseCrashReporting.isCrashReportingEnabled())
-            {
-                Toast.makeText(getApplicationContext(),"Foi o erro", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(getApplicationContext(),"Ñ Foi o erro", Toast.LENGTH_SHORT).show();
-            }
-            /*mProgressDialog.setCanceledOnTouchOutside(true);
+            MeuLocal = new myLocation(this);
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . . ");
@@ -130,46 +123,43 @@ public class secondActivity extends ActionBarActivity {
                 Lng = MeuLocal.getLongitude();
 
                 ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("BaresLocal");
-                query.orderByAscending("NomeBar");
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> list, ParseException e) {
-                        if (e == null)
+                        if(e==null)
                         {
-                            if (list.size() > 0)
-                            {
-                                for (int i = 0; i < list.size(); i++)
-                                {
-                                    ParseObject op = list.get(i);
-                                    parseLat = op.getDouble("Latitude");
-                                    parseLng = op.getDouble("Longitude");
-                                    Bar = op.getString("NomeBar");
+                           if(list.size() > 0)
+                           {
+                               for(ParseObject obj : list)
+                               {
+                                   parseLat = obj.getDouble("Latitude");
+                                   parseLng = obj.getDouble("Longitude");
+                                   cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+                               }
 
-                                    cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
-                                    lugares.add(cResult);
-                                }
-
-                                mProgressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), "Foi", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                mProgressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), "Erro na lista", Toast.LENGTH_SHORT).show();
-                            }
+                               mProgressDialog.dismiss();
+                           }
+                           else
+                           {
+                               mProgressDialog.dismiss();
+                               Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                           }
                         }
                         else
                         {
                             mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+
                         }
                     }
                 });
             }
             else
             {
+                mProgressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Sem Internet", Toast.LENGTH_SHORT).show();
-            }*/
+                MeuLocal.AbreConfigGPS();
+            }
         }
         catch (Exception ex)
         {
