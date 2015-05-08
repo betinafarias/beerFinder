@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.facebook.internal.CollectionMapper;
 import com.facebook.share.widget.LikeView;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -26,6 +27,7 @@ import com.parse.ParseUser;
 import java.lang.annotation.Target;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /********************************************
@@ -58,7 +60,6 @@ public class secondActivity extends ActionBarActivity {
         likeView.setObjectIdAndType("https://www.facebook.com/BeersFinder", LikeView.ObjectType.PAGE);
 
         //Parse Infos
-
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
@@ -119,16 +120,18 @@ public class secondActivity extends ActionBarActivity {
      **********************************************/
     public void BarProximo(View view)
     {
+        MeuLocal = new myLocation(this);
+
+        final List<Double> distBares = new ArrayList<Double>();
+        final List<ListaBares> listadebar = new ArrayList<>();
+
+        final ListaBares listagem = new ListaBares();
+
+        mProgressDialog = new ProgressDialog(this);
+
         try
         {
-            MeuLocal = new myLocation(this);
 
-            final List<Double> distBares = new ArrayList<Double>();
-            final List<ListaBares> listadebar = new ArrayList<>();
-
-            final ListaBares listagem = new ListaBares();
-
-            mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setTitle("Carregando");
@@ -193,8 +196,8 @@ public class secondActivity extends ActionBarActivity {
             ex.printStackTrace();
             Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
         }
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

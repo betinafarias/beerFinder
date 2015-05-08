@@ -5,11 +5,11 @@ import java.util.List;
 
 /********************************************
  * Autores: Diego Cunha Gabriel Cataneo  ****
- * Criação: 08/05/2015                   ****
+ * Criaï¿½ï¿½o: 08/05/2015                   ****
  * Classe: ListaBares                    ****
- * Função: Login no Aplicativo           ****
+ * Funï¿½ï¿½o: Login no Aplicativo           ****
  ********************************************/
-public class ListaBares{
+public class ListaBares implements Comparable<ListaBares>{
     private String nomeBar;
     private double distBar;
     private double latBar;
@@ -58,4 +58,15 @@ public class ListaBares{
     {
         this.lngBar = lngBar;
     }
+
+    @Override
+    public int compareTo(ListaBares listaBares) {
+        if(this.distBar > listaBares.distBar)
+        {
+            return -1;
+        }
+
+        return this.getNomeBar().compareToIgnoreCase(listaBares.getNomeBar());
+    }
 }
+
