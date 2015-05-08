@@ -44,6 +44,7 @@ public class secondActivity extends ActionBarActivity {
     private Integer count = 0;
     myLocation MeuLocal;
     double Lat, Lng, parseLat, parseLng, cResult;
+    ArrayList<Double>bares;
     Button btnTeste;
     boolean isOn, isNet;
     ConnectivityManager conectivtyManager;
@@ -126,30 +127,34 @@ public class secondActivity extends ActionBarActivity {
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> list, ParseException e) {
-                        if(e==null)
+                        if (e == null)
                         {
-                           if(list.size() > 0)
-                           {
-                               for(ParseObject obj : list)
-                               {
-                                   parseLat = obj.getDouble("Latitude");
-                                   parseLng = obj.getDouble("Longitude");
-                                   cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
-                               }
+                            if (list.size() > 0)
+                            {
+                                for (ParseObject obj : list) {
+                                    parseLat = obj.getDouble("Latitude");
+                                    parseLng = obj.getDouble("Longitude");
+                                    cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
+                                }
 
-                               mProgressDialog.dismiss();
-                           }
-                           else
-                           {
-                               mProgressDialog.dismiss();
-                               Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
-                           }
+                                for(int i = 0; i < list.size(); i++)
+                                {
+                                    bares.add(cResult);
+                                }
+                            }
+                            else
+                            {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                                cResult = 0.00;
+                            }
                         }
                         else
                         {
                             mProgressDialog.dismiss();
+                            cResult = 0.00;
+                            Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
-
                         }
                     }
                 });
