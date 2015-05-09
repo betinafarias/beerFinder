@@ -64,6 +64,8 @@ public class secondActivity extends ActionBarActivity {
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
 
+        getUser();
+
     }
 
     /*****************************************
@@ -76,17 +78,15 @@ public class secondActivity extends ActionBarActivity {
     {
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        if(currentUser != null)
-        {
-            Intent intent = new Intent(this, secondActivity.class);
-            startActivity(intent);
-        }
-        else
+        if(currentUser == null)
         {
             Intent intent = new Intent(this, firstActivity.class);
             startActivity(intent);
+
         }
     }
+
+
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
@@ -196,6 +196,12 @@ public class secondActivity extends ActionBarActivity {
             ex.printStackTrace();
             Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
         }
+    }
+
+    public void openBares(View view)
+    {
+        Intent intent = new Intent(this, BaresActivity.class);
+        startActivity(intent);
     }
 
 
