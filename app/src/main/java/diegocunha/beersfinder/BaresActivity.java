@@ -16,7 +16,6 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 public class BaresActivity extends ActionBarActivity {
 
     List<String> listaBares;
-    ArrayAdapter<String> dataAdapter;
+    //ArrayAdapter<String> dataAdapter;
     Spinner mySpinner;
     ProgressDialog mProgressDialog;
     ConnectivityManager conectivtyManager;
@@ -35,16 +34,19 @@ public class BaresActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bares);
 
-        //Parse Infos
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
 
+        mySpinner = (Spinner)findViewById(R.id.meuSpinner);
         loadBares();
 
         setContentView(R.layout.activity_bares);
     }
+
+
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
@@ -79,34 +81,34 @@ public class BaresActivity extends ActionBarActivity {
     public void loadBares()
     {
         mProgressDialog =  new ProgressDialog(this);
-        listaBares = new ArrayList<String>();
-        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaBares);
-
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaBares);
 
         try
         {
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setTitle("Carregando");
+            mProgressDialog.setMessage("Loading. . . ");
+            mProgressDialog.show();
+
             if(verificaConexao())
             {
-                mProgressDialog.setCanceledOnTouchOutside(true);
-                mProgressDialog.setCancelable(true);
-                mProgressDialog.setTitle("Carregando");
-                mProgressDialog.setMessage("Loading. . . ");
-                mProgressDialog.show();
-
-
                 ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Bares");
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> list, ParseException e) {
-                        if (e == null)
-                        {
-                            if (list.size() > 0)
-                            {
+                        if (e == null) {
+                            if (list.size() > 0) {
                                 for (int i = 0; i < list.size(); i++) {
                                     ParseObject pObject = list.get(i);
                                     nomeBar = pObject.getString("NomeBar");
                                     listaBares.add(i, nomeBar);
+                                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    mySpinner.setAdapter(dataAdapter);
                                 }
+
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getApplication(), "CHUPA", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
@@ -116,12 +118,6 @@ public class BaresActivity extends ActionBarActivity {
                         }
                     }
                 });
-
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                mySpinner = (Spinner)findViewById(R.id.thisSpinner);
-                mySpinner.setAdapter(dataAdapter);
-                mProgressDialog.dismiss();
             }
             else
             {

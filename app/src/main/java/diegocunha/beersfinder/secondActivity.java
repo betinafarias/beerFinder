@@ -55,10 +55,6 @@ public class secondActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        //Função que permite ao usuário dar Like na página ofical
-        LikeView likeView = (LikeView)findViewById(R.id.like_view);
-        likeView.setObjectIdAndType("https://www.facebook.com/BeersFinder", LikeView.ObjectType.PAGE);
-
         //Parse Infos
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
@@ -87,6 +83,11 @@ public class secondActivity extends ActionBarActivity {
     }
 
 
+    public void AbreLista(View view)
+    {
+        Intent intent = new Intent(this, BaresActivity.class);
+        startActivity(intent);
+    }
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
@@ -197,13 +198,6 @@ public class secondActivity extends ActionBarActivity {
             Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
         }
     }
-
-    public void openBares(View view)
-    {
-        Intent intent = new Intent(this, BaresActivity.class);
-        startActivity(intent);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
