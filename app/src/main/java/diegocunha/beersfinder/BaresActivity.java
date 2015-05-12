@@ -80,11 +80,14 @@ public class BaresActivity extends ActionBarActivity {
      **********************************************/
     public void loadBares()
     {
-        mProgressDialog =  new ProgressDialog(this);
+
+        listaBares = new ArrayList<String>();
         final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaBares);
+
 
         try
         {
+            mProgressDialog =  new ProgressDialog(this);
             mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setTitle("Carregando");
@@ -102,13 +105,11 @@ public class BaresActivity extends ActionBarActivity {
                                 for (int i = 0; i < list.size(); i++) {
                                     ParseObject pObject = list.get(i);
                                     nomeBar = pObject.getString("NomeBar");
-                                    listaBares.add(i, nomeBar);
+                                    listaBares.add(nomeBar);
+                                    mProgressDialog.dismiss();
                                     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                     mySpinner.setAdapter(dataAdapter);
                                 }
-
-                                mProgressDialog.dismiss();
-                                Toast.makeText(getApplication(), "CHUPA", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
@@ -118,6 +119,8 @@ public class BaresActivity extends ActionBarActivity {
                         }
                     }
                 });
+
+
             }
             else
             {
