@@ -82,7 +82,6 @@ public class secondActivity extends ActionBarActivity {
         }
     }
 
-
     public void AbreLista(View view)
     {
         Intent intent = new Intent(this, BaresActivity.class);

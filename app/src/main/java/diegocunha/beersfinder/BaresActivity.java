@@ -2,49 +2,65 @@ package diegocunha.beersfinder;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.parse.FindCallback;
 import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.parse.ParseUser;
 
 
 public class BaresActivity extends ActionBarActivity{
 
-    Spinner mySpinner;
+    Spinner mySpinner, spinerCerveja;
     ProgressDialog mProgressDialog;
     ConnectivityManager conectivtyManager;
     boolean isOn;
-    String AppID, ClientID;
-    private String nomeBar[];
+    private String AppID, ClientID, nomedoBar, nomeCerveja;
+    private String nomeBar[], nomeCeva[];
+    int barPosition, cevaPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bares);
 
+        //Inicializa o Parse
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
+        getUser();
 
         setContentView(R.layout.activity_bares);
+
+        //Preenche os Spinners
         mySpinner = (Spinner)findViewById(R.id.meuSpinner);
+        spinerCerveja = (Spinner)findViewById(R.id.spinnerBebidas);
         loadBares();
+    }
+
+    /*****************************************
+     Autores: Diego Cunha, Gabriel Cataneo  **
+     Função: getUser                        **
+     Funcionalidade: Verifica usuário       **
+     Data Criação: 05/05/2015               **
+     ******************************************/
+    protected void getUser()
+    {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if(currentUser == null)
+        {
+            Intent intent = new Intent(this, firstActivity.class);
+            startActivity(intent);
+
+        }
     }
 
     /**********************************************
@@ -73,33 +89,27 @@ public class BaresActivity extends ActionBarActivity{
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
+     * Criação: 13/05/2015                     ****
      * Função: void loadBares                  ****
-     * Funcionalidade: Preenche o Spinner      ****
+     * Funcionalidade: Preenche os Spinners    ****
      **********************************************/
    public void loadBares()
    {
        try
        {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setCanceledOnTouchOutside(true);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setTitle("Carregando");
-            mProgressDialog.setMessage("Loading . . .");
+            this.nomeBar = new String[]{"Escolha uma opção", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas"};
+            this.nomeCeva = new String[]{"Escolha uma opção", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
 
-            this.nomeBar = new String[]{"Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeBar);
+            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeCeva);
 
             mySpinner.setAdapter(adapter);
+            spinerCerveja.setAdapter(adapter2);
        }
        catch (Exception ex)
        {
            ex.printStackTrace();
            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
-       }
-       finally
-       {
-            mProgressDialog.dismiss();
        }
    }
 
@@ -111,7 +121,44 @@ public class BaresActivity extends ActionBarActivity{
      ******************************************************/
     public void sendBares(View view)
     {
+        mProgressDialog = new ProgressDialog(this);
 
+        try
+        {
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setTitle("Carregando");
+            mProgressDialog.setMessage("Loading . . .");
+
+            nomedoBar = mySpinner.getSelectedItem().toString();
+            nomeCerveja = spinerCerveja.getSelectedItem().toString();
+
+            barPosition = mySpinner.getSelectedItemPosition();
+            cevaPosition = spinerCerveja.getSelectedItemPosition();
+
+            if(barPosition == 0 && cevaPosition == 0)
+            {
+                mProgressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Escolha um parametro válido", Toast.LENGTH_SHORT).show();
+            }
+            else if(barPosition == 0 && cevaPosition != 0)
+            {
+                mProgressDialog.dismiss();
+            }
+            else if(barPosition != 0 && cevaPosition == 0)
+            {
+                mProgressDialog.dismiss();
+            }
+            else
+            {
+                mProgressDialog.dismiss();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
