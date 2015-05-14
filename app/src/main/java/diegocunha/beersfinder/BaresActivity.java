@@ -97,8 +97,8 @@ public class BaresActivity extends ActionBarActivity{
    {
        try
        {
-            this.nomeBar = new String[]{"Escolha uma opção", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas"};
-            this.nomeCeva = new String[]{"Escolha uma opção", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
+            this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas"};
+            this.nomeCeva = new String[]{"Escolha uma opcao", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeBar);
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeCeva);
@@ -143,10 +143,16 @@ public class BaresActivity extends ActionBarActivity{
             }
             else if(barPosition == 0 && cevaPosition != 0)
             {
+                Intent intent = new Intent(getApplicationContext(), selectBaresA.class);
+                intent.putExtra("strCeva", nomeCerveja);
+                startActivity(intent);
                 mProgressDialog.dismiss();
             }
             else if(barPosition != 0 && cevaPosition == 0)
             {
+                Intent intent = new Intent(getApplicationContext(), selectBaresA.class);
+                intent.putExtra("strBar", nomedoBar);
+                startActivity(intent);
                 mProgressDialog.dismiss();
             }
             else

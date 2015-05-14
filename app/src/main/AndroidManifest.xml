@@ -42,6 +42,10 @@
             android:name=".BaresActivity"
             android:label="@string/title_activity_bares" >
         </activity>
+        <activity
+            android:name=".selectBaresA"
+            android:label="@string/title_activity_select_bares" >
+        </activity>
     </application>
 
 </manifest>
