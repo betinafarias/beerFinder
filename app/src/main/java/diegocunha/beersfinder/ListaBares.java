@@ -26,6 +26,7 @@ public class ListaBares implements Comparable<ListaBares>{
         this.nomeBar = nomeBar;
     }
 
+
     //Distancia Bar
     public double getDistBar()
     {

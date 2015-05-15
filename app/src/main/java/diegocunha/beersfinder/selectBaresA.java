@@ -12,63 +12,59 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class selectBaresA extends ActionBarActivity {
 
-
+    //Variáveis Globais
     ListView listView;
     String bar, ceva;
-    String[] lista = {""};
     private String AppID, ClientID;
     ProgressDialog mProgressDialog;
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<String> adapter, adapter2;
+    List<String> lbares = null;
+    List<String> ruaBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         //Inicializa o Parse
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
+
+        //Bloqueia página usuário sem acesso
         getUser();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lista);
+
+        //Inicializa variáveis
+        lbares = new ArrayList<String>();
+        ruaBar = new ArrayList<String>();
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lbares);
+        adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, ruaBar);
+
         Bundle extras = getIntent().getExtras();
 
+        //Recebe valores do BaresActivity
         if (extras != null)
         {
             bar = extras.getString("strBar");
             ceva = extras.getString("strCeva");
-
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-            query.whereEqualTo("NomeBar", bar);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if (e == null) {
-                        lista = new String[list.size()];
-
-                        for (int i = 0; i < list.size(); i++) {
-                            lista[i] = list.get(i).getString("NomeBar");
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                    listView = (ListView) findViewById(R.id.listView);
-                    listView.setAdapter(adapter);
-                }
-            });
         }
 
         setContentView(R.layout.activity_selectbares);
+        getListView(bar);
     }
 
     /*****************************************
@@ -86,6 +82,62 @@ public class selectBaresA extends ActionBarActivity {
             Intent intent = new Intent(this, firstActivity.class);
             startActivity(intent);
 
+        }
+    }
+
+    /*****************************************
+     Autores: Diego Cunha, Gabriel Cataneo  **
+     Função: getListView(String Bar)        **
+     Funcionalidade: Retorna busca          **
+     Data Criação: 05/05/2015               **
+     ******************************************/
+    protected void getListView(String Bar)
+    {
+        try
+        {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setTitle("Verificando");
+            mProgressDialog.setMessage("Carregando. . . ");
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+            query.whereEqualTo("NomeBar", Bar);
+
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if(e == null)
+                    {
+                        mProgressDialog.show();
+
+                        for(int i = 0; i <list.size();i++)
+                        {
+                            ParseObject pObject = list.get(i);
+                            lbares.add(pObject.getString("NomeBar"));
+                            ruaBar.add(pObject.getString("RuaBar"));
+                        }
+                        adapter.notifyDataSetChanged();
+                        adapter2.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            mProgressDialog.dismiss();
+        }
+        finally
+        {
+            listView = (ListView)findViewById(R.id.listView);
+            listView.setAdapter(adapter);
+            mProgressDialog.dismiss();
         }
     }
 
