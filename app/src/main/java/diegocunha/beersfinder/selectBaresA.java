@@ -1,23 +1,47 @@
 package diegocunha.beersfinder;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class selectBaresA extends ActionBarActivity {
 
 
-    TextView txt;
+    ListView listView;
     String bar, ceva;
+    String[] lista = {""};
+    private String AppID, ClientID;
+    ProgressDialog mProgressDialog;
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_selectbares);
-
+        //Inicializa o Parse
+        AppID = getString(R.string.AppID);
+        ClientID = getString(R.string.ClientID);
+        Parse.initialize(this, AppID, ClientID);
+        getUser();
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lista);
         Bundle extras = getIntent().getExtras();
 
         if (extras != null)
@@ -25,14 +49,43 @@ public class selectBaresA extends ActionBarActivity {
             bar = extras.getString("strBar");
             ceva = extras.getString("strCeva");
 
-            if(bar == null)
-            {
-                bar = "Nenhum";
-            }
-            else if(ceva == null)
-            {
-                ceva = "Nenhum";
-            }
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+            query.whereEqualTo("NomeBar", bar);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if (e == null) {
+                        lista = new String[list.size()];
+
+                        for (int i = 0; i < list.size(); i++) {
+                            lista[i] = list.get(i).getString("NomeBar");
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                    listView = (ListView) findViewById(R.id.listView);
+                    listView.setAdapter(adapter);
+                }
+            });
+        }
+
+        setContentView(R.layout.activity_selectbares);
+    }
+
+    /*****************************************
+     Autores: Diego Cunha, Gabriel Cataneo  **
+     Função: getUser                        **
+     Funcionalidade: Verifica usuário       **
+     Data Criação: 05/05/2015               **
+     ******************************************/
+    protected void getUser()
+    {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if(currentUser == null)
+        {
+            Intent intent = new Intent(this, firstActivity.class);
+            startActivity(intent);
+
         }
     }
 
