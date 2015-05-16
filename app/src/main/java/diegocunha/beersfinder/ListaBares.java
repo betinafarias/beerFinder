@@ -9,7 +9,9 @@ import java.util.List;
  * Classe: ListaBares                    ****
  * Fun��o: Login no Aplicativo           ****
  ********************************************/
-public class ListaBares implements Comparable<ListaBares>{
+public class ListaBares
+{
+    private String ruaBar;
     private String nomeBar;
     private double distBar;
     private double latBar;
@@ -26,6 +28,16 @@ public class ListaBares implements Comparable<ListaBares>{
         this.nomeBar = nomeBar;
     }
 
+    //RuaBar
+    public String getRuaBar()
+    {
+        return ruaBar;
+    }
+
+    public void setRuaBar(String ruaBar)
+    {
+        this.ruaBar = ruaBar;
+    }
 
     //Distancia Bar
     public double getDistBar()
@@ -60,14 +72,5 @@ public class ListaBares implements Comparable<ListaBares>{
         this.lngBar = lngBar;
     }
 
-    @Override
-    public int compareTo(ListaBares listaBares) {
-        if(this.distBar > listaBares.distBar)
-        {
-            return -1;
-        }
-
-        return this.getNomeBar().compareToIgnoreCase(listaBares.getNomeBar());
-    }
 }
 

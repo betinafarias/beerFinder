@@ -82,5 +82,12 @@
         android:layout_marginTop="5dp"
         android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Esqueci minha senha"
+        android:onClick="resetPass"
+        android:layout_above="@+id/faceBtn"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

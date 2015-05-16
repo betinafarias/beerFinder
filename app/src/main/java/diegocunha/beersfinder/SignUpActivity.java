@@ -17,15 +17,15 @@ import java.security.MessageDigest;
 
 /********************************************
  * Autores: Diego Cunha Gabriel Cataneo  ****
- * Criação: 28/04/2015                   ****
+ * Criaï¿½ï¿½o: 28/04/2015                   ****
  * Classe: SignUpActivity                ****
- * Função: Cria cadastro usuário         ****
+ * Funï¿½ï¿½o: Cria cadastro usuï¿½rio         ****
  ********************************************/
 public class SignUpActivity extends ActionBarActivity {
 
-    //Variáveis Globais
+    //Variï¿½veis Globais
     private EditText edLogin, edPass, edMail;
-    private String login, pass, mail, AppID, ClientID, strPassMD5;
+    private String login, pass, mail, AppID, ClientID;
     private boolean conectado;
     ProgressDialog progressDialog;
 
@@ -49,8 +49,8 @@ public class SignUpActivity extends ActionBarActivity {
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: boolean VerificaConexao         ****
+     * Criaï¿½ï¿½o: 28/04/2015                     ****
+     * Funï¿½ï¿½o: boolean VerificaConexao         ****
      * Funcionalidade: Retorna status conexao  ****
      **********************************************/
     public  boolean verificaConexao()
@@ -73,43 +73,8 @@ public class SignUpActivity extends ActionBarActivity {
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 04/05/2015                     ****
-     * Função: String GeraHash                 ****
-     * Funcionalidade: Retorna senha cript     ****
-     **********************************************/
-    protected String GeraHash(String temp)
-    {
-        String resultado;
-        try
-        {
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            md.reset();
-            byte[] buffer = temp.getBytes();
-            md.update(buffer);
-            byte[] digest = md.digest();
-
-            String hStr = "";
-
-            for (int i = 0; i < digest.length; i++)
-            {
-                hStr += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1);
-            }
-
-            resultado = hStr;
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            resultado = "";
-        }
-
-        return resultado;
-    }
-
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: void sig                        ****
+     * Criaï¿½ï¿½o: 28/04/2015                     ****
+     * Funï¿½ï¿½o: void sig                        ****
      * Funcionalidade: Realiza cadastro Parse  ****
      * OBS: Utilizar no OnClick do bt Login    ****
      **********************************************/
@@ -129,20 +94,19 @@ public class SignUpActivity extends ActionBarActivity {
                 login = edLogin.getText().toString();
                 pass  = edPass.getText().toString();
                 mail  = edMail.getText().toString();
-                strPassMD5 = GeraHash(pass);
 
 
                 if(login == null || login.equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "Username inválido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Username invï¿½lido", Toast.LENGTH_SHORT).show();
                 }
                 else if(login.length() < 6)
                 {
-                    Toast.makeText(getApplicationContext(), "Usuário deve possuír ao menos 6 caracteres", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Usuï¿½rio deve possuï¿½r ao menos 6 caracteres", Toast.LENGTH_SHORT).show();
                 }
                 else if(pass == null || pass.equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "Senha inválida", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Senha invï¿½lida", Toast.LENGTH_SHORT).show();
                 }
                 else if(pass.length() < 6 || pass.length() > 8)
                 {
@@ -150,17 +114,17 @@ public class SignUpActivity extends ActionBarActivity {
                 }
                 else if(mail == null || mail.equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "E-mail inválido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "E-mail invï¿½lido", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
                     ParseUser user = new ParseUser();
                     user.setUsername(login);
-                    user.setPassword(strPassMD5);
+                    user.setPassword(pass);
                     user.setEmail(mail);
                     user.signUpInBackground();
 
-                    Toast.makeText(getApplicationContext(), "Cadastrado com sucesso: " + strPassMD5, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Cadastrado com sucesso", Toast.LENGTH_SHORT).show();
                 }
             }
             else

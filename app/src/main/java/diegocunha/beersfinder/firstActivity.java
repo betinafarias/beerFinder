@@ -89,6 +89,12 @@ public class firstActivity extends ActionBarActivity
         startActivity(intet);
     }
 
+    public void resetPass(View view)
+    {
+        Intent intent = new Intent(this, ResetPasswordActivity.class);
+        startActivity(intent);
+    }
+
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
      * Criação: 28/04/2015                   ****
@@ -111,41 +117,6 @@ public class firstActivity extends ActionBarActivity
         }
 
         return conectado;
-    }
-
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 04/05/2015                   ****
-     * Função: String GeraHash               ****
-     * Funcionalidade: Retorna senha cript     ****
-     **********************************************/
-    protected String GeraHash(String temp)
-    {
-        String resultado;
-        try
-        {
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            md.reset();
-            byte[] buffer = temp.getBytes();
-            md.update(buffer);
-            byte[] digest = md.digest();
-
-            String hStr = "";
-
-            for (int i = 0; i < digest.length; i++)
-            {
-                hStr += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1);
-            }
-
-            resultado = hStr;
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            resultado = "";
-        }
-
-        return resultado;
     }
 
     /**********************************************
@@ -182,9 +153,8 @@ public class firstActivity extends ActionBarActivity
             {
                 strLogin = login.getText().toString();
                 strSenha = senha.getText().toString();
-                strMD5Pass = GeraHash(strSenha);
 
-                ParseUser.logInInBackground(strLogin, strMD5Pass, new LogInCallback() {
+                ParseUser.logInInBackground(strLogin, strSenha, new LogInCallback() {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {
                         if(parseUser != null)

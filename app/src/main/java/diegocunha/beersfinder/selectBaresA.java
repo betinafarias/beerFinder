@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class selectBaresA extends ActionBarActivity {
 
-    //Variáveis Globais
+    //Variï¿½veis Globais
     ListView listView;
     String bar, ceva;
     private String AppID, ClientID;
@@ -34,6 +35,7 @@ public class selectBaresA extends ActionBarActivity {
     ArrayAdapter<String> adapter, adapter2;
     List<String> lbares = null;
     List<String> ruaBar = null;
+    List<ListaBares> listaBares = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +47,13 @@ public class selectBaresA extends ActionBarActivity {
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
 
-        //Bloqueia página usuário sem acesso
+        //Bloqueia pï¿½gina usuï¿½rio sem acesso
         getUser();
 
-        //Inicializa variáveis
+        //Inicializa variï¿½veis
         lbares = new ArrayList<String>();
         ruaBar = new ArrayList<String>();
+        listaBares = new ArrayList<ListaBares>();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lbares);
         adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, ruaBar);
 
@@ -69,9 +72,9 @@ public class selectBaresA extends ActionBarActivity {
 
     /*****************************************
      Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getUser                        **
-     Funcionalidade: Verifica usuário       **
-     Data Criação: 05/05/2015               **
+     Funï¿½ï¿½o: getUser                        **
+     Funcionalidade: Verifica usuï¿½rio       **
+     Data Criaï¿½ï¿½o: 05/05/2015               **
      ******************************************/
     protected void getUser()
     {
@@ -87,19 +90,14 @@ public class selectBaresA extends ActionBarActivity {
 
     /*****************************************
      Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getListView(String Bar)        **
+     FunÃ§Ã£o: getListView(String Bar)        **
      Funcionalidade: Retorna busca          **
-     Data Criação: 05/05/2015               **
+     Data CriaÃ§Ã£o: 05/05/2015               **
      ******************************************/
     protected void getListView(String Bar)
     {
         try
         {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setCanceledOnTouchOutside(true);
-            mProgressDialog.setTitle("Verificando");
-            mProgressDialog.setMessage("Carregando. . . ");
 
             ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
             query.whereEqualTo("NomeBar", Bar);
@@ -109,7 +107,6 @@ public class selectBaresA extends ActionBarActivity {
                 public void done(List<ParseObject> list, ParseException e) {
                     if(e == null)
                     {
-                        mProgressDialog.show();
 
                         for(int i = 0; i <list.size();i++)
                         {
@@ -131,13 +128,11 @@ public class selectBaresA extends ActionBarActivity {
         {
             ex.printStackTrace();
             Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
-            mProgressDialog.dismiss();
         }
         finally
         {
             listView = (ListView)findViewById(R.id.listView);
             listView.setAdapter(adapter);
-            mProgressDialog.dismiss();
         }
     }
 

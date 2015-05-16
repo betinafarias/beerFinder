@@ -10,8 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/meuSpinner"
-        android:layout_marginBottom="12dp"
-        android:layout_above="@+id/spinnerBebidas"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -19,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerBebidas"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/meuSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -28,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Buscar"
         android:id="@+id/btnBusca"
-        android:onClick="sendBares"
+        android:onClick="sendBares" 
         android:layout_below="@+id/spinnerBebidas"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="57dp" />
