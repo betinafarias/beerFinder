@@ -13,9 +13,9 @@ public class ListaBares
 {
     private String ruaBar;
     private String nomeBar;
-    private double distBar;
-    private double latBar;
-    private double lngBar;
+    //private double distBar;
+    //private double latBar;
+    //private double lngBar;
 
     //NomeBar
     public String getNomeBar()
@@ -40,7 +40,7 @@ public class ListaBares
     }
 
     //Distancia Bar
-    public double getDistBar()
+    /*public double getDistBar()
     {
         return distBar;
     }
@@ -71,6 +71,6 @@ public class ListaBares
     {
         this.lngBar = lngBar;
     }
-
+*/
 }
 

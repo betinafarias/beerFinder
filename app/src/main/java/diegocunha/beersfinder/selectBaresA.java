@@ -36,6 +36,8 @@ public class selectBaresA extends ActionBarActivity {
     List<String> lbares = null;
     List<String> ruaBar = null;
     List<ListaBares> listaBares = null;
+    myAdapter adapterList;
+    ListaBares listinha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +49,16 @@ public class selectBaresA extends ActionBarActivity {
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
 
-        //Bloqueia pï¿½gina usuï¿½rio sem acesso
+        //Bloqueia pagina de usuário sem acesso
         getUser();
 
-        //Inicializa variï¿½veis
+        //Inicializa variaeis
         lbares = new ArrayList<String>();
         ruaBar = new ArrayList<String>();
         listaBares = new ArrayList<ListaBares>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lbares);
-        adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, ruaBar);
-
+        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lbares);
+        adapterList = new myAdapter(this, listaBares);
+        listinha = new ListaBares();
         Bundle extras = getIntent().getExtras();
 
         //Recebe valores do BaresActivity
@@ -111,11 +113,17 @@ public class selectBaresA extends ActionBarActivity {
                         for(int i = 0; i <list.size();i++)
                         {
                             ParseObject pObject = list.get(i);
-                            lbares.add(pObject.getString("NomeBar"));
-                            ruaBar.add(pObject.getString("RuaBar"));
+                            //lbares.add(pObject.getString("RuaBar"));
+                            listinha.setNomeBar(pObject.getString("NomeBar"));
+                            listinha.setRuaBar(pObject.getString("RuaBar"));
+                            listaBares.add(listinha);
+
+                            //ruaBar.add(pObject.getString("RuaBar"));
                         }
-                        adapter.notifyDataSetChanged();
-                        adapter2.notifyDataSetChanged();
+                        //adapter.notifyDataSetChanged();
+                        adapterList.notifyDataSetChanged();
+                        mProgressDialog.dismiss();
+                        //adapter2.notifyDataSetChanged();
                     }
                     else
                     {
@@ -132,7 +140,7 @@ public class selectBaresA extends ActionBarActivity {
         finally
         {
             listView = (ListView)findViewById(R.id.listView);
-            listView.setAdapter(adapter);
+            listView.setAdapter(adapterList);
         }
     }
 

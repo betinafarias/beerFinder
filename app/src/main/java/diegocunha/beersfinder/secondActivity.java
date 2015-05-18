@@ -162,7 +162,7 @@ public class secondActivity extends ActionBarActivity {
                                     distBares.add(i, cResult);
 
                                     listagem.setNomeBar(parseNomeBar);
-                                    listagem.setDistBar(cResult);
+                                    //listagem.setDistBar(cResult);
 
                                     listadebar.add(i, listagem);
                                     mProgressDialog.dismiss();
