@@ -9,11 +9,13 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_splash">Splash</string>
 
-    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_splash_screen">BeersFinder</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_spinner">SpinnerActivity</string>
-    <string name="title_activity_bares">BaresActivity</string>
-    <string name="title_activity_select_bares">selectBaresA</string>
+    <string name="title_activity_main">BeersFinder</string>
+    <string name="title_activity_spinner">BeersFinder</string>
+    <string name="title_activity_bares">BeersFinder</string>
+    <string name="title_activity_select_bares">BeersFinder</string>
+    <string name="title_activity_bar_for_location">BeersFinder</string>
+    <string name="title_activity_reset_password">BeersFinder</string>
 </resources>

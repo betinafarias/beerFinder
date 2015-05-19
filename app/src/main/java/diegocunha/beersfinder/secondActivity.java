@@ -128,78 +128,8 @@ public class secondActivity extends ActionBarActivity {
      **********************************************/
     public void BarProximo(View view)
     {
-        MeuLocal = new myLocation(this);
-
-
-        mProgressDialog = new ProgressDialog(this);
-
-        try
-        {
-
-            mProgressDialog.setCanceledOnTouchOutside(true);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setTitle("Carregando");
-            mProgressDialog.setMessage("Loading. . . ");
-            mProgressDialog.show();
-
-            if(verificaConexao() && MeuLocal.canGetLocation())
-            {
-                Lat = MeuLocal.getLatitude();
-                Lng = MeuLocal.getLongitude();
-
-                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("BaresLocal");
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> list, ParseException e) {
-                        if (e == null)
-                        {
-                            if (list.size() > 0)
-                            {
-                                for(int i = 0; i < list.size(); i++)
-                                {
-                                    ParseObject pObject = list.get(i);
-                                    parseLat = pObject.getDouble("Latitude");
-                                    parseLng = pObject.getDouble("Longitude");
-                                    parseNomeBar = pObject.getString("NomeBar");
-                                    parseRuaBar = pObject.getString("RuaBar");
-
-                                    cResult = MeuLocal.calculaDistancia(Lat, parseLat, Lng, parseLng);
-                                    String strDist = String.format("%.2f", cResult) + "km";
-                                    ListaBares item = new ListaBares(parseNomeBar, parseRuaBar, strDist, cResult);
-                                    listaBares.add(i, item);
-                                    Collections.sort(listaBares);
-                                }
-                                adapterList.notifyDataSetChanged();
-                                mProgressDialog.dismiss();
-                            }
-                            else
-                            {
-                                mProgressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        else
-                        {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-            else
-            {
-                mProgressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Sem Internet", Toast.LENGTH_SHORT).show();
-                MeuLocal.AbreConfigGPS();
-            }
-        }
-        catch (Exception ex)
-        {
-            mProgressDialog.dismiss();
-            ex.printStackTrace();
-            Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT);
-        }
+        Intent intent = new Intent(this, BarForLocationActivity.class);
+        startActivity(intent);
     }
 
     @Override
