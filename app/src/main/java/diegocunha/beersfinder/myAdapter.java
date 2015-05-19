@@ -29,8 +29,8 @@ public class myAdapter extends BaseAdapter {
         return listaBares.size();
     }
 
-    @Override
-    public Object getItem(int position) {
+    public ListaBares getItem(int position)
+    {
         return listaBares.get(position);
     }
 
@@ -49,6 +49,7 @@ public class myAdapter extends BaseAdapter {
             itemHolder = new ItemSuporte();
             itemHolder.txtNomeBar = (TextView) convertView.findViewById(R.id.nameBar);
             itemHolder.txtRuaBar = (TextView) convertView.findViewById(R.id.ruaBar);
+            itemHolder.txtDistancia = (TextView)convertView.findViewById(R.id.distancia);
 
             convertView.setTag(itemHolder);
         }
@@ -60,6 +61,7 @@ public class myAdapter extends BaseAdapter {
         ListaBares item = listaBares.get(position);
         itemHolder.txtNomeBar.setText(item.getNomeBar());
         itemHolder.txtRuaBar.setText(item.getRuaBar());
+        itemHolder.txtDistancia.setText(item.getDistBar());
 
         return convertView;
     }
@@ -68,5 +70,6 @@ public class myAdapter extends BaseAdapter {
 
         TextView txtNomeBar;
         TextView txtRuaBar;
+        TextView txtDistancia;
     }
 }

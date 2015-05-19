@@ -9,13 +9,24 @@ import java.util.List;
  * Classe: ListaBares                    ****
  * Fun��o: Login no Aplicativo           ****
  ********************************************/
-public class ListaBares
+public class ListaBares implements Comparable<ListaBares>
 {
     private String ruaBar;
     private String nomeBar;
-    //private double distBar;
+    private String distBar;
+    private Double dDistBar;
     //private double latBar;
     //private double lngBar;
+
+    public ListaBares(){}
+
+    public ListaBares(String nomeBar, String ruaBar, String distBar, double dDistBar)
+    {
+        this.nomeBar = nomeBar;
+        this.ruaBar = ruaBar;
+        this.distBar = distBar;
+        this.dDistBar = dDistBar;
+    }
 
     //NomeBar
     public String getNomeBar()
@@ -40,37 +51,31 @@ public class ListaBares
     }
 
     //Distancia Bar
-    /*public double getDistBar()
+    public String getDistBar()
     {
         return distBar;
     }
 
-    public void setDistBar(double distBar)
+    public void setDistBar(String distBar)
     {
         this.distBar = distBar;
     }
 
-    //Latitude
-    public double getLatBar()
+    public void setdDistBar(Double dDistBar)
     {
-        return latBar;
+        this.dDistBar = dDistBar;
     }
 
-    public void setLatBar(double latBar)
+    public double getdDistBar()
     {
-        this.latBar = latBar;
+        return dDistBar;
     }
 
-    //Longitude
-    public double getLngBar()
-    {
-        return lngBar;
+    @Override
+    public int compareTo(ListaBares another) {
+        if(getdDistBar() > another.dDistBar)
+        return 1;
+        else return -1;
     }
-
-    public void setLngBar(double lngBar)
-    {
-        this.lngBar = lngBar;
-    }
-*/
 }
 

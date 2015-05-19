@@ -1,7 +1,9 @@
 package diegocunha.beersfinder;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,23 +23,28 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.security.spec.ECField;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 
 public class selectBaresA extends ActionBarActivity {
 
-    //Vari�veis Globais
+    //Variaveis Globais
     ListView listView;
     String bar, ceva;
     private String AppID, ClientID;
     ProgressDialog mProgressDialog;
-    ArrayAdapter<String> adapter, adapter2;
-    List<String> lbares = null;
-    List<String> ruaBar = null;
     List<ListaBares> listaBares = null;
     myAdapter adapterList;
     ListaBares listinha;
+    myLocation MeuLugar;
+    double Latitude, Longitude;
+    ConnectivityManager conectivtyManager;
+    boolean conectado;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +56,15 @@ public class selectBaresA extends ActionBarActivity {
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
 
-        //Bloqueia pagina de usu�rio sem acesso
+        //Bloqueia pagina de usuario sem acesso
         getUser();
 
         //Inicializa variaeis
-        lbares = new ArrayList<String>();
-        ruaBar = new ArrayList<String>();
         listaBares = new ArrayList<ListaBares>();
-        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lbares);
         adapterList = new myAdapter(this, listaBares);
         listinha = new ListaBares();
+        MeuLugar = new myLocation(this);
+        mProgressDialog = new ProgressDialog(this);
         Bundle extras = getIntent().getExtras();
 
         //Recebe valores do BaresActivity
@@ -90,6 +96,30 @@ public class selectBaresA extends ActionBarActivity {
         }
     }
 
+    /**********************************************
+     * Autores: Diego Cunha Gabriel Cataneo    ****
+     * Criação: 28/04/2015                     ****
+     * Função: boolean VerificaConexao         ****
+     * Funcionalidade: Retorna status conexao  ****
+     **********************************************/
+    public  boolean verificaConexao()
+    {
+        conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected())
+        {
+            conectado = true;
+        }
+        else
+        {
+            conectado = false;
+        }
+
+        return conectado;
+    }
+
     /*****************************************
      Autores: Diego Cunha, Gabriel Cataneo  **
      Função: getListView(String Bar)        **
@@ -100,40 +130,68 @@ public class selectBaresA extends ActionBarActivity {
     {
         try
         {
+            mProgressDialog.setTitle("Carregando");
+            mProgressDialog.setMessage("Loading. . .");
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.show();
+            if(verificaConexao())
+            {
+                if(MeuLugar.canGetLocation())
+                {
+                    Latitude = MeuLugar.getLatitude();
+                    Longitude = MeuLugar.getLongitude();
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-            query.whereEqualTo("NomeBar", Bar);
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                    query.whereEqualTo("NomeBar", Bar);
 
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if(e == null)
-                    {
+                    query.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> list, ParseException e) {
+                            if(e == null)
+                            {
+                                for(int i = 0; i <list.size();i++)
+                                {
+                                    ParseObject pObject = list.get(i);
+                                    String strNomeBar = pObject.getString("NomeBar");
+                                    String strRuaBar = pObject.getString("RuaBar");
+                                    double parseLat = pObject.getDouble("Latitude");
+                                    double parseLng = pObject.getDouble("Longitude");
 
-                        for(int i = 0; i <list.size();i++)
-                        {
-                            ParseObject pObject = list.get(i);
-                            //lbares.add(pObject.getString("RuaBar"));
-                            listinha.setNomeBar(pObject.getString("NomeBar"));
-                            listinha.setRuaBar(pObject.getString("RuaBar"));
-                            listaBares.add(listinha);
+                                    double dist = MeuLugar.calculaDistancia(Latitude, parseLat, Longitude, parseLng);
+                                    String strDist = String.format("%.2f", dist) + "km";
 
-                            //ruaBar.add(pObject.getString("RuaBar"));
+                                    ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist);
+
+                                    listaBares.add(i, item);
+                                    Collections.sort(listaBares);
+                                }
+                                adapterList.notifyDataSetChanged();
+                                mProgressDialog.dismiss();
+                            }
+                            else
+                            {
+                                mProgressDialog.dismiss();
+                                e.printStackTrace();
+                            }
                         }
-                        //adapter.notifyDataSetChanged();
-                        adapterList.notifyDataSetChanged();
-                        mProgressDialog.dismiss();
-                        //adapter2.notifyDataSetChanged();
-                    }
-                    else
-                    {
-                        e.printStackTrace();
-                    }
+                    });
                 }
-            });
+                else
+                {
+                    mProgressDialog.dismiss();
+                    MeuLugar.AbreConfigGPS();
+                }
+            }
+            else
+            {
+                mProgressDialog.dismiss();
+               MeuLugar.AbreConfigNET();
+            }
         }
         catch (Exception ex)
         {
+            mProgressDialog.dismiss();
             ex.printStackTrace();
             Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }

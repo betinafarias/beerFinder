@@ -235,6 +235,18 @@ public class myLocation extends Service implements LocationListener
 	/**********************************************
 	 * Autores: Diego Cunha Gabriel Cataneo    ****
 	 * Criação: 28/04/2015                     ****
+	 * Função: void AbreConfigNET              ****
+	 * Funcionalidade: Abre tela WIFI          ****
+	 **********************************************/
+	public void AbreConfigNET()
+	{
+		Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+		mcontext.startActivity(intent);
+	}
+
+	/**********************************************
+	 * Autores: Diego Cunha Gabriel Cataneo    ****
+	 * Criação: 28/04/2015                     ****
 	 * Função: void onLocationChanged          ****
 	 * Funcionalidade: Atualiza info GPS       ****
 	 * OBS: Não mexer					       ****

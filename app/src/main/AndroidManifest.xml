@@ -46,6 +46,10 @@
             android:name=".selectBaresA"
             android:label="@string/title_activity_select_bares" >
         </activity>
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:label="@string/title_activity_reset_password" >
+        </activity>
     </application>
 
 </manifest>
