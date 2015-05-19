@@ -1,6 +1,8 @@
 package diegocunha.beersfinder;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -8,9 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseCrashReporting;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 import java.util.Timer;
 
@@ -36,14 +41,50 @@ public class MainActivity extends ActionBarActivity {
     {
         if(ParseCrashReporting.isCrashReportingEnabled())
         {
-            Intent intent = new Intent(this, firstActivity.class);
-            startActivity(intent);
+            SharedPreferences sp = getApplicationContext().getSharedPreferences("login_saved", Context.MODE_PRIVATE);
+            String user = sp.getString("login", null);
+            String pass = sp.getString("password", null);
+            if(user != null && pass != null)
+            {
+                ParseUser.logInInBackground(user, pass, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+                        if(parseUser != null)
+                        {
+                            loadSecond();
+                        }
+                        else
+                        {
+                            loadFirst();
+                        }
+
+                    }
+                });
+            }
+            else
+            {
+                Intent intent = new Intent(this, firstActivity.class);
+                startActivity(intent);
+            }
+
         }
         else
         {
             Toast.makeText(getApplicationContext(), "errou", Toast.LENGTH_SHORT);
             finish();
         }
+    }
+
+    protected void loadSecond()
+    {
+        Intent intent = new Intent(this, secondActivity.class);
+        startActivity(intent);
+    }
+
+    protected void loadFirst()
+    {
+        Intent intent = new Intent(this, firstActivity.class);
+        startActivity(intent);
     }
 
     @Override

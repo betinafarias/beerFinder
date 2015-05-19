@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -159,6 +160,13 @@ public class firstActivity extends ActionBarActivity
                     public void done(ParseUser parseUser, ParseException e) {
                         if(parseUser != null)
                         {
+
+                            SharedPreferences sp = getApplicationContext().getSharedPreferences("login_saved", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putString("login", strLogin);
+                            editor.putString("password", strPass);
+                            editor.commit();
+
                             progressDialog.dismiss();
                             second();
                         }
