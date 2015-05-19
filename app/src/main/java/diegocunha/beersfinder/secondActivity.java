@@ -41,7 +41,7 @@ public class secondActivity extends ActionBarActivity {
     //Variáveis globais
     protected ProgressDialog mProgressDialog;
     private TextView txt;
-    protected String AppID, ClientID, parseNomeBar;
+    protected String AppID, ClientID, parseNomeBar, parseRuaBar;
     private Integer count = 0;
     myLocation MeuLocal;
     double Lat, Lng, parseLat, parseLng;
@@ -49,6 +49,9 @@ public class secondActivity extends ActionBarActivity {
     private Button btnTeste;
     boolean isOn;
     ConnectivityManager conectivtyManager;
+    List<ListaBares> listaBares = null;
+    ListaBares listinha;
+    myAdapter adapterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,11 @@ public class secondActivity extends ActionBarActivity {
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
+
+        listaBares = new ArrayList<ListaBares>();
+        adapterList = new myAdapter(this, listaBares);
+        listinha = new ListaBares();
+        MeuLocal = new myLocation(this);
 
         getUser();
 
@@ -122,10 +130,6 @@ public class secondActivity extends ActionBarActivity {
     {
         MeuLocal = new myLocation(this);
 
-        final List<Double> distBares = new ArrayList<Double>();
-        final List<ListaBares> listadebar = new ArrayList<>();
-
-        final ListaBares listagem = new ListaBares();
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -157,16 +161,16 @@ public class secondActivity extends ActionBarActivity {
                                     parseLat = pObject.getDouble("Latitude");
                                     parseLng = pObject.getDouble("Longitude");
                                     parseNomeBar = pObject.getString("NomeBar");
+                                    parseRuaBar = pObject.getString("RuaBar");
 
-                                    cResult = MeuLocal.calculaDistancia(Lat, Lng, parseLat, parseLng);
-                                    distBares.add(i, cResult);
-
-                                    listagem.setNomeBar(parseNomeBar);
-                                    //listagem.setDistBar(cResult);
-
-                                    listadebar.add(i, listagem);
-                                    mProgressDialog.dismiss();
+                                    cResult = MeuLocal.calculaDistancia(Lat, parseLat, Lng, parseLng);
+                                    String strDist = String.format("%.2f", cResult) + "km";
+                                    ListaBares item = new ListaBares(parseNomeBar, parseRuaBar, strDist, cResult);
+                                    listaBares.add(i, item);
+                                    Collections.sort(listaBares);
                                 }
+                                adapterList.notifyDataSetChanged();
+                                mProgressDialog.dismiss();
                             }
                             else
                             {
