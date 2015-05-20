@@ -1,5 +1,7 @@
 package diegocunha.beersfinder;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -68,6 +70,7 @@ public class firstActivity extends ActionBarActivity
         //Pega infos dos EditText
         login = (EditText)findViewById(R.id.edtLogin);
         senha = (EditText)findViewById(R.id.edtSenha);
+
 
         //Parse Infos
         AppID = getString(R.string.AppID);
@@ -155,17 +158,17 @@ public class firstActivity extends ActionBarActivity
                 strLogin = login.getText().toString();
                 strSenha = senha.getText().toString();
 
+
                 ParseUser.logInInBackground(strLogin, strSenha, new LogInCallback() {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {
                         if(parseUser != null)
                         {
-
-                            SharedPreferences sp = getApplicationContext().getSharedPreferences("login_saved", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("login", strLogin);
-                            editor.putString("password", strPass);
-                            editor.commit();
+                            SharedPreferences sp=getSharedPreferences("Login", 0);
+                            SharedPreferences.Editor Ed=sp.edit();
+                            Ed.putString("Unm",strLogin );
+                            Ed.putString("Psw",strSenha);
+                            Ed.commit();
 
                             progressDialog.dismiss();
                             second();

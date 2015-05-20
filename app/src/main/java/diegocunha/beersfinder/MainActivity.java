@@ -3,11 +3,13 @@ package diegocunha.beersfinder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -23,6 +25,7 @@ import java.util.Timer;
 public class MainActivity extends ActionBarActivity {
 
     private String AppID, ClientID;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +37,37 @@ public class MainActivity extends ActionBarActivity {
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
         ParseFacebookUtils.initialize(getApplicationContext());
+        imageView = (ImageView)findViewById(R.id.gyro);
+        imageView.setBackgroundResource(R.drawable.animation_xml);
+        AnimationDrawable gyroAnimation = (AnimationDrawable)imageView.getBackground();
         start();
     }
 
     public void start()
     {
+        final AnimationDrawable gyroAnimation = (AnimationDrawable)imageView.getBackground();
+        gyroAnimation.start();
+
         if(ParseCrashReporting.isCrashReportingEnabled())
         {
-            SharedPreferences sp = getApplicationContext().getSharedPreferences("login_saved", Context.MODE_PRIVATE);
-            String user = sp.getString("login", null);
-            String pass = sp.getString("password", null);
-            if(user != null && pass != null)
+            SharedPreferences sp1=this.getSharedPreferences("Login", 0);
+
+            String unm=sp1.getString("Unm", null);
+            String pass = sp1.getString("Psw", null);
+
+            if(unm != null && pass != null)
             {
-                ParseUser.logInInBackground(user, pass, new LogInCallback() {
+                ParseUser.logInInBackground(unm, pass, new LogInCallback() {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {
                         if(parseUser != null)
                         {
+                            gyroAnimation.stop();
                             loadSecond();
                         }
                         else
                         {
+                            gyroAnimation.stop();
                             loadFirst();
                         }
 
@@ -64,12 +77,14 @@ public class MainActivity extends ActionBarActivity {
             else
             {
                 Intent intent = new Intent(this, firstActivity.class);
+                gyroAnimation.stop();
                 startActivity(intent);
             }
 
         }
         else
         {
+            gyroAnimation.stop();
             Toast.makeText(getApplicationContext(), "errou", Toast.LENGTH_SHORT);
             finish();
         }
