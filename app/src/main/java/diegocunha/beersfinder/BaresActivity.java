@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import java.lang.reflect.Array;
+
 
 public class BaresActivity extends ActionBarActivity{
 
@@ -22,8 +24,8 @@ public class BaresActivity extends ActionBarActivity{
     ProgressDialog mProgressDialog;
     ConnectivityManager conectivtyManager;
     boolean isOn;
-    private String AppID, ClientID, nomedoBar, nomeCerveja;
-    private String nomeBar[], nomeCeva[];
+    private String AppID, ClientID, nomedoBar, nomeCerveja, tipoCerveja;
+    private String nomeBar[], nomeCeva[], tamanhoCeva[];
     int barPosition, cevaPosition;
 
     @Override
@@ -99,9 +101,11 @@ public class BaresActivity extends ActionBarActivity{
        {
             this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub"};
             this.nomeCeva = new String[]{"Escolha uma opcao", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
+            this.tamanhoCeva = new String[]{"Escolha uma opcao", "500ml","600ml", "Long Neck", "Artesanal", "Chopp"};
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeBar);
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeCeva);
+            ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tamanhoCeva);
 
             mySpinner.setAdapter(adapter);
             spinerCerveja.setAdapter(adapter2);
@@ -132,6 +136,7 @@ public class BaresActivity extends ActionBarActivity{
 
             nomedoBar = mySpinner.getSelectedItem().toString();
             nomeCerveja = spinerCerveja.getSelectedItem().toString();
+            tipoCerveja = "";
 
             barPosition = mySpinner.getSelectedItemPosition();
             cevaPosition = spinerCerveja.getSelectedItemPosition();

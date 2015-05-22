@@ -21,7 +21,12 @@ import com.parse.ParseUser;
 
 import java.util.Timer;
 
-
+/********************************************
+ * Autores: Diego Cunha Gabriel Cataneo  ****
+ * Criação: 28/04/2015                   ****
+ * Class: MainActivity                   ****
+ * Funcionalidade: SplashScreen do app   ****
+ *******************************************/
 public class MainActivity extends ActionBarActivity {
 
     private String AppID, ClientID;
@@ -43,6 +48,12 @@ public class MainActivity extends ActionBarActivity {
         start();
     }
 
+    /*********************************************
+     * Autores: Diego Cunha Gabriel Cataneo   ****
+     * Criação: 14/05/2015                    ****
+     * Função: void start                     ****
+     * Funcionalidade: Carrega o com a Splas  ****
+     *********************************************/
     public void start()
     {
         final AnimationDrawable gyroAnimation = (AnimationDrawable)imageView.getBackground();
