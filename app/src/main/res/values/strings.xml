@@ -18,4 +18,5 @@
     <string name="title_activity_select_bares">BeersFinder</string>
     <string name="title_activity_bar_for_location">BeersFinder</string>
     <string name="title_activity_reset_password">BeersFinder</string>
+    <string name="title_activity_selected_bar">SelectedBarActivity</string>
 </resources>

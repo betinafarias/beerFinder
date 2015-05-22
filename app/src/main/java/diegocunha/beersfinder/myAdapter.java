@@ -105,7 +105,7 @@ public class myAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, SignUpActivity.class);
+                Intent intent = new Intent(context, SelectedBarActivity.class);
                 intent.putExtra("NomeBar", listaBares.get(position).getNomeBar());
                 intent.putExtra("RuaBar", listaBares.get(position).getRuaBar());
                 intent.putExtra("DistBar",listaBares.get(position).getDistBar());
