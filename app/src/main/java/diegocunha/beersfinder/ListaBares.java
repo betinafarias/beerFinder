@@ -15,17 +15,19 @@ public class ListaBares implements Comparable<ListaBares>
     private String nomeBar;
     private String distBar;
     private Double dDistBar;
-    //private double latBar;
-    //private double lngBar;
+    private double latBar;
+    private double lngBar;
 
     public ListaBares(){}
 
-    public ListaBares(String nomeBar, String ruaBar, String distBar, double dDistBar)
+    public ListaBares(String nomeBar, String ruaBar, String distBar, double dDistBar, double latBar, double lngBar)
     {
         this.nomeBar = nomeBar;
         this.ruaBar = ruaBar;
         this.distBar = distBar;
         this.dDistBar = dDistBar;
+        this.latBar = latBar;
+        this.lngBar = lngBar;
     }
 
     //NomeBar
@@ -50,6 +52,21 @@ public class ListaBares implements Comparable<ListaBares>
         this.ruaBar = ruaBar;
     }
 
+    //Latitude
+    public double getLatBar(){return latBar;}
+
+    public void setLatBar(double latBar)
+    {
+        this.latBar = latBar;
+    }
+
+    //Longitude
+    public double getLngBar(){return lngBar;}
+
+    public void setLngBar(double lngBar)
+    {
+        this.lngBar = lngBar;
+    }
     //Distancia Bar
     public String getDistBar()
     {

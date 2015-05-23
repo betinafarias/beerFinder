@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ public class SelectedBarActivity extends ActionBarActivity {
     //Variaveis Globais
     private String AppID, ClientID, nomedoBar, ruadoBar, distdoBar;
     TextView v1,v2, v3;
+    private double Lat, Lng;
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -60,7 +62,10 @@ public class SelectedBarActivity extends ActionBarActivity {
             v2.setText(ruadoBar);
             distdoBar = extras.getString("DistBar");
             v3.setText(distdoBar);
+            Lat = extras.getDouble("Latitude");
+            Lng = extras.getDouble("Longitude");
             mProgressDialog.dismiss();
+
         }
         else // Se nao foi
         {
@@ -88,6 +93,14 @@ public class SelectedBarActivity extends ActionBarActivity {
             startActivity(intent);
 
         }
+    }
+
+    public void goDraw(View view)
+    {
+        Intent intent = new Intent(this, HowtoGoActivity.class);
+        intent.putExtra("LatitudeBar", Lat);
+        intent.putExtra("LongitudeBar", Lng);
+        startActivity(intent);
     }
 
     @Override

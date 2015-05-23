@@ -60,9 +60,9 @@ public class BarForLocationActivity extends ActionBarActivity {
 
     /*****************************************
      Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getUser                        **
-     Funcionalidade: Verifica usuário       **
-     Data Criação: 05/05/2015               **
+     Funï¿½ï¿½o: getUser                        **
+     Funcionalidade: Verifica usuï¿½rio       **
+     Data Criaï¿½ï¿½o: 05/05/2015               **
      ******************************************/
     protected void getUser()
     {
@@ -136,7 +136,7 @@ public class BarForLocationActivity extends ActionBarActivity {
                                         double dist = MeuLugar.calculaDistancia(Latitude, parseLat, Longitude, parseLng);
                                         String strDist = String.format("%.2f", dist) + "km";
 
-                                        ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist);
+                                        ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
 
                                         listaBares.add(i, item);
                                         Collections.sort(listaBares);

@@ -35,6 +35,7 @@ public class myAdapter extends BaseAdapter {
     {
         this.listaBares = listaBares;
         mInflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     /*******************************************
@@ -108,7 +109,9 @@ public class myAdapter extends BaseAdapter {
                 Intent intent = new Intent(context, SelectedBarActivity.class);
                 intent.putExtra("NomeBar", listaBares.get(position).getNomeBar());
                 intent.putExtra("RuaBar", listaBares.get(position).getRuaBar());
-                intent.putExtra("DistBar",listaBares.get(position).getDistBar());
+                intent.putExtra("DistBar", listaBares.get(position).getDistBar());
+                intent.putExtra("Latitude", listaBares.get(position).getLatBar());
+                intent.putExtra("Longitude", listaBares.get(position).getLngBar());
                 context.startActivity(intent);
             }
         });
@@ -123,7 +126,6 @@ public class myAdapter extends BaseAdapter {
      * Funcionalidade: Declara os TextView   ****
      *******************************************/
     private class ItemSuporte {
-
         TextView txtNomeBar;
         TextView txtRuaBar;
         TextView txtDistancia;

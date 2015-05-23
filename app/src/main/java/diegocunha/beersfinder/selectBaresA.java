@@ -161,7 +161,7 @@ public class selectBaresA extends ActionBarActivity {
                                     double dist = MeuLugar.calculaDistancia(Latitude, parseLat, Longitude, parseLng);
                                     String strDist = String.format("%.2f", dist) + "km";
 
-                                    ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist);
+                                    ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
 
                                     listaBares.add(i, item);
                                     Collections.sort(listaBares);
