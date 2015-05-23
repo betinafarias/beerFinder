@@ -60,7 +60,7 @@ public class HowtoGoActivity extends FragmentActivity {
 
             Polygon polygon = mMap.addPolygon(new PolygonOptions()
                     .add(new LatLng(Latitude, Longitude),
-                            new LatLng(barLat, barLng)).strokeWidth(5).strokeColor(Color.BLUE));
+                            new LatLng(barLat, barLng)).geodesic(true));
         }
         catch (Exception ex)
         {

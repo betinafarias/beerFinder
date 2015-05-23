@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ public class SelectedBarActivity extends ActionBarActivity {
     private String AppID, ClientID, nomedoBar, ruadoBar, distdoBar;
     TextView v1,v2, v3;
     private double Lat, Lng;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

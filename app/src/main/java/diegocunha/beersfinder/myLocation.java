@@ -11,8 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
-import android.widget.Toast;
-
+import android.widget.Toast;;
 import com.parse.Parse;
 import com.parse.ParseCrashReporting;
 
@@ -28,7 +27,7 @@ public class myLocation extends Service implements LocationListener
     private final Context mcontext;
 	boolean isGPS = false, isNet = false, haveLocation = false;
 	Location location;
-	double latitude, longitude, teta, dist;
+	double latitude, longitude, teta, dist, Radius;
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 	private static final long MIN_TIME_BW_UPDATES = 0;
 	protected LocationManager locationManager;
@@ -36,7 +35,7 @@ public class myLocation extends Service implements LocationListener
 
 	public myLocation(Context context)
 	{
-			this.mcontext = context;
+		this.mcontext = context;
 		getLocation();
 	}
 
@@ -65,22 +64,7 @@ public class myLocation extends Service implements LocationListener
 			else
 			{
 				this.haveLocation = true;
-				if(isNet)
-				{
-					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
-					if(locationManager != null)
-					{
-						location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-						if(location != null)
-						{
-							latitude = location.getLatitude();
-							longitude = location.getLongitude();
-						}
-					}
-				}
-				else if(isGPS)
+				if(isGPS)
 				{
 					if(location == null)
 					{
@@ -162,18 +146,19 @@ public class myLocation extends Service implements LocationListener
 	 * Criação: 05/05/2015                     ****
 	 * Função: double calculaDistancia         ****
 	 * Funcionalidade: Realiza cálculo dist.   ****
-	 * OBS: Não mexer					       ****
+	 * Correção: 22/05/2015 - Diego Cunha
+	 *
 	 **********************************************/
 	public double calculaDistancia(double lat1, double lat2, double lng1, double lng2)
 	{
 		try
 		{
-			teta = lng1 - lng2;
-			dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(teta));
-			dist = Math.acos(dist);
-			dist = rad2deg(dist);
-			dist = dist * 60 * 1.1515;
-			dist = dist * 1.609344;
+			Radius = 6371;
+			double dLat= Math.toRadians(lat2-lat1);
+			double dLng = Math.toRadians(lng2-lng1);
+			double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng/2) * Math.sin(dLng/2);
+			dist = 2 * Math.asin(Math.sqrt(a));
+			dist = dist * Radius;
 		}
 		catch (Exception ex)
 		{
