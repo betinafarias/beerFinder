@@ -141,6 +141,8 @@ public class BarForLocationActivity extends ActionBarActivity {
                                         listaBares.add(i, item);
                                         Collections.sort(listaBares);
                                     }
+
+                                    MeuLugar.stopUsingGPS();
                                     adapterList.notifyDataSetChanged();
                                     mProgressDialog.dismiss();
                                 }

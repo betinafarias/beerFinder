@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -34,6 +35,7 @@ public class HowtoGoActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
         MeuLugar = new myLocation(this);
+        mMap = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
         if(extras != null)
         {
             barLat = extras.getDouble("Latitude");
@@ -57,10 +59,6 @@ public class HowtoGoActivity extends FragmentActivity {
             strLong = String.valueOf(Longitude);
             strBarLat = String.valueOf(barLat);
             strBarLng = String.valueOf(barLng);
-
-            Polygon polygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng(Latitude, Longitude),
-                            new LatLng(barLat, barLng)).geodesic(true));
         }
         catch (Exception ex)
         {
