@@ -96,6 +96,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         }
     }
 
+    /*****************************************
+     Autores: Diego Cunha, Gabriel Cataneo  **
+     Funçao: goDraw                         **
+     Funcionalidade: Abre activity do Maps  **
+     Data Cria??o: 23/05/2015               **
+     ******************************************/
     public void goDraw(View view)
     {
         Intent intent = new Intent(this, HowtoGoActivity.class);

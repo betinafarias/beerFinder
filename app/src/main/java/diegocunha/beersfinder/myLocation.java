@@ -64,7 +64,22 @@ public class myLocation extends Service implements LocationListener
 			else
 			{
 				this.haveLocation = true;
-				if(isGPS)
+				if(isNet)
+				{
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+					if(locationManager != null)
+					{
+						location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+						if(location != null)
+						{
+							latitude = location.getLatitude();
+							longitude = location.getLongitude();
+						}
+					}
+				}
+				else if(isGPS)
 				{
 					if(location == null)
 					{
@@ -164,7 +179,6 @@ public class myLocation extends Service implements LocationListener
 		{
 			ex.printStackTrace();
 			Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
-			dist = 0.00;
 		}
 		return dist;
 	}

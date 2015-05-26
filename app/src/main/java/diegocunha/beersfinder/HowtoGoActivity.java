@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HowtoGoActivity extends FragmentActivity {
+public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     myLocation MeuLugar;
@@ -57,29 +58,36 @@ public class HowtoGoActivity extends FragmentActivity {
     {
         try
         {
-            Latitude = MeuLugar.getLatitude();
-            Longitude = MeuLugar.getLongitude();
-
-            strLat = String.valueOf(Latitude);
-            strLong = String.valueOf(Longitude);
-            strBarLat = String.valueOf(barLat);
-            strBarLng = String.valueOf(barLng);
-
-            start = new LatLng(Latitude, Longitude);
-            end  = new LatLng(barLat, barLng);
-
-            Document doc = md.getDocument(start, end, myIntineraire.MODE_DRIVING);
-
-            ArrayList<LatLng> directPoint = md.getDirection(doc);
-            PolylineOptions rectline = new PolylineOptions().width(3).color(Color.GREEN);
-
-            for(int i = 0; i <directPoint.size();i++)
+            if(MeuLugar.canGetLocation())
             {
-                rectline.add(directPoint.get(i));
+                Latitude = MeuLugar.getLatitude();
+                Longitude = MeuLugar.getLongitude();
+
+                strLat = String.valueOf(Latitude);
+                strLong = String.valueOf(Longitude);
+                strBarLat = String.valueOf(barLat);
+                strBarLng = String.valueOf(barLng);
+
+                start = new LatLng(Latitude, Longitude);
+                end  = new LatLng(barLat, barLng);
+
+                Document doc = md.getDocument(start, end, myIntineraire.MODE_DRIVING);
+
+                ArrayList<LatLng> directPoint = md.getDirection(doc);
+                PolylineOptions rectline = new PolylineOptions().width(3).color(Color.GREEN);
+
+                for(int i = 0; i <directPoint.size();i++)
+                {
+                    rectline.add(directPoint.get(i));
+                }
+
+                Polyline polyline = mMap.addPolyline(rectline);
+
             }
-
-            Polyline polyline = mMap.addPolyline(rectline);
-
+            else
+            {
+                MeuLugar.AbreConfigGPS();
+            }
         }
         catch (Exception ex)
         {
@@ -104,12 +112,18 @@ public class HowtoGoActivity extends FragmentActivity {
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
-                //connect();
             }
         }
     }
 
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        double sLat = MeuLugar.getLatitude();
+        double sLng = MeuLugar.getLongitude();
+        mMap.addMarker(new MarkerOptions().position(new LatLng(sLat, sLng)).title("Eu aqui"));
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        connect();
     }
 }
