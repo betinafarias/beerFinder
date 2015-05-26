@@ -3,36 +3,25 @@ package diegocunha.beersfinder;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
-
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     myLocation MeuLugar;
+    TextView txt;
     private double Latitude, Longitude, barLat, barLng;
-    private String strLat, strLong, strBarLat, strBarLng;
+    private String strLat, strLong, strBarLat, strBarLng, strNomeBar;
     myIntineraire md;
     LatLng start, end;
     @Override
@@ -42,6 +31,7 @@ public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallb
         Bundle extras = getIntent().getExtras();
         MeuLugar = new myLocation(this);
         md = new myIntineraire();
+        txt = (TextView)findViewById(R.id.tNomeBar);
 
         setContentView(R.layout.activity_howtogo);
         setUpMapIfNeeded();
@@ -50,6 +40,8 @@ public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallb
         {
             barLat = extras.getDouble("Latitude");
             barLng = extras.getDouble("Longitude");
+            strNomeBar = extras.getString("NomeBar");
+            txt.setText(strNomeBar);
             connect();
         }
     }

@@ -107,6 +107,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         Intent intent = new Intent(this, HowtoGoActivity.class);
         intent.putExtra("LatitudeBar", Lat);
         intent.putExtra("LongitudeBar", Lng);
+        intent.putExtra("NomeBar", nomedoBar);
         startActivity(intent);
     }
 
