@@ -31,7 +31,7 @@ public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallb
         Bundle extras = getIntent().getExtras();
         MeuLugar = new myLocation(this);
         md = new myIntineraire();
-        txt = (TextView)findViewById(R.id.tNomeBar);
+
 
         setContentView(R.layout.activity_howtogo);
         setUpMapIfNeeded();
@@ -41,6 +41,7 @@ public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallb
             barLat = extras.getDouble("Latitude");
             barLng = extras.getDouble("Longitude");
             strNomeBar = extras.getString("NomeBar");
+            txt = (TextView)findViewById(R.id.tNomeBar);
             txt.setText(strNomeBar);
             connect();
         }
