@@ -1,11 +1,14 @@
 package diegocunha.beersfinder;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -15,15 +18,16 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.w3c.dom.Document;
 import java.util.ArrayList;
 
-public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallback {
+public class HowtoGoActivity extends Activity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+
     myLocation MeuLugar;
     TextView txt;
     private double Latitude, Longitude, barLat, barLng;
     private String strLat, strLong, strBarLat, strBarLng, strNomeBar;
     myIntineraire md;
     LatLng start, end;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,27 +36,15 @@ public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallb
         MeuLugar = new myLocation(this);
         md = new myIntineraire();
 
-
         setContentView(R.layout.activity_howtogo);
-        setUpMapIfNeeded();
 
-        if(extras != null)
-        {
-            barLat = extras.getDouble("Latitude");
-            barLng = extras.getDouble("Longitude");
-            strNomeBar = extras.getString("NomeBar");
-            txt = (TextView)findViewById(R.id.tNomeBar);
-            txt.setText(strNomeBar);
-            connect();
-        }
+        MapFragment mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
+        mMap.getMapAsync(this);
     }
 
-    public void connect()
-    {
-        try
-        {
-            if(MeuLugar.canGetLocation())
-            {
+    /*public void connect() {
+        try {
+            if (MeuLugar.canGetLocation()) {
                 Latitude = MeuLugar.getLatitude();
                 Longitude = MeuLugar.getLongitude();
 
@@ -62,61 +54,39 @@ public class HowtoGoActivity extends FragmentActivity implements OnMapReadyCallb
                 strBarLng = String.valueOf(barLng);
 
                 start = new LatLng(Latitude, Longitude);
-                end  = new LatLng(barLat, barLng);
+                end = new LatLng(barLat, barLng);
 
                 Document doc = md.getDocument(start, end, myIntineraire.MODE_DRIVING);
 
                 ArrayList<LatLng> directPoint = md.getDirection(doc);
                 PolylineOptions rectline = new PolylineOptions().width(3).color(Color.GREEN);
 
-                for(int i = 0; i <directPoint.size();i++)
-                {
+                for (int i = 0; i < directPoint.size(); i++) {
                     rectline.add(directPoint.get(i));
                 }
 
-                Polyline polyline = mMap.addPolyline(rectline);
+                //Polyline polyline = mMap.addPolyline(rectline);
 
-            }
-            else
-            {
+            } else {
                 MeuLugar.AbreConfigGPS();
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-    }
+    }*/
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-    }
+    public void onMapReady(GoogleMap googleMap)
+    {
+        LatLng sydney = new LatLng(-33.867, 151.206);
 
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            //connect();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
-            }
-        }
-    }
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
 
-    private void setUpMap() {
-        double sLat = MeuLugar.getLatitude();
-        double sLng = MeuLugar.getLongitude();
-        mMap.addMarker(new MarkerOptions().position(new LatLng(sLat, sLng)).title("Eu aqui"));
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        connect();
+        googleMap.addMarker(new MarkerOptions()
+                .title("Sydney")
+                .snippet("The most populous city in Australia.")
+                .position(sydney));
     }
 }
