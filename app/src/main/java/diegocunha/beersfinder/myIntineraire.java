@@ -32,14 +32,18 @@ public class myIntineraire {
     private double myLat, myLng, parseLat, parseLng;
     public final static String MODE_DRIVING = "driving";
     public final static String MODE_WALKING = "walking";
+    NodeList nl1, nl2, nl3;
+    Document doc;
+
 
     public Document getDocument(LatLng start, LatLng end, String mode) {
         String url = "http://maps.googleapis.com/maps/api/directions/xml?"
                 + "origin=" + start.latitude + "," + start.longitude
                 + "&destination=" + end.latitude + "," + end.longitude
-                + "&sensor=false&units=metrics&mode=driving";
+                + "&sensor=false&units=metric&mode=" + mode;
 
-        try {
+        try
+        {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             HttpPost httpPost = new HttpPost(url);
@@ -47,20 +51,22 @@ public class myIntineraire {
 
             InputStream input = response.getEntity().getContent();
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.parse(input);
+            doc = builder.parse(input);
 
-            return doc;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
+            doc = null;
         }
 
-        return null;
+        return doc;
     }
 
     public String getDurationText(Document doc) {
         try {
 
-            NodeList nl1 = doc.getElementsByTagName("duration");
+            nl1 = doc.getElementsByTagName("duration");
             Node node1 = nl1.item(0);
             NodeList nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "text"));
@@ -72,9 +78,9 @@ public class myIntineraire {
 
     public int getDurationValue(Document doc) {
         try {
-            NodeList nl1 = doc.getElementsByTagName("duration");
+            nl1 = doc.getElementsByTagName("duration");
             Node node1 = nl1.item(0);
-            NodeList nl2 = node1.getChildNodes();
+            nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
             return Integer.parseInt(node2.getTextContent());
         } catch (Exception e) {
@@ -85,11 +91,10 @@ public class myIntineraire {
     public String getDistanceText(Document doc) {
 
         try {
-            NodeList nl1;
             nl1 = doc.getElementsByTagName("distance");
 
             Node node1 = nl1.item(nl1.getLength() - 1);
-            NodeList nl2 = null;
+            nl2 = null;
             nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
             return node2.getTextContent();
@@ -100,10 +105,10 @@ public class myIntineraire {
 
     public int getDistanceValue(Document doc) {
         try {
-            NodeList nl1 = doc.getElementsByTagName("distance");
+            nl1 = doc.getElementsByTagName("distance");
             Node node1 = null;
             node1 = nl1.item(nl1.getLength() - 1);
-            NodeList nl2 = node1.getChildNodes();
+            nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
             return Integer.parseInt(node2.getTextContent());
         } catch (Exception e) {
@@ -113,7 +118,7 @@ public class myIntineraire {
 
     public String getStartAddress(Document doc) {
         try {
-            NodeList nl1 = doc.getElementsByTagName("start_address");
+            nl1 = doc.getElementsByTagName("start_address");
             Node node1 = nl1.item(0);
             Log.i("StartAddress", node1.getTextContent());
             return node1.getTextContent();
@@ -125,7 +130,7 @@ public class myIntineraire {
 
     public String getEndAddress(Document doc) {
         try {
-            NodeList nl1 = doc.getElementsByTagName("end_address");
+            nl1 = doc.getElementsByTagName("end_address");
             Node node1 = nl1.item(0);
             return node1.getTextContent();
         } catch (Exception e) {
@@ -135,7 +140,7 @@ public class myIntineraire {
 
     public String getCopyRights(Document doc) {
         try {
-            NodeList nl1 = doc.getElementsByTagName("copyrights");
+            nl1 = doc.getElementsByTagName("copyrights");
             Node node1 = nl1.item(0);
             return node1.getTextContent();
         } catch (Exception e) {
@@ -145,7 +150,7 @@ public class myIntineraire {
     }
 
     public ArrayList<LatLng> getDirection(Document doc) {
-        NodeList nl1, nl2, nl3;
+
         ArrayList<LatLng> listGeopoints = new ArrayList<LatLng>();
         nl1 = doc.getElementsByTagName("step");
         if (nl1.getLength() > 0) {

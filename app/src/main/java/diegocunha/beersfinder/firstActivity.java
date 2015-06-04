@@ -39,12 +39,12 @@ import org.w3c.dom.Text;
 import java.security.MessageDigest;
 import java.util.List;
 
-    /*******************************************
-    * Autores: Diego Cunha Gabriel Cataneo  ****
-    * Criação: 28/04/2015                 ****
-    * Classe: firstActivity                 ****
-    * Função: Login no Aplicativo         ****
-    ********************************************/
+/*******************************************
+* Autores: Diego Cunha Gabriel Cataneo  ****
+* Criação: 28/04/2015                   ****
+* Classe: firstActivity                 ****
+* Função: Login no Aplicativo           ****
+********************************************/
 public class firstActivity extends ActionBarActivity
 {
 	//Variáveis Globais
@@ -54,7 +54,7 @@ public class firstActivity extends ActionBarActivity
     private LocationManager locationManager;
     private boolean conectado, load = false;
     private ConnectivityManager conectivtyManager;
-    private ProgressDialog progressDialog;
+    private ProgressDialog mProgressDialog;
 
 
     @Override
@@ -93,6 +93,12 @@ public class firstActivity extends ActionBarActivity
         startActivity(intet);
     }
 
+    /*************************************************
+     * Autores: Diego Cunha Gabriel Cataneo       ****
+     * Criação: 28/04/2015                        ****
+     * Função: void resetPass                     ****
+     * Funcionalidade: Abre ResetPasswordActivity ****
+     *************************************************/
     public void resetPass(View view)
     {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
@@ -101,8 +107,8 @@ public class firstActivity extends ActionBarActivity
 
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                   ****
-     * Função: boolean VerificaConexao       ****
+     * Criação: 28/04/2015                     ****
+     * Função: boolean VerificaConexao         ****
      * Funcionalidade: Retorna status conexao  ****
      **********************************************/
     public  boolean verificaConexao()
@@ -143,39 +149,43 @@ public class firstActivity extends ActionBarActivity
      **********************************************/
     public void Login(View view)
     {
-
         try
         {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(true);
-            progressDialog.setCanceledOnTouchOutside(true);
-            progressDialog.setTitle("Verificando");
-            progressDialog.setMessage("Carregando. . . ");
-            progressDialog.show();
+            //Inicializa ProgressDialog
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setTitle("Verificando");
+            mProgressDialog.setMessage("Carregando. . . ");
+            mProgressDialog.show();
 
+            //Verifica conexao com internet
             if(verificaConexao())
             {
+                //Pega texto dos TextView
                 strLogin = login.getText().toString();
                 strSenha = senha.getText().toString();
 
-
+                //Realiza o Login com o PArse
                 ParseUser.logInInBackground(strLogin, strSenha, new LogInCallback() {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {
+                        //Se usuario existe
                         if(parseUser != null)
                         {
+                            //Salva login no Android
                             SharedPreferences sp=getSharedPreferences("Login", 0);
                             SharedPreferences.Editor Ed=sp.edit();
                             Ed.putString("Unm",strLogin );
                             Ed.putString("Psw",strSenha);
                             Ed.commit();
 
-                            progressDialog.dismiss();
+                            mProgressDialog.dismiss();
                             second();
                         }
                         else
                         {
-                            progressDialog.dismiss();
+                            mProgressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), "Erro: " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -183,13 +193,13 @@ public class firstActivity extends ActionBarActivity
             }
             else
             {
-                progressDialog.dismiss();
+                mProgressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Sem internet", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception ex)
         {
-            progressDialog.dismiss();
+            mProgressDialog.dismiss();
             ex.printStackTrace();
             Toast.makeText(getApplicationContext(), "Erro: " + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
@@ -226,6 +236,7 @@ public class firstActivity extends ActionBarActivity
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
+    //Bloqueia acesso a SplashScreen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {

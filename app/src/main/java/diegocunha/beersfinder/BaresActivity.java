@@ -17,9 +17,15 @@ import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
 
-
+/********************************************
+ * Autores: Diego Cunha Gabriel Cataneo  ****
+ * Cria��o: 08/05/2015                   ****
+ * Classe: BaresActivity                 ****
+ * Fun��o: Filtro para bares             ****
+ ********************************************/
 public class BaresActivity extends ActionBarActivity{
 
+    //Variaveis Globais
     Spinner mySpinner, spinerCerveja;
     ProgressDialog mProgressDialog;
     ConnectivityManager conectivtyManager;
@@ -38,8 +44,6 @@ public class BaresActivity extends ActionBarActivity{
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
         getUser();
-
-        setContentView(R.layout.activity_bares);
 
         //Preenche os Spinners
         mySpinner = (Spinner)findViewById(R.id.meuSpinner);
@@ -99,16 +103,19 @@ public class BaresActivity extends ActionBarActivity{
    {
        try
        {
-            this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub"};
-            this.nomeCeva = new String[]{"Escolha uma opcao", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
-            this.tamanhoCeva = new String[]{"Escolha uma opcao", "500ml","600ml", "Long Neck", "Artesanal", "Chopp"};
+            //Adiciona os valores aos Spinners
+           this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub"};
+           this.nomeCeva = new String[]{"Escolha uma opcao", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
+           this.tamanhoCeva = new String[]{"Escolha uma opcao", "500ml","600ml", "Long Neck", "Artesanal", "Chopp"};
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeBar);
-            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeCeva);
-            ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tamanhoCeva);
+           //Cria ArrayAdapter para os Spinner
+           ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeBar);
+           ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeCeva);
+           ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tamanhoCeva);
 
-            mySpinner.setAdapter(adapter);
-            spinerCerveja.setAdapter(adapter2);
+           //Carrega Spinner
+           mySpinner.setAdapter(adapter);
+           spinerCerveja.setAdapter(adapter2);
        }
        catch (Exception ex)
        {
@@ -125,6 +132,7 @@ public class BaresActivity extends ActionBarActivity{
      ******************************************************/
     public void sendBares(View view)
     {
+        //Inicia o ProgressDialog
         mProgressDialog = new ProgressDialog(this);
 
         try
@@ -141,6 +149,7 @@ public class BaresActivity extends ActionBarActivity{
             barPosition = mySpinner.getSelectedItemPosition();
             cevaPosition = spinerCerveja.getSelectedItemPosition();
 
+            //Manda informações para SelectedBaresActivity
             if(barPosition == 0 && cevaPosition == 0)
             {
                 mProgressDialog.dismiss();

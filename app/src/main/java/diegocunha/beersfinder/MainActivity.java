@@ -37,9 +37,14 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Parse Crash Report
         ParseCrashReporting.enable(this);
+
+        //Direciona ID do Parse
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
+
+        //Inicializa informacoes
         Parse.initialize(this, AppID, ClientID);
         ParseFacebookUtils.initialize(getApplicationContext());
         imageView = (ImageView)findViewById(R.id.gyro);
@@ -48,12 +53,12 @@ public class MainActivity extends ActionBarActivity {
         start();
     }
 
-    /*********************************************
-     * Autores: Diego Cunha Gabriel Cataneo   ****
-     * Criação: 14/05/2015                    ****
-     * Função: void start                     ****
-     * Funcionalidade: Carrega o com a Splas  ****
-     *********************************************/
+/*********************************************
+* Autores: Diego Cunha Gabriel Cataneo   ****
+* Criação: 14/05/2015                    ****
+* Função: void start                     ****
+* Funcionalidade: Carrega o com a Splas  ****
+*********************************************/
     public void start()
     {
         final AnimationDrawable gyroAnimation = (AnimationDrawable)imageView.getBackground();
@@ -81,7 +86,6 @@ public class MainActivity extends ActionBarActivity {
                             gyroAnimation.stop();
                             loadFirst();
                         }
-
                     }
                 });
             }
@@ -91,7 +95,6 @@ public class MainActivity extends ActionBarActivity {
                 gyroAnimation.stop();
                 startActivity(intent);
             }
-
         }
         else
         {

@@ -19,9 +19,15 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.w3c.dom.Document;
 import java.util.ArrayList;
 
+/********************************************
+ * Autores: Diego Cunha Gabriel Cataneo  ****
+ * Cria??o: 08/05/2015                   ****
+ * Classe: HowtoGoActivity               ****
+ * Fun??o: Mostra no Maps rota           ****
+ ********************************************/
 public class HowtoGoActivity extends Activity{
 
-
+    //Variaveis Globais
     myLocation MeuLugar;
     TextView txt;
     private double Latitude, Longitude, barLat, barLng;
@@ -34,17 +40,18 @@ public class HowtoGoActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_howtogo);
 
+        //Inicia variaveis necessarias
         Bundle extras = getIntent().getExtras();
         MeuLugar = new myLocation(this);
         md = new myIntineraire();
-
-        setContentView(R.layout.activity_howtogo);
 
         googleMAp = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
         googleMAp.setMyLocationEnabled(true);
 
+        //Se ha valores sendo passados
         if(extras != null)
         {
             barLat = extras.getDouble("LatitudeBar");
@@ -66,6 +73,8 @@ public class HowtoGoActivity extends Activity{
             .title("Minha posicao")
             .position(lMeuLugar));
 
+
+
         }
     }
 
@@ -82,21 +91,16 @@ public class HowtoGoActivity extends Activity{
 
                 start = new LatLng(Latitude, Longitude);
                 end = new LatLng(barLat, barLng);
-
                 Document doc = md.getDocument(start, end, myIntineraire.MODE_DRIVING);
 
                 ArrayList<LatLng> directPoint = md.getDirection(doc);
                 PolylineOptions rectline = new PolylineOptions().width(3).color(Color.GREEN);
 
                 for (int i = 0; i < directPoint.size(); i++) {
-                    rectline.add(directPoint.get(i));
+                rectline.add(directPoint.get(i));
                 }
 
-                Polyline polyline = mMap.addPolyline(rectline);
-                lBar = new LatLng(barLat, barLng);
-
-
-
+                Polyline polyline = googleMAp.addPolyline(rectline);
             } else {
                 MeuLugar.AbreConfigGPS();
             }

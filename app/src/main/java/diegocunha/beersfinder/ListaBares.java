@@ -7,10 +7,11 @@ import java.util.List;
  * Autores: Diego Cunha Gabriel Cataneo  ****
  * Cria��o: 08/05/2015                   ****
  * Classe: ListaBares                    ****
- * Fun��o: Login no Aplicativo           ****
+ * Fun��o: Lista para bares              ****
  ********************************************/
 public class ListaBares implements Comparable<ListaBares>
 {
+    //Variaveis Globais
     private String ruaBar;
     private String nomeBar;
     private String distBar;
@@ -20,6 +21,7 @@ public class ListaBares implements Comparable<ListaBares>
 
     public ListaBares(){}
 
+    //Recebe valores para serem adicionados na lista
     public ListaBares(String nomeBar, String ruaBar, String distBar, double dDistBar, double latBar, double lngBar)
     {
         this.nomeBar = nomeBar;
@@ -67,7 +69,8 @@ public class ListaBares implements Comparable<ListaBares>
     {
         this.lngBar = lngBar;
     }
-    //Distancia Bar
+
+    //Distancia Bar (String)
     public String getDistBar()
     {
         return distBar;
@@ -78,6 +81,7 @@ public class ListaBares implements Comparable<ListaBares>
         this.distBar = distBar;
     }
 
+    //Distancia Bar (Double)
     public void setdDistBar(Double dDistBar)
     {
         this.dDistBar = dDistBar;
@@ -88,6 +92,7 @@ public class ListaBares implements Comparable<ListaBares>
         return dDistBar;
     }
 
+    //Ordena Lista para mostrar bares mais perto primeiro
     @Override
     public int compareTo(ListaBares another) {
         if(getdDistBar() > another.dDistBar)

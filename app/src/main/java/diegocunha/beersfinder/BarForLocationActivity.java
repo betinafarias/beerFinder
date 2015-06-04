@@ -22,7 +22,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/********************************************
+ * Autores: Diego Cunha Gabriel Cataneo  ****
+ * Cria��o: 08/05/2015                   ****
+ * Classe: BarForLocationActivity        ****
+ * Fun��o: Bares pela posicao            ****
+ ********************************************/
 public class BarForLocationActivity extends ActionBarActivity {
 
     //Variaveis Globais
@@ -48,6 +53,7 @@ public class BarForLocationActivity extends ActionBarActivity {
         Parse.initialize(this, AppID, ClientID);
         getUser();
 
+        //Inicializia variaveis
         listaBares = new ArrayList<ListaBares>();
         adapterList = new myAdapter(this, listaBares);
         listinha = new ListaBares();
@@ -104,27 +110,34 @@ public class BarForLocationActivity extends ActionBarActivity {
     {
         try
         {
+            //Inicializa o ProgressDialog
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . .");
             mProgressDialog.setCancelable(true);
             mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.show();
 
+            //Verifica GPS
             if(MeuLugar.canGetLocation())
             {
+                //Verifica Conexao com internet
                 if(verificaConexao())
                 {
                     Latitude = MeuLugar.getLatitude();
                     Longitude = MeuLugar.getLongitude();
 
+                    //Busca do Parse o resultado da pesquisa
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
                     query.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> list, ParseException e) {
+                            //Se nao ha excecao
                             if(e == null)
                             {
+                                //Verifica se a lista esta preenchida
                                 if(list.size() > 0)
                                 {
+                                    //Adiciona valores do Parse as variaveis
                                     for(int i = 0; i <list.size();i++)
                                     {
                                         ParseObject pObject = list.get(i);
@@ -142,7 +155,9 @@ public class BarForLocationActivity extends ActionBarActivity {
                                         Collections.sort(listaBares);
                                     }
 
+                                    //Para o uso do GPS
                                     MeuLugar.stopUsingGPS();
+                                    //Avisa adapter que dados foram atualizados
                                     adapterList.notifyDataSetChanged();
                                     mProgressDialog.dismiss();
                                 }
