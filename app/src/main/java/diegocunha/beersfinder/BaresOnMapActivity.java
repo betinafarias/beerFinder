@@ -39,13 +39,15 @@ public class BaresOnMapActivity extends Activity {
         //Direciona ID do Parse
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
+
+        //Instancia maps a variavel
         googleMAp = ((MapFragment) getFragmentManager().findFragmentById(R.id.map2))
                 .getMap();
         googleMAp.setMyLocationEnabled(true);
-        MeuLugar = new myLocation(this);
 
         //Inicializa informacoes
         Parse.initialize(this, AppID, ClientID);
+        MeuLugar = new myLocation(this);
         loadbares();
 
     }
@@ -82,6 +84,7 @@ public class BaresOnMapActivity extends Activity {
                             {
                                 ParseObject pObject = list.get(i);
                                 String strNomeBar = pObject.getString("NomeBar");
+                                String strRuaBar = pObject.getString("RuaBar");
                                 double parseLat = pObject.getDouble("Latitude");
                                 double parseLng = pObject.getDouble("Longitude");
                                 String strRuaBar = pObject.getString("RuaBar");
