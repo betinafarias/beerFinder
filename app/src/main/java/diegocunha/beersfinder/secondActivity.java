@@ -96,10 +96,16 @@ public class secondActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void AbreMaps(View view)
+    {
+        Intent intent = new Intent(this, BaresOnMapActivity.class);
+        startActivity(intent);
+    }
+
     /**********************************************
      * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                   ****
-     * Função: boolean VerificaConexao       ****
+     * Criação: 28/04/2015                     ****
+     * Função: boolean VerificaConexao         ****
      * Funcionalidade: Retorna status conexao  ****
      **********************************************/
     public  boolean verificaConexao()

@@ -59,10 +59,7 @@ public class HowtoGoActivity extends Activity{
             Latitude = MeuLugar.getLatitude();
             Longitude = MeuLugar.getLongitude();
             strNomeBar = extras.getString("NomeBar");
-
-            lBar = new LatLng(barLat, barLng);
-            lMeuLugar = new LatLng(Latitude, Longitude);
-
+            
             googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lBar, 13));
 
             googleMAp.addMarker(new MarkerOptions()

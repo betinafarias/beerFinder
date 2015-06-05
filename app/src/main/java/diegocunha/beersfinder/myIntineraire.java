@@ -152,7 +152,7 @@ public class myIntineraire {
     public ArrayList<LatLng> getDirection(Document doc) {
 
         ArrayList<LatLng> listGeopoints = new ArrayList<LatLng>();
-        nl1 = doc.getElementsByTagName("step");
+        nl1 = doc.getElementsByTagName("steps");
         if (nl1.getLength() > 0) {
             for (int i = 0; i < nl1.getLength(); i++) {
                 Node node1 = nl1.item(i);
