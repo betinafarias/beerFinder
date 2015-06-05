@@ -104,7 +104,7 @@ public class BaresActivity extends ActionBarActivity{
        try
        {
             //Adiciona os valores aos Spinners
-           this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub"};
+           this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub", "Tirol"};
            this.nomeCeva = new String[]{"Escolha uma opcao", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
            this.tamanhoCeva = new String[]{"Escolha uma opcao", "500ml","600ml", "Long Neck", "Artesanal", "Chopp"};
 

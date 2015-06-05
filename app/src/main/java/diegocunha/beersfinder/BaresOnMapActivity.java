@@ -84,15 +84,21 @@ public class BaresOnMapActivity extends Activity {
                                 String strNomeBar = pObject.getString("NomeBar");
                                 double parseLat = pObject.getDouble("Latitude");
                                 double parseLng = pObject.getDouble("Longitude");
+                                String strRuaBar = pObject.getString("RuaBar");
 
                                 //Adiciona no maps o resultado
                                 googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
                                 lBar = new LatLng(parseLat, parseLng);
                                 googleMAp.addMarker(new MarkerOptions()
                                         .title(strNomeBar)
+                                        .snippet(strRuaBar)
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
                                         .position(lBar));
                             }
+
+                            googleMAp.addMarker(new MarkerOptions()
+                            .title("Eu estou aqui")
+                            .position(lMeuLugar));
                         }
                         else
                         {

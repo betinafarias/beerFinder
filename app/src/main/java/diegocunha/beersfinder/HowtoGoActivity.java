@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -31,7 +32,7 @@ public class HowtoGoActivity extends Activity{
     myLocation MeuLugar;
     TextView txt;
     private double Latitude, Longitude, barLat, barLng;
-    private String strLat, strLong, strBarLat, strBarLng, strNomeBar;
+    private String strLat, strLong, strBarLat, strBarLng, strNomeBar, strRuaBar;
     myIntineraire md;
     LatLng start, end;
     GoogleMap googleMAp;
@@ -59,18 +60,21 @@ public class HowtoGoActivity extends Activity{
             Latitude = MeuLugar.getLatitude();
             Longitude = MeuLugar.getLongitude();
             strNomeBar = extras.getString("NomeBar");
-            
+            strRuaBar = extras.getString("RuaBar");
+
+            lBar = new LatLng(barLat, barLng);
             googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lBar, 13));
 
             googleMAp.addMarker(new MarkerOptions()
                     .title(strNomeBar)
+                    .snippet(strRuaBar)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
                     .position(lBar));
 
+            lMeuLugar = new LatLng(Latitude, Longitude);
             googleMAp.addMarker(new MarkerOptions()
             .title("Minha posicao")
             .position(lMeuLugar));
-
-
 
         }
     }
