@@ -1,52 +1,33 @@
 package diegocunha.beersfinder;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.facebook.internal.CollectionMapper;
-import com.facebook.share.widget.LikeView;
-import com.parse.FindCallback;
 import com.parse.Parse;
-import com.parse.ParseCrashReporting;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import java.lang.annotation.Target;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Criação: 28/04/2015                   ****
- * Classe: secondActivity                ****
- * Função: Login no Aplicativo           ****
- ********************************************/
+/*********************************************************
+ * Autores: Diego Cunha Gabriel Cataneo Betina Farias ****
+ * Criação: 28/04/2015                                ****
+ * Classe: secondActivity                             ****
+ * Função: Login no Aplicativo                        ****
+ *********************************************************/
 public class secondActivity extends ActionBarActivity {
 
     //Variáveis globais
-    protected ProgressDialog mProgressDialog;
-    private TextView txt;
-    protected String AppID, ClientID, parseNomeBar, parseRuaBar;
+    protected String AppID, ClientID;
     private Integer count = 0;
     myLocation MeuLocal;
-    double Lat, Lng, parseLat, parseLng;
-    protected Double cResult;
-    private Button btnTeste;
     boolean isOn;
     ConnectivityManager conectivtyManager;
     List<ListaBares> listaBares = null;
@@ -63,21 +44,22 @@ public class secondActivity extends ActionBarActivity {
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
 
+        //Inicializa variaveis necessarias
         listaBares = new ArrayList<ListaBares>();
         adapterList = new myAdapter(this, listaBares);
         listinha = new ListaBares();
         MeuLocal = new myLocation(this);
 
+        //Bloqueia pagina quando nao tem login
         getUser();
-
     }
 
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getUser                        **
-     Funcionalidade: Verifica usuário       **
-     Data Criação: 05/05/2015               **
-     ******************************************/
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Função: getUser                                      **
+     * Funcionalidade: Verifica usuário                     **
+     * Data Criação: 05/05/2015                             **
+     *********************************************************/
     protected void getUser()
     {
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -90,51 +72,51 @@ public class secondActivity extends ActionBarActivity {
         }
     }
 
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Função: getUser                                      **
+     * Funcionalidade: Abre filtro de busca de bares        **
+     * Data Criação: 05/05/2015                             **
+     *********************************************************/
     public void AbreLista(View view)
     {
         Intent intent = new Intent(this, BaresActivity.class);
         startActivity(intent);
     }
 
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Função: getUser                                      **
+     * Funcionalidade: Mostra bares no Mapa                 **
+     * Data Criação: 05/05/2015                             **
+     *********************************************************/
     public void AbreMaps(View view)
     {
         Intent intent = new Intent(this, BaresOnMapActivity.class);
         startActivity(intent);
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: boolean VerificaConexao         ****
-     * Funcionalidade: Retorna status conexao  ****
-     **********************************************/
-    public  boolean verificaConexao()
-    {
-        conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (conectivtyManager.getActiveNetworkInfo() != null
-                && conectivtyManager.getActiveNetworkInfo().isAvailable()
-                && conectivtyManager.getActiveNetworkInfo().isConnected())
-        {
-            isOn = true;
-        }
-        else
-        {
-            isOn = false;
-        }
-
-        return isOn;
-    }
-
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 08/05/2015                     ****
-     * Função: void BarProximo                 ****
-     * Funcionalidade: Busca coord bares       ****
-     **********************************************/
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Criação: 08/05/2015                                  **
+     * Função: void BarProximo                              **
+     * Funcionalidade: Busca bares mais pertos              **
+     *********************************************************/
     public void BarProximo(View view)
     {
         Intent intent = new Intent(this, BarForLocationActivity.class);
+        startActivity(intent);
+    }
+
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Criação: 06/06/2015                                  **
+     * Função: void BarProximo                              **
+     * Funcionalidade: Abre pagina para curtir              **
+     *********************************************************/
+    public void OpenFace(View view)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/1562830260649134"));
         startActivity(intent);
     }
 
@@ -160,12 +142,12 @@ public class secondActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getUser                        **
-     Funcionalidade: Efetua logou           **
-     Data Criação: 05/05/2015               **
-     ******************************************/
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Função: getUser                                      **
+     * Funcionalidade: Efetua logout                        **
+     * Data Criação: 05/05/2015                             **
+     *********************************************************/
     @Override
     public void onBackPressed()
     {
