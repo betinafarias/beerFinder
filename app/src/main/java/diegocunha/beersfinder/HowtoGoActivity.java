@@ -1,7 +1,9 @@
 package diegocunha.beersfinder;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,17 +28,21 @@ import java.util.ArrayList;
  * Classe: HowtoGoActivity               ****
  * Fun??o: Mostra no Maps rota           ****
  ********************************************/
-public class HowtoGoActivity extends Activity{
+public class HowtoGoActivity extends FragmentActivity{
 
     //Variaveis Globais
     myLocation MeuLugar;
-    TextView txt;
     private double Latitude, Longitude, barLat, barLng;
-    private String strLat, strLong, strBarLat, strBarLng, strNomeBar, strRuaBar;
+    private String strNomeBar, strRuaBar;
     myIntineraire md;
     LatLng start, end;
     GoogleMap googleMAp;
     LatLng lBar, lMeuLugar;
+    myIntineraire DrawRoute;
+    ArrayList<LatLng> markerPoints;
+    MarkerOptions marker;
+    Document document;
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,72 +53,102 @@ public class HowtoGoActivity extends Activity{
         Bundle extras = getIntent().getExtras();
         MeuLugar = new myLocation(this);
         md = new myIntineraire();
+        markerPoints = new ArrayList<LatLng>();
+        DrawRoute = new myIntineraire();
+        marker = new MarkerOptions();
+        GetRouteTask getRoute = new GetRouteTask();
+        mProgressDialog = new ProgressDialog(this);
 
         googleMAp = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
-        googleMAp.setMyLocationEnabled(true);
+        googleMAp.setMyLocationEnabled(false);
 
         //Se ha valores sendo passados
         if(extras != null)
         {
             barLat = extras.getDouble("LatitudeBar");
             barLng = extras.getDouble("LongitudeBar");
+
             Latitude = MeuLugar.getLatitude();
             Longitude = MeuLugar.getLongitude();
+
             strNomeBar = extras.getString("NomeBar");
             strRuaBar = extras.getString("RuaBar");
 
             lBar = new LatLng(barLat, barLng);
-            googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lBar, 13));
-
-            googleMAp.addMarker(new MarkerOptions()
-                    .title(strNomeBar)
-                    .snippet(strRuaBar)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
-                    .position(lBar));
-
             lMeuLugar = new LatLng(Latitude, Longitude);
-            googleMAp.addMarker(new MarkerOptions()
-            .title("Minha posicao")
-            .position(lMeuLugar));
 
+            //Inicializa o ProgressDialog
+            mProgressDialog.setTitle("Carregando");
+            mProgressDialog.setMessage("Loading. . .");
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.show();
+
+            //Inicia o draw da rota
+            getRoute.execute();
         }
+
     }
 
-    /*public void connect() {
-        try {
-            if (MeuLugar.canGetLocation()) {
-                Latitude = MeuLugar.getLatitude();
-                Longitude = MeuLugar.getLongitude();
-
-                strLat = String.valueOf(Latitude);
-                strLong = String.valueOf(Longitude);
-                strBarLat = String.valueOf(barLat);
-                strBarLng = String.valueOf(barLng);
-
-                start = new LatLng(Latitude, Longitude);
-                end = new LatLng(barLat, barLng);
-                Document doc = md.getDocument(start, end, myIntineraire.MODE_DRIVING);
-
-                ArrayList<LatLng> directPoint = md.getDirection(doc);
-                PolylineOptions rectline = new PolylineOptions().width(3).color(Color.GREEN);
-
-                for (int i = 0; i < directPoint.size(); i++) {
-                rectline.add(directPoint.get(i));
-                }
-
-                Polyline polyline = googleMAp.addPolyline(rectline);
-            } else {
-                MeuLugar.AbreConfigGPS();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }*/
-
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_bar_for_location, menu);
         return true;
     }
+
+    private class GetRouteTask extends AsyncTask<String, Void, String> {
+
+        String response = "";
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            //Pega todos os valores da rota
+            document = DrawRoute.getDocument(lBar, lMeuLugar, DrawRoute.MODE_DRIVING);
+            response = "Success";
+            return response;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            googleMAp.clear();
+            if(response.equalsIgnoreCase("Success")){
+                ArrayList<LatLng> directionPoint = DrawRoute.getDirection(document);
+                PolylineOptions rectLine = new PolylineOptions().width(5).color(
+                        Color.rgb(102,102,255));
+
+                for (int i = 0; i < directionPoint.size(); i++) {
+                    rectLine.add(directionPoint.get(i));
+                }
+                //Adiciona a rota no mapa
+                googleMAp.addPolyline(rectLine);
+
+                //Adiciona os marcadores no mapa
+                googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lBar, 13));
+                googleMAp.addMarker(new MarkerOptions()
+                        .title(strNomeBar)
+                        .snippet(strRuaBar)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
+                        .position(lBar));
+
+                googleMAp.addMarker(new MarkerOptions()
+                        .title("Minha posicao")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
+                        .position(lMeuLugar));
+
+                mProgressDialog.dismiss();
+            }
+
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }
+
