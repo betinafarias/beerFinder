@@ -97,8 +97,9 @@ public class BaresOnMapActivity extends Activity {
                             }
 
                             googleMAp.addMarker(new MarkerOptions()
-                            .title("Eu estou aqui")
-                            .position(lMeuLugar));
+                                    .title("Eu estou aqui")
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
+                                    .position(lMeuLugar));
                         }
                         else
                         {

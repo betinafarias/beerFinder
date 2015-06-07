@@ -2,6 +2,7 @@ package diegocunha.beersfinder;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,19 +12,24 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SelectedBarActivity extends ActionBarActivity {
 
     //Variaveis Globais
     private String AppID, ClientID, nomedoBar, ruadoBar, distdoBar;
-    TextView v1,v2, v3;
+    TextView v1,v2, v3,v4,v5,v6,v7,v8,v9;
     private double Lat, Lng;
-    private ProgressDialog mProgressDialog;;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         v1 = (TextView)findViewById(R.id.txtNomeBar2);
         v2 = (TextView)findViewById(R.id.txtRuaBar2);
         v3 = (TextView)findViewById(R.id.txtDistBar);
+
 
         //Direciona o ProgressDialog
         mProgressDialog = new ProgressDialog(this);
@@ -66,7 +73,7 @@ public class SelectedBarActivity extends ActionBarActivity {
             Lat = extras.getDouble("Latitude");
             Lng = extras.getDouble("Longitude");
             mProgressDialog.dismiss();
-
+            //load_cerveja(nomedoBar);
         }
         else // Se nao foi
         {
@@ -92,7 +99,6 @@ public class SelectedBarActivity extends ActionBarActivity {
         {
             Intent intent = new Intent(this, firstActivity.class);
             startActivity(intent);
-
         }
     }
 
@@ -111,6 +117,45 @@ public class SelectedBarActivity extends ActionBarActivity {
         intent.putExtra("RuaBar", ruadoBar);
         startActivity(intent);
     }
+
+   /* protected void load_cerveja(String txNomeBar)
+    {
+        try
+        {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
+            query.setLimit(3);
+            query.orderByAscending("Preco");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if(e == null)
+                    {
+                        if(list.size() > 0)
+                        {
+                            for(int i =0; i < list.size(); i++)
+                            {
+                                v4.setText(list.get(0).getString("NomeCerveja"));
+                                v7.setText(String.valueOf(list.get(0).getDouble("Preco")));
+
+                                v5.setText(list.get(1).getString("NomeCerveja"));
+                                v8.setText(String.valueOf(list.get(1).getDouble("Preco")));
+
+                                v6.setText(list.get(2).getString("NomeCerveja"));
+                                v9.setText(String.valueOf(list.get(2).getDouble("Preco")));
+                            }
+
+                            mProgressDialog.dismiss();
+                        }
+                    }
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            mProgressDialog.dismiss();
+        }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
