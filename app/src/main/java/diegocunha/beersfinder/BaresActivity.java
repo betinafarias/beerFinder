@@ -26,13 +26,13 @@ import java.lang.reflect.Array;
 public class BaresActivity extends ActionBarActivity{
 
     //Variaveis Globais
-    Spinner mySpinner, spinerCerveja;
+    Spinner mySpinner, spinerCerveja, spinnerTipoCeva;
     ProgressDialog mProgressDialog;
     ConnectivityManager conectivtyManager;
     boolean isOn;
     private String AppID, ClientID, nomedoBar, nomeCerveja, tipoCerveja;
     private String nomeBar[], nomeCeva[], tamanhoCeva[];
-    int barPosition, cevaPosition;
+    int barPosition, cevaPosition, tipoCevaPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class BaresActivity extends ActionBarActivity{
         //Preenche os Spinners
         mySpinner = (Spinner)findViewById(R.id.meuSpinner);
         spinerCerveja = (Spinner)findViewById(R.id.spinnerBebidas);
+        spinnerTipoCeva = (Spinner)findViewById(R.id.spinnerTipoCeva);
         loadBares();
     }
 
@@ -116,6 +117,7 @@ public class BaresActivity extends ActionBarActivity{
            //Carrega Spinner
            mySpinner.setAdapter(adapter);
            spinerCerveja.setAdapter(adapter2);
+           spinnerTipoCeva.setAdapter(adapter3);
        }
        catch (Exception ex)
        {
@@ -144,25 +146,26 @@ public class BaresActivity extends ActionBarActivity{
 
             nomedoBar = mySpinner.getSelectedItem().toString();
             nomeCerveja = spinerCerveja.getSelectedItem().toString();
-            tipoCerveja = "";
+            tipoCerveja = spinnerTipoCeva.getSelectedItem().toString();
 
             barPosition = mySpinner.getSelectedItemPosition();
             cevaPosition = spinerCerveja.getSelectedItemPosition();
+            tipoCevaPosition = spinnerTipoCeva.getSelectedItemPosition();
 
             //Manda informações para SelectedBaresActivity
-            if(barPosition == 0 && cevaPosition == 0)
+            if(barPosition == 0 && cevaPosition == 0 && tipoCevaPosition == 0)
             {
                 mProgressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Escolha um parametro válido", Toast.LENGTH_SHORT).show();
             }
-            else if(barPosition == 0 && cevaPosition != 0)
+            else if(tipoCevaPosition == 0 && barPosition == 0 && cevaPosition != 0)
             {
                 Intent intent = new Intent(getApplicationContext(), selectBaresA.class);
                 intent.putExtra("strCeva", nomeCerveja);
                 startActivity(intent);
                 mProgressDialog.dismiss();
             }
-            else if(barPosition != 0 && cevaPosition == 0)
+            else if(barPosition != 0 && cevaPosition == 0 && tipoCevaPosition == 0)
             {
                 Intent intent = new Intent(getApplicationContext(), selectBaresA.class);
                 intent.putExtra("strBar", nomedoBar);
