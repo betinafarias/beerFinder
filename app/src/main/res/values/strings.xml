@@ -20,7 +20,6 @@
     <string name="title_activity_reset_password">BeersFinder</string>
     <string name="title_activity_selected_bar">BeersFinder</string>
     <string name="title_activity_howto_go">Map</string>
-    <string name="google_maps_key">AIzaSyB3GOeWzyL4wJVT44peV6vdVFgnexiW9tc</string>
+    <string name="google_maps_key">AIzaSyBqGEf-Rzn0d18bHA_vdNrTGU2xVNiuz8U</string>
     <string name="title_activity_bares_on_map">BaresOnMapActivity</string>
-    <string name="title_activity_join">JoinActivity</string>
 </resources>
