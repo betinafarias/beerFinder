@@ -33,9 +33,8 @@ public class HowtoGoActivity extends FragmentActivity{
     //Variaveis Globais
     myLocation MeuLugar;
     private double Latitude, Longitude, barLat, barLng;
-    private String strNomeBar, strRuaBar;
+    private String strNomeBar, strRuaBar, strNomeCerveja, strPrecoCerveja;
     myIntineraire md;
-    LatLng start, end;
     GoogleMap googleMAp;
     LatLng lBar, lMeuLugar;
     myIntineraire DrawRoute;
@@ -58,7 +57,6 @@ public class HowtoGoActivity extends FragmentActivity{
         marker = new MarkerOptions();
         GetRouteTask getRoute = new GetRouteTask();
         mProgressDialog = new ProgressDialog(this);
-
         googleMAp = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
         googleMAp.setMyLocationEnabled(false);
@@ -66,15 +64,21 @@ public class HowtoGoActivity extends FragmentActivity{
         //Se ha valores sendo passados
         if(extras != null)
         {
+            //Latitude e longitude do bar
             barLat = extras.getDouble("LatitudeBar");
             barLng = extras.getDouble("LongitudeBar");
 
+            //Latitude e longitude do usuario
             Latitude = MeuLugar.getLatitude();
             Longitude = MeuLugar.getLongitude();
 
+            //Adiciona os valores recebidos
             strNomeBar = extras.getString("NomeBar");
             strRuaBar = extras.getString("RuaBar");
+            strNomeCerveja = extras.getString("NomeCerveja");
+            strPrecoCerveja = extras.getString("PrecoCerveja");
 
+            //Adiciona as posições as lists LatLng
             lBar = new LatLng(barLat, barLng);
             lMeuLugar = new LatLng(Latitude, Longitude);
 
@@ -128,10 +132,11 @@ public class HowtoGoActivity extends FragmentActivity{
                 googleMAp.addPolyline(rectLine);
 
                 //Adiciona os marcadores no mapa
-                googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lBar, 13));
+                googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
+
                 googleMAp.addMarker(new MarkerOptions()
                         .title(strNomeBar)
-                        .snippet(strRuaBar)
+                        .snippet(strNomeCerveja + " " + strPrecoCerveja)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
                         .position(lBar));
 

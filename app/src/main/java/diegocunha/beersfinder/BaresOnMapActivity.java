@@ -25,7 +25,7 @@ import java.util.List;
 public class BaresOnMapActivity extends Activity {
 
     //Variaveis Globais
-    private String AppID, ClientID;
+    private String AppID, ClientID, valorBar, nomeCeva, resultado;
     private GoogleMap googleMAp;
     private LatLng lBar, lMeuLugar;
     private double Latitude, Longitude;
@@ -118,6 +118,52 @@ public class BaresOnMapActivity extends Activity {
             Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    /*protected String load_cerveja(String txNomeBar)
+    {
+        try
+        {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
+            query.setLimit(1);
+            query.orderByAscending("Preco");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if(e == null)
+                    {
+                        if(list.size() > 0)
+                        {
+                            for(int i = 0; i <list.size(); i++)
+                            {
+                                ParseObject pObject =list.get(i);
+                                nomeCeva = pObject.getString("NomeCerveja");
+                                valorBar = "R$ " +String.valueOf(pObject.getDouble("Preco")).replace(".", ",");
+                                resultado = nomeCeva + " " + valorBar;
+                            }
+                        }
+                        else
+                        {
+                            nomeCeva = "null";
+                            valorBar = "R$ 0,00";
+                        }
+                    }
+                    else
+                    {
+                        nomeCeva = "null";
+                        e.printStackTrace();
+                        valorBar = "R$ 0,00";
+                    }
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            valorBar = "R$ 0,00";
+            ex.printStackTrace();
+        }
+
+        return resultado;
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

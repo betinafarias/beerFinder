@@ -19,6 +19,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import java.util.List;
 public class SelectedBarActivity extends ActionBarActivity {
 
     //Variaveis Globais
-    private String AppID, ClientID, nomedoBar, ruadoBar, distdoBar;
+    private String AppID, ClientID, nomedoBar, ruadoBar, distdoBar, strNomeCerveja, strPrecoCerveja;
     TextView v1,v2, v3,v4,v5,v6,v7,v8,v9;
     private double Lat, Lng;
     private ProgressDialog mProgressDialog;
@@ -48,6 +50,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         v1 = (TextView)findViewById(R.id.txtNomeBar2);
         v2 = (TextView)findViewById(R.id.txtRuaBar2);
         v3 = (TextView)findViewById(R.id.txtDistBar);
+        v4 = (TextView)findViewById(R.id.txtCeva1);
+        v5 = (TextView)findViewById(R.id.txtPrecoCeva1);
+        v6 = (TextView)findViewById(R.id.txtCeva2);
+        v7 = (TextView)findViewById(R.id.txtPrecoCeva2);
+        v8 = (TextView)findViewById(R.id.txtCeva3);
+        v9 = (TextView)findViewById(R.id.txtPrecoCeva3);
 
 
         //Direciona o ProgressDialog
@@ -72,8 +80,8 @@ public class SelectedBarActivity extends ActionBarActivity {
             v3.setText(distdoBar);
             Lat = extras.getDouble("Latitude");
             Lng = extras.getDouble("Longitude");
-            mProgressDialog.dismiss();
-            //load_cerveja(nomedoBar);
+            //mProgressDialog.dismiss();
+            load_cerveja(nomedoBar);
         }
         else // Se nao foi
         {
@@ -115,10 +123,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         intent.putExtra("LongitudeBar", Lng);
         intent.putExtra("NomeBar", nomedoBar);
         intent.putExtra("RuaBar", ruadoBar);
+        intent.putExtra("NomeCerveja", strNomeCerveja);
+        intent.putExtra("PrecoCerveja", strPrecoCerveja);
         startActivity(intent);
     }
 
-   /* protected void load_cerveja(String txNomeBar)
+   protected void load_cerveja(String txNomeBar)
     {
         try
         {
@@ -135,13 +145,16 @@ public class SelectedBarActivity extends ActionBarActivity {
                             for(int i =0; i < list.size(); i++)
                             {
                                 v4.setText(list.get(0).getString("NomeCerveja"));
-                                v7.setText(String.valueOf(list.get(0).getDouble("Preco")));
+                                v5.setText("R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ","));
 
-                                v5.setText(list.get(1).getString("NomeCerveja"));
-                                v8.setText(String.valueOf(list.get(1).getDouble("Preco")));
+                                strNomeCerveja = list.get(0).getString("NomeCerveja");
+                                strPrecoCerveja = "R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ",");
 
-                                v6.setText(list.get(2).getString("NomeCerveja"));
-                                v9.setText(String.valueOf(list.get(2).getDouble("Preco")));
+                                v6.setText(list.get(1).getString("NomeCerveja"));
+                                v7.setText("R$ " + String.valueOf(list.get(1).getDouble("Preco")).replace(".", ","));
+
+                                v8.setText(list.get(2).getString("NomeCerveja"));
+                                v9.setText("R$ " + String.valueOf(list.get(2).getDouble("Preco")).replace(".", ","));
                             }
 
                             mProgressDialog.dismiss();
@@ -155,7 +168,7 @@ public class SelectedBarActivity extends ActionBarActivity {
             ex.printStackTrace();
             mProgressDialog.dismiss();
         }
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

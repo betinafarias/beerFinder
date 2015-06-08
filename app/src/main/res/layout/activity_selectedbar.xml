@@ -34,7 +34,69 @@
         android:text="Como Chegar"
         android:id="@+id/btnTraceRoute"
         android:layout_below="@+id/txtRuaBar2"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="80dp"
         android:onClick="goDraw"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCerveja"
+        android:text="Cervejas"
+        android:textSize="30dp"
+        android:layout_below="@+id/btnTraceRoute"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCeva1"
+        android:layout_below="@+id/txtCerveja"
+        android:text="Cerveja1"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtPrecoCeva1"
+        android:layout_alignBaseline="@+id/txtCeva1"
+        android:text="Price1"
+        android:layout_marginLeft="180dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCeva2"
+        android:layout_below="@+id/txtCeva1"
+        android:text="Cerveja2"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtPrecoCeva2"
+        android:layout_alignBaseline="@+id/txtCeva2"
+        android:text="Price2"
+        android:layout_marginLeft="180dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCeva3"
+        android:layout_below="@id/txtCeva2"
+        android:text="Cerveja 3"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtPrecoCeva3"
+        android:text="Price 3"
+        android:layout_alignBaseline="@id/txtCeva3"
+        android:layout_marginLeft="180dp"/>
 
 </RelativeLayout>
