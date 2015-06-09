@@ -1,6 +1,7 @@
 package diegocunha.beersfinder;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -19,17 +21,23 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
 public class BaresOnMapActivity extends Activity {
 
     //Variaveis Globais
-    private String AppID, ClientID, valorBar, nomeCeva, resultado;
+    private String AppID, ClientID, resultado, strHour, strAbertura, strFechamento;
     private GoogleMap googleMAp;
     private LatLng lBar, lMeuLugar;
     private double Latitude, Longitude;
     myLocation MeuLugar;
+    private ProgressDialog mProgressDialog;
+    private Marker barMarker, myMarker;
+    Calendar cal1, cal2, cal3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,7 @@ public class BaresOnMapActivity extends Activity {
 
         //Inicializa informacoes
         Parse.initialize(this, AppID, ClientID);
+        mProgressDialog = new ProgressDialog(this);
         MeuLugar = new myLocation(this);
         loadbares();
 
@@ -60,10 +69,37 @@ public class BaresOnMapActivity extends Activity {
      ************************************************************/
     protected void loadbares()
     {
+        //Incializa o ProgressDialog
+        mProgressDialog.setTitle("Carregando");
+        mProgressDialog.setMessage("Loading. . .");
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+
         //Adiciona valores de latitude e longitude
         Latitude = MeuLugar.getLatitude();
         Longitude = MeuLugar.getLongitude();
         lMeuLugar = new LatLng(Latitude, Longitude);
+
+        //DateTime
+        cal1 = Calendar.getInstance(); // Abertura
+        cal2 = Calendar.getInstance(); // Fechamento
+        cal3 = Calendar.getInstance(); // Atual;
+
+        //Hora Atual;
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        strHour = sdf.format(now);
+
+
+        //Move camera para posicionamento do usuario
+        googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
+
+        //Adiciona marker para posicao do usuario
+        myMarker = googleMAp.addMarker(new MarkerOptions()
+                .title("Eu estou aqui")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
+                .position(lMeuLugar));
 
         try
         {
@@ -79,38 +115,71 @@ public class BaresOnMapActivity extends Activity {
                         //Verifica se a lista esta preenchida
                         if (list.size() > 0)
                         {
+
                             //Adiciona valores do Parse as variaveis
                             for (int i = 0; i < list.size(); i++)
                             {
                                 ParseObject pObject = list.get(i);
                                 String strNomeBar = pObject.getString("NomeBar");
                                 String strRuaBar = pObject.getString("RuaBar");
+
                                 double parseLat = pObject.getDouble("Latitude");
                                 double parseLng = pObject.getDouble("Longitude");
-                                String strRuaBar = pObject.getString("RuaBar");
 
-                                //Adiciona no maps o resultado
-                                googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
+                                strAbertura = pObject.getString("Abertura");
+                                strFechamento = pObject.getString("Fechamento");
+
+                                //Abertura
+                                String[] parts = strAbertura.split(":");
+                                cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                cal1.set(Calendar.SECOND, Integer.parseInt(parts[2]));
+
+                                //Fechamento
+                                parts = strFechamento.split(":");
+                                cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                cal2.set(Calendar.SECOND, Integer.parseInt(parts[2]));
+                                cal2.add(Calendar.DATE, 1);
+
+                                //Hora atual
+                                parts = strHour.split(":");
+                                cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                cal3.set(Calendar.SECOND, Integer.parseInt(parts[2]));
+
+                                if(cal3.before(cal1) && cal3.after(cal2))
+                                {
+                                    resultado = "Fechado";
+                                }
+                                else if(cal3.after(cal1) && cal3.before(cal2))
+                                {
+                                    resultado = "Aberto";
+                                }
+                                else
+                                {
+                                    resultado = "TU É BURRO";
+                                }
+
                                 lBar = new LatLng(parseLat, parseLng);
-                                googleMAp.addMarker(new MarkerOptions()
+                                barMarker = googleMAp.addMarker(new MarkerOptions()
                                         .title(strNomeBar)
-                                        .snippet(strRuaBar)
+                                        .snippet(resultado)
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
                                         .position(lBar));
                             }
 
-                            googleMAp.addMarker(new MarkerOptions()
-                                    .title("Eu estou aqui")
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
-                                    .position(lMeuLugar));
+                            mProgressDialog.dismiss();
                         }
                         else
                         {
+                            mProgressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else
                     {
+                        mProgressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -118,56 +187,10 @@ public class BaresOnMapActivity extends Activity {
         }
         catch (Exception ex)
         {
+            mProgressDialog.dismiss();
             Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
     }
-
-    /*protected String load_cerveja(String txNomeBar)
-    {
-        try
-        {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
-            query.setLimit(1);
-            query.orderByAscending("Preco");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if(e == null)
-                    {
-                        if(list.size() > 0)
-                        {
-                            for(int i = 0; i <list.size(); i++)
-                            {
-                                ParseObject pObject =list.get(i);
-                                nomeCeva = pObject.getString("NomeCerveja");
-                                valorBar = "R$ " +String.valueOf(pObject.getDouble("Preco")).replace(".", ",");
-                                resultado = nomeCeva + " " + valorBar;
-                            }
-                        }
-                        else
-                        {
-                            nomeCeva = "null";
-                            valorBar = "R$ 0,00";
-                        }
-                    }
-                    else
-                    {
-                        nomeCeva = "null";
-                        e.printStackTrace();
-                        valorBar = "R$ 0,00";
-                    }
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            valorBar = "R$ 0,00";
-            ex.printStackTrace();
-        }
-
-        return resultado;
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
