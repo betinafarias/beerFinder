@@ -139,6 +139,7 @@ public class BaresOnMapActivity extends Activity {
                                 cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                 cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
                                 cal2.set(Calendar.SECOND, Integer.parseInt(parts[2]));
+                                cal2.add(Calendar.DATE, 1);
 
                                 //Hora atual
                                 parts = strHour.split(":");
