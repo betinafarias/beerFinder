@@ -99,4 +99,49 @@
         android:layout_alignBaseline="@id/txtCeva3"
         android:layout_marginLeft="180dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtStatus"
+        android:text="Open/Close"
+        android:layout_below="@+id/txtRuaBar2"
+        android:layout_alignParentRight="true"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/txClose"
+        android:layout_marginTop="54dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtRuaBar2"
+        android:id="@+id/txOpen"
+        android:text="Abertura: "
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txOpen"
+        android:id="@+id/hAbertura"
+        android:textSize="20dp"
+        android:layout_marginLeft="90dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txOpen"
+        android:id="@+id/txClose"
+        android:textSize="20dp"
+        android:text="Fechamento: "
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hFechamento"
+        android:layout_alignBaseline="@+id/txClose"
+        android:textSize="20dp"
+        android:layout_marginLeft="120dp"/>
+
 </RelativeLayout>

@@ -37,7 +37,7 @@ public class BaresOnMapActivity extends Activity {
     myLocation MeuLugar;
     private ProgressDialog mProgressDialog;
     private Marker barMarker, myMarker;
-    Calendar cal1, cal2, cal3;
+    private Calendar cal1, cal2, cal3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,9 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Criação: 04/06/2015                                   ****
      * Função: loadbares                                     ****
      * Funcionalidade: Mostra bares no maps                  ****
+     * Criação: 04/06/2015                                   ****
      ************************************************************/
     protected void loadbares()
     {
@@ -115,7 +115,6 @@ public class BaresOnMapActivity extends Activity {
                         //Verifica se a lista esta preenchida
                         if (list.size() > 0)
                         {
-
                             //Adiciona valores do Parse as variaveis
                             for (int i = 0; i < list.size(); i++)
                             {
@@ -140,7 +139,6 @@ public class BaresOnMapActivity extends Activity {
                                 cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                 cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
                                 cal2.set(Calendar.SECOND, Integer.parseInt(parts[2]));
-                                cal2.add(Calendar.DATE, 1);
 
                                 //Hora atual
                                 parts = strHour.split(":");
@@ -148,17 +146,13 @@ public class BaresOnMapActivity extends Activity {
                                 cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
                                 cal3.set(Calendar.SECOND, Integer.parseInt(parts[2]));
 
-                                if(cal3.before(cal1) && cal3.after(cal2))
+                                if(cal3.before(cal1) || cal3.after(cal2))
                                 {
                                     resultado = "Fechado";
                                 }
-                                else if(cal3.after(cal1) && cal3.before(cal2))
-                                {
-                                    resultado = "Aberto";
-                                }
                                 else
                                 {
-                                    resultado = "TU É BURRO";
+                                    resultado = "Aberto";
                                 }
 
                                 lBar = new LatLng(parseLat, parseLng);
