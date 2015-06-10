@@ -146,7 +146,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         //DateTime
         cal1 = Calendar.getInstance(); // Abertura
         cal2 = Calendar.getInstance(); // Fechamento
-        cal3 = Calendar.getInstance(); // Atual;
+        cal3 = Calendar.getInstance(); // Atual
 
         //Hora Atual;
         Date now = new Date();
@@ -200,15 +200,15 @@ public class SelectedBarActivity extends ActionBarActivity {
                                 cal3.set(Calendar.SECOND, Integer.parseInt(parts[2]));
 
                                 //Realiza verificacao do horario
-                                if(cal3.before(cal1) || cal3.after(cal2))
-                                {
-                                    v10.setTextColor(Color.RED);
-                                    v10.setText("Fechado");
-                                }
-                                else
+                                if(cal3.after(cal1) && cal3.before(cal2))
                                 {
                                     v10.setTextColor(Color.GREEN);
                                     v10.setText("Aberto");
+                                }
+                                else
+                                {
+                                    v10.setTextColor(Color.RED);
+                                    v10.setText("Fechado");
                                 }
                             }
                         }

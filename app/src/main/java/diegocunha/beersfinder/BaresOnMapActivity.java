@@ -147,13 +147,13 @@ public class BaresOnMapActivity extends Activity {
                                 cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
                                 cal3.set(Calendar.SECOND, Integer.parseInt(parts[2]));
 
-                                if(cal3.before(cal1) || cal3.after(cal2))
+                                if(cal3.after(cal1) && cal3.before(cal2))
                                 {
-                                    resultado = "Fechado";
+                                    resultado = "Aberto";
                                 }
                                 else
                                 {
-                                    resultado = "Aberto";
+                                    resultado = "Fechado";
                                 }
 
                                 lBar = new LatLng(parseLat, parseLng);
