@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -22,26 +21,20 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.w3c.dom.Document;
 import java.util.ArrayList;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Cria??o: 08/05/2015                   ****
- * Classe: HowtoGoActivity               ****
- * Fun??o: Mostra no Maps rota           ****
- ********************************************/
 public class HowtoGoActivity extends FragmentActivity{
 
     //Variaveis Globais
     myLocation MeuLugar;
     private double Latitude, Longitude, barLat, barLng;
     private String strNomeBar, strRuaBar, strNomeCerveja, strPrecoCerveja;
-    myIntineraire md;
-    GoogleMap googleMAp;
-    LatLng lBar, lMeuLugar;
-    myIntineraire DrawRoute;
-    ArrayList<LatLng> markerPoints;
-    MarkerOptions marker;
-    Document document;
-    ProgressDialog mProgressDialog;
+    private myIntineraire md;
+    private GoogleMap googleMAp;
+    private LatLng lBar, lMeuLugar;
+    private myIntineraire DrawRoute;
+    private ArrayList<LatLng> markerPoints;
+    private MarkerOptions marker;
+    private Document document;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +137,6 @@ public class HowtoGoActivity extends FragmentActivity{
                         .title("Minha posicao")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
                         .position(lMeuLugar));
-
                 mProgressDialog.dismiss();
             }
 

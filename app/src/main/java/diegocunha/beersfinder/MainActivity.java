@@ -21,14 +21,9 @@ import com.parse.ParseUser;
 
 import java.util.Timer;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Criação: 28/04/2015                   ****
- * Class: MainActivity                   ****
- * Funcionalidade: SplashScreen do app   ****
- *******************************************/
 public class MainActivity extends ActionBarActivity {
 
+    //Variaveis Globais
     private String AppID, ClientID;
     ImageView imageView;
 
@@ -53,12 +48,12 @@ public class MainActivity extends ActionBarActivity {
         start();
     }
 
-/*********************************************
-* Autores: Diego Cunha Gabriel Cataneo   ****
-* Criação: 14/05/2015                    ****
-* Função: void start                     ****
-* Funcionalidade: Carrega o com a Splas  ****
-*********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: start                                         ****
+     * Funcionalidade: Inicia o SplashScreen                 ****
+     * Data Criacao: 14/05/2015                              ****
+     ***********************************************************/
     public void start()
     {
         final AnimationDrawable gyroAnimation = (AnimationDrawable)imageView.getBackground();
@@ -104,12 +99,24 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: loadSecond                                    ****
+     * Funcionalidade: Abre secondactivity                   ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void loadSecond()
     {
         Intent intent = new Intent(this, secondActivity.class);
         startActivity(intent);
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: loadFirst                                     ****
+     * Funcionalidade: Bloqueia pagina sem login             ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void loadFirst()
     {
         Intent intent = new Intent(this, firstActivity.class);

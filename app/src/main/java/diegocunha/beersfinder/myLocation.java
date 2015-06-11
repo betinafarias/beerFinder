@@ -1,5 +1,6 @@
 package diegocunha.beersfinder;
 
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +32,6 @@ public class myLocation extends Service implements LocationListener
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 	private static final long MIN_TIME_BW_UPDATES = 0;
 	protected LocationManager locationManager;
-	private String AppID, ClientID;
 
 	public myLocation(Context context)
 	{
@@ -178,7 +178,7 @@ public class myLocation extends Service implements LocationListener
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			Toast.makeText(getApplication(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 		return dist;
 	}

@@ -17,12 +17,6 @@ import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Cria��o: 08/05/2015                   ****
- * Classe: BaresActivity                 ****
- * Fun��o: Filtro para bares             ****
- ********************************************/
 public class BaresActivity extends ActionBarActivity{
 
     //Variaveis Globais
@@ -52,12 +46,12 @@ public class BaresActivity extends ActionBarActivity{
         loadBares();
     }
 
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getUser                        **
-     Funcionalidade: Verifica usuário       **
-     Data Criação: 05/05/2015               **
-     ******************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getUser                                       ****
+     * Funcionalidade: Bloqueia pagina sem login             ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void getUser()
     {
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -70,12 +64,12 @@ public class BaresActivity extends ActionBarActivity{
         }
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: boolean VerificaConexao         ****
-     * Funcionalidade: Retorna status conexao  ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: verificaConexao                               ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public  boolean verificaConexao()
     {
         conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -126,12 +120,12 @@ public class BaresActivity extends ActionBarActivity{
        }
    }
 
-    /******************************************************
-     * Autores: Diego Cunha Gabriel Cataneo            ****
-     * Criação: 13/05/2015                             ****
-     * Função: void sendBares                          ****
-     * Funcionalidade: Manda o parametro de busca      ****
-     ******************************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: sendBares                                     ****
+     * Funcionalidade: Manda parametros para busca           ****
+     * Data Criacao: 13/05/2015                              ****
+     ***********************************************************/
     public void sendBares(View view)
     {
         //Inicia o ProgressDialog
@@ -180,7 +174,7 @@ public class BaresActivity extends ActionBarActivity{
         catch (Exception ex)
         {
             ex.printStackTrace();
-            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -1,9 +1,12 @@
 package diegocunha.beersfinder;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,12 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Cria��o: 08/05/2015                   ****
- * Classe: BarForLocationActivity        ****
- * Fun��o: Bares pela posicao            ****
- ********************************************/
 public class BarForLocationActivity extends ActionBarActivity {
 
     //Variaveis Globais
@@ -41,6 +38,7 @@ public class BarForLocationActivity extends ActionBarActivity {
     double Latitude, Longitude;
     ConnectivityManager conectivtyManager;
     boolean conectado;
+    private AlertDialog.Builder alertB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +62,12 @@ public class BarForLocationActivity extends ActionBarActivity {
         getListView();
     }
 
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Fun��o: getUser                        **
-     Funcionalidade: Verifica usu�rio       **
-     Data Cria��o: 05/05/2015               **
-     ******************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getUser                                       ****
+     * Funcionalidade: Bloqueia pagina sem login             ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void getUser()
     {
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -82,12 +80,12 @@ public class BarForLocationActivity extends ActionBarActivity {
         }
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: boolean VerificaConexao         ****
-     * Funcionalidade: Retorna status conexao  ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: verificaConexao                               ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public  boolean verificaConexao()
     {
         conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -106,6 +104,12 @@ public class BarForLocationActivity extends ActionBarActivity {
         return conectado;
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getListView                                   ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     protected void getListView()
     {
         try
@@ -170,25 +174,27 @@ public class BarForLocationActivity extends ActionBarActivity {
                             else
                             {
                                 mProgressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
                 else
                 {
-                    MeuLugar.AbreConfigNET();
+                    mProgressDialog.dismiss();
+                    OpenNet();
                 }
             }
             else
             {
-                MeuLugar.AbreConfigGPS();
+                mProgressDialog.dismiss();
+                OpenGPS();
             }
         }
         catch (Exception ex)
         {
             mProgressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
         }
 
@@ -197,6 +203,69 @@ public class BarForLocationActivity extends ActionBarActivity {
             listView = (ListView)findViewById(R.id.barLocationListView);
             listView.setAdapter(adapterList);
         }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenGPS                                       ****
+     * Funcionalidade: Abre Config de GPS                    ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenGPS()
+    {
+        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("GPS desativado, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
     }
 
     @Override

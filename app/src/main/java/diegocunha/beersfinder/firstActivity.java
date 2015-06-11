@@ -3,14 +3,17 @@ package diegocunha.beersfinder;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,12 +42,6 @@ import org.w3c.dom.Text;
 import java.security.MessageDigest;
 import java.util.List;
 
-/*******************************************
-* Autores: Diego Cunha Gabriel Cataneo  ****
-* Criação: 28/04/2015                   ****
-* Classe: firstActivity                 ****
-* Função: Login no Aplicativo           ****
-********************************************/
 public class firstActivity extends ActionBarActivity
 {
 	//Variáveis Globais
@@ -55,6 +52,7 @@ public class firstActivity extends ActionBarActivity
     private boolean conectado, load = false;
     private ConnectivityManager conectivtyManager;
     private ProgressDialog mProgressDialog;
+    private AlertDialog.Builder alertB;
 
 
     @Override
@@ -71,7 +69,6 @@ public class firstActivity extends ActionBarActivity
         login = (EditText)findViewById(R.id.edtLogin);
         senha = (EditText)findViewById(R.id.edtSenha);
 
-
         //Parse Infos
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
@@ -80,37 +77,36 @@ public class firstActivity extends ActionBarActivity
 
     }
 
-
-    /*******************************************
-     * Autores: Diego Cunha Gabriel Cataneo ****
-     * Criação: 28/04/2015                ****
-     * Função: void second                ****
-     * Funcionalidade: Abre secondLayout    ****
-     *******************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: second                                        ****
+     * Funcionalidade: Abre layout se tiver feito login      ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public void second()
     {
         Intent intet = new Intent(this, secondActivity.class);
         startActivity(intet);
     }
 
-    /*************************************************
-     * Autores: Diego Cunha Gabriel Cataneo       ****
-     * Criação: 28/04/2015                        ****
-     * Função: void resetPass                     ****
-     * Funcionalidade: Abre ResetPasswordActivity ****
-     *************************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: resetPass                                     ****
+     * Funcionalidade: Abre layout para recuperar senha      ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public void resetPass(View view)
     {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
         startActivity(intent);
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: boolean VerificaConexao         ****
-     * Funcionalidade: Retorna status conexao  ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: verificaConexao                               ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public  boolean verificaConexao()
     {
         conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -129,24 +125,24 @@ public class firstActivity extends ActionBarActivity
         return conectado;
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                   ****
-     * Função: void Sigin                    ****
-     * Funcionalidade: Abre Layout de cadastro ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: Sigin                                         ****
+     * Funcionalidade: Abre layout para cadastro             ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public void Sigin(View view)
     {
         Intent intet = new Intent(this, SignUpActivity.class);
         startActivity(intet);
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                   ****
-     * Função: void Login                    ****
-     * Funcionalidade: Realiza o login         ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: Login                                         ****
+     * Funcionalidade: Realiza o login                       ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public void Login(View view)
     {
         try
@@ -186,7 +182,7 @@ public class firstActivity extends ActionBarActivity
                         else
                         {
                             mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Erro: " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -194,17 +190,48 @@ public class firstActivity extends ActionBarActivity
             else
             {
                 mProgressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Sem internet", Toast.LENGTH_SHORT).show();
+                OpenNet();
             }
         }
         catch (Exception ex)
         {
             mProgressDialog.dismiss();
             ex.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Erro: " + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Erro: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

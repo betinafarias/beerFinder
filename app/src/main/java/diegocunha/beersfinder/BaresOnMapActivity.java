@@ -1,13 +1,16 @@
 package diegocunha.beersfinder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,12 +23,11 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
+import com.parse.ParseUser;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 
 public class BaresOnMapActivity extends Activity {
 
@@ -38,10 +40,14 @@ public class BaresOnMapActivity extends Activity {
     private ProgressDialog mProgressDialog;
     private Marker barMarker, myMarker;
     private Calendar cal1, cal2, cal3;
+    private boolean conectado;
+    private ConnectivityManager conectivtyManager;
+    private AlertDialog.Builder alertB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getUser();
         setContentView(R.layout.activity_baresonmap);
 
         //Direciona ID do Parse
@@ -63,6 +69,47 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getUser                                       ****
+     * Funcionalidade: Bloqueia pagina sem login             ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
+    protected void getUser()
+    {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if(currentUser == null)
+        {
+            Intent intent = new Intent(this, firstActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: verificaConexao                               ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
+    public  boolean verificaConexao()
+    {
+        conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected())
+        {
+            conectado = true;
+        }
+        else
+        {
+            conectado = false;
+        }
+
+        return conectado;
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
      * Função: loadbares                                     ****
      * Funcionalidade: Mostra bares no maps                  ****
      * Criação: 04/06/2015                                   ****
@@ -76,116 +123,195 @@ public class BaresOnMapActivity extends Activity {
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
 
-        //Adiciona valores de latitude e longitude
-        Latitude = MeuLugar.getLatitude();
-        Longitude = MeuLugar.getLongitude();
-        lMeuLugar = new LatLng(Latitude, Longitude);
+        //Verifica se ha conexao com internet
+       if(verificaConexao())
+       {
+           //Verifica se consegue pegar info do GPS
+          if(MeuLugar.canGetLocation())
+          {
+              //Adiciona valores de latitude e longitude
+              Latitude = MeuLugar.getLatitude();
+              Longitude = MeuLugar.getLongitude();
+              lMeuLugar = new LatLng(Latitude, Longitude);
 
-        //DateTime
-        cal1 = Calendar.getInstance(); // Abertura
-        cal2 = Calendar.getInstance(); // Fechamento
-        cal3 = Calendar.getInstance(); // Atual;
+              //DateTime
+              cal1 = Calendar.getInstance(); // Abertura
+              cal2 = Calendar.getInstance(); // Fechamento
+              cal3 = Calendar.getInstance(); // Atual
 
-        //Hora Atual;
-        Date now = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        strHour = sdf.format(now);
+              //Hora Atual
+              Date now = new Date();
+              SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+              strHour = sdf.format(now);
 
 
-        //Move camera para posicionamento do usuario
-        googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
+              //Move camera para posicionamento do usuario
+              googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
 
-        //Adiciona marker para posicao do usuario
-        myMarker = googleMAp.addMarker(new MarkerOptions()
-                .title("Eu estou aqui")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
-                .position(lMeuLugar));
+              //Adiciona marker para posicao do usuario
+              myMarker = googleMAp.addMarker(new MarkerOptions()
+                      .title("Eu estou aqui")
+                      .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_position))
+                      .position(lMeuLugar));
 
-        try
-        {
-            //Carrega informações do Parse
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e)
-                {
-                    //Se nao ha excecao
-                    if (e == null)
-                    {
-                        //Verifica se a lista esta preenchida
-                        if (list.size() > 0)
-                        {
-                            //Adiciona valores do Parse as variaveis
-                            for (int i = 0; i < list.size(); i++)
-                            {
-                                ParseObject pObject = list.get(i);
-                                String strNomeBar = pObject.getString("NomeBar");
-                                String strRuaBar = pObject.getString("RuaBar");
+              try
+              {
+                  //Carrega informações do Parse
+                  ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                  query.findInBackground(new FindCallback<ParseObject>() {
+                      @Override
+                      public void done(List<ParseObject> list, ParseException e)
+                      {
+                          //Se nao ha excecao
+                          if (e == null)
+                          {
+                              //Verifica se a lista esta preenchida
+                              if (list.size() > 0)
+                              {
+                                  //Adiciona valores do Parse as variaveis
+                                  for (int i = 0; i < list.size(); i++)
+                                  {
+                                      ParseObject pObject = list.get(i);
+                                      String strNomeBar = pObject.getString("NomeBar");
+                                      String strRuaBar = pObject.getString("RuaBar");
 
-                                double parseLat = pObject.getDouble("Latitude");
-                                double parseLng = pObject.getDouble("Longitude");
+                                      double parseLat = pObject.getDouble("Latitude");
+                                      double parseLng = pObject.getDouble("Longitude");
 
-                                strAbertura = pObject.getString("Abertura");
-                                strFechamento = pObject.getString("Fechamento");
+                                      strAbertura = pObject.getString("Abertura");
+                                      strFechamento = pObject.getString("Fechamento");
 
-                                //Abertura
-                                String[] parts = strAbertura.split(":");
-                                cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
-                                cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                cal1.set(Calendar.SECOND, Integer.parseInt(parts[2]));
+                                      //Abertura
+                                      String[] parts = strAbertura.split(":");
+                                      cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                      cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                      cal1.set(Calendar.SECOND, Integer.parseInt(parts[2]));
 
-                                //Fechamento
-                                parts = strFechamento.split(":");
-                                cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
-                                cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                cal2.set(Calendar.SECOND, Integer.parseInt(parts[2]));
-                                cal2.add(Calendar.DATE, 1);
+                                      //Fechamento
+                                      parts = strFechamento.split(":");
+                                      cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                      cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                      cal2.add(Calendar.DATE, 1);
 
-                                //Hora atual
-                                parts = strHour.split(":");
-                                cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
-                                cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                cal3.set(Calendar.SECOND, Integer.parseInt(parts[2]));
+                                      //Hora atual
+                                      parts = strHour.split(":");
+                                      cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                      cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
 
-                                if(cal3.after(cal1) && cal3.before(cal2))
-                                {
-                                    resultado = "Aberto";
-                                }
-                                else
-                                {
-                                    resultado = "Fechado";
-                                }
+                                      if(cal3.after(cal1) && cal3.before(cal2))
+                                      {
+                                          resultado = "Aberto";
+                                      }
+                                      else
+                                      {
+                                          resultado = "Fechado";
+                                      }
 
-                                lBar = new LatLng(parseLat, parseLng);
-                                barMarker = googleMAp.addMarker(new MarkerOptions()
-                                        .title(strNomeBar)
-                                        .snippet(resultado)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
-                                        .position(lBar));
-                            }
+                                      lBar = new LatLng(parseLat, parseLng);
+                                      barMarker = googleMAp.addMarker(new MarkerOptions()
+                                              .title(strNomeBar)
+                                              .snippet(resultado)
+                                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
+                                              .position(lBar));
+                                  }
 
-                            mProgressDialog.dismiss();
-                        }
-                        else
-                        {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else
-                    {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            mProgressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
-        }
+                                  mProgressDialog.dismiss();
+                              }
+                              else
+                              {
+                                  mProgressDialog.dismiss();
+                                  Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                              }
+                          }
+                          else
+                          {
+                              mProgressDialog.dismiss();
+                              Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                          }
+                      }
+                  });
+              }
+              catch (Exception ex)
+              {
+                  mProgressDialog.dismiss();
+                  Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+              }
+          }
+          else
+          {
+              mProgressDialog.dismiss();
+              OpenGPS();
+          }
+       }
+       else
+       {
+           mProgressDialog.dismiss();
+           OpenNet();
+       }
     }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenGPS                                       ****
+     * Funcionalidade: Abre Config de GPS                    ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenGPS()
+    {
+        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("GPS desativado, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

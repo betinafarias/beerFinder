@@ -1,36 +1,33 @@
 package diegocunha.beersfinder;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 
 public class SelectedBarActivity extends ActionBarActivity {
 
@@ -40,6 +37,9 @@ public class SelectedBarActivity extends ActionBarActivity {
     private double Lat, Lng;
     private ProgressDialog mProgressDialog;
     private Calendar cal1, cal2, cal3;
+    private ConnectivityManager conectivtyManager;
+    private boolean conectado;
+    private AlertDialog.Builder alertB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +115,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         }
     }
 
-
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Fun??o: getUser                        **
-     Funcionalidade: Verifica usu?rio       **
-     Data Cria??o: 05/05/2015               **
-     ******************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getUser                                       ****
+     * Funcionalidade: Bloqueia pagina sem login             ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void getUser()
     {
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -133,14 +132,36 @@ public class SelectedBarActivity extends ActionBarActivity {
         }
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: verificaConexao                               ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
+    public  boolean verificaConexao()
+    {
+        conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected())
+        {
+            conectado = true;
+        }
+        else
+        {
+            conectado = false;
+        }
+
+        return conectado;
+    }
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: load_cerveja                                  ****
+     * Funçao: load_status                                   ****
      * Funcionalidade: Verifica se os bares esta aberto      ****
      * Data Criacao: 09/06/2015                              ****
      ***********************************************************/
-
     protected void load_status(String nome)
     {
         //DateTime
@@ -148,88 +169,94 @@ public class SelectedBarActivity extends ActionBarActivity {
         cal2 = Calendar.getInstance(); // Fechamento
         cal3 = Calendar.getInstance(); // Atual
 
-        //Hora Atual;
+        //Hora Atual
         Date now = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         strHour = sdf.format(now);
 
-        try
+        if(verificaConexao())
         {
-            //Carrega informações do Parse
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-            query.whereEqualTo("NomeBar", nome);
-            query.setLimit(1);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e)
-                {
-                    //Se nao ha excecao
-                    if (e == null)
+            try
+            {
+                //Carrega informações do Parse
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                query.whereEqualTo("NomeBar", nome);
+                query.setLimit(1);
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e)
                     {
-                        //Verifica se a lista esta preenchida
-                        if (list.size() > 0)
+                        //Se nao ha excecao
+                        if (e == null)
                         {
-                            //Adiciona valores do Parse as variaveis
-                            for (int i = 0; i < list.size(); i++)
+                            //Verifica se a lista esta preenchida
+                            if (list.size() > 0)
                             {
-                                ParseObject pObject = list.get(i);
-
-                                strAbertura = pObject.getString("Abertura");
-                                v11.setText(strAbertura);
-
-                                strFechamento = pObject.getString("Fechamento");
-                                v12.setText(strFechamento);
-
-                                //Abertura
-                                String[] parts = strAbertura.split(":");
-                                cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
-                                cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                cal1.set(Calendar.SECOND, Integer.parseInt(parts[2]));
-
-                                //Fechamento
-                                parts = strFechamento.split(":");
-                                cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
-                                cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                cal2.set(Calendar.SECOND, Integer.parseInt(parts[2]));
-                                cal2.add(Calendar.DATE, 1);
-
-                                //Hora atual
-                                parts = strHour.split(":");
-                                cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
-                                cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                cal3.set(Calendar.SECOND, Integer.parseInt(parts[2]));
-
-                                //Realiza verificacao do horario
-                                if(cal3.after(cal1) && cal3.before(cal2))
+                                //Adiciona valores do Parse as variaveis
+                                for (int i = 0; i < list.size(); i++)
                                 {
-                                    v10.setTextColor(Color.GREEN);
-                                    v10.setText("Aberto");
+                                    ParseObject pObject = list.get(i);
+
+                                    strAbertura = pObject.getString("Abertura");
+                                    v11.setText(strAbertura);
+
+                                    strFechamento = pObject.getString("Fechamento");
+                                    v12.setText(strFechamento);
+
+                                    //Abertura
+                                    String[] parts = strAbertura.split(":");
+                                    cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                    cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+
+                                    //Fechamento
+                                    parts = strFechamento.split(":");
+                                    cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                    cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                    cal2.add(Calendar.DATE, 1);
+
+                                    //Hora atual
+                                    parts = strHour.split(":");
+                                    cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                                    cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+
+                                    //Realiza verificacao do horario
+                                    if(cal3.after(cal1) && cal3.before(cal2))
+                                    {
+                                        v10.setTextColor(Color.GREEN);
+                                        v10.setText("Aberto");
+                                    }
+                                    else
+                                    {
+                                        v10.setTextColor(Color.RED);
+                                        v10.setText("Fechado");
+                                    }
                                 }
-                                else
-                                {
-                                    v10.setTextColor(Color.RED);
-                                    v10.setText("Fechado");
-                                }
+                            }
+                            else
+                            {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
                             }
                         }
                         else
                         {
                             mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                    else
-                    {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                mProgressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                ex.printStackTrace();
+            }
         }
-        catch (Exception ex)
+        else
         {
             mProgressDialog.dismiss();
-            ex.printStackTrace();
+            OpenNet();
         }
     }
 
@@ -259,58 +286,129 @@ public class SelectedBarActivity extends ActionBarActivity {
      ***********************************************************/
    protected void load_cerveja(String txNomeBar)
     {
-        try
+        if(verificaConexao())
         {
-            //Carrega informações do Parse
-            ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
-            query.setLimit(3);
-            query.orderByAscending("Preco");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    //Se nao ha excecao
-                    if(e == null)
-                    {
-                        //Se a lista nao esta fazia
-                        if(list.size() > 0)
+            try
+            {
+                //Carrega informações do Parse
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
+                query.setLimit(3);
+                query.orderByAscending("Preco");
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e) {
+                        //Se nao ha excecao
+                        if(e == null)
                         {
-                            //Varre a lista
-                            for(int i =0; i < list.size(); i++)
+                            //Se a lista nao esta fazia
+                            if(list.size() > 0)
                             {
-                                //Adiciona infos das cervejas mais barata
-                                v4.setText(list.get(0).getString("NomeCerveja"));
-                                v5.setText("R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ","));
-                                v6.setText(list.get(1).getString("NomeCerveja"));
-                                v7.setText("R$ " + String.valueOf(list.get(1).getDouble("Preco")).replace(".", ","));
-                                v8.setText(list.get(2).getString("NomeCerveja"));
-                                v9.setText("R$ " + String.valueOf(list.get(2).getDouble("Preco")).replace(".", ","));
+                                //Varre a lista
+                                for(int i =0; i < list.size(); i++)
+                                {
+                                    //Adiciona infos das cervejas mais barata
+                                    v4.setText(list.get(0).getString("NomeCerveja"));
+                                    v5.setText("R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ","));
+                                    v6.setText(list.get(1).getString("NomeCerveja"));
+                                    v7.setText("R$ " + String.valueOf(list.get(1).getDouble("Preco")).replace(".", ","));
+                                    v8.setText(list.get(2).getString("NomeCerveja"));
+                                    v9.setText("R$ " + String.valueOf(list.get(2).getDouble("Preco")).replace(".", ","));
 
-                                strNomeCerveja = list.get(0).getString("NomeCerveja");
-                                strPrecoCerveja = "R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ",");
+                                    strNomeCerveja = list.get(0).getString("NomeCerveja");
+                                    strPrecoCerveja = "R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ",");
+                                }
+
+                                mProgressDialog.dismiss();
                             }
-
-                            mProgressDialog.dismiss();
+                            else
+                            {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         else
                         {
                             mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else
-                    {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                    }
 
-                }
-            });
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                mProgressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                ex.printStackTrace();
+            }
         }
-        catch (Exception ex)
+        else
         {
-            ex.printStackTrace();
             mProgressDialog.dismiss();
+            OpenNet();
         }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenGPS                                       ****
+     * Funcionalidade: Abre Config de GPS                    ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenGPS()
+    {
+        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("GPS desativado, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
     }
 
     @Override

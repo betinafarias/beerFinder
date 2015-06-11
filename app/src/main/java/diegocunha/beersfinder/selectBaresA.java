@@ -1,9 +1,13 @@
 package diegocunha.beersfinder;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.preference.DialogPreference;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,7 +33,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-
 public class selectBaresA extends ActionBarActivity {
 
     //Variaveis Globais
@@ -44,11 +47,10 @@ public class selectBaresA extends ActionBarActivity {
     double Latitude, Longitude;
     ConnectivityManager conectivtyManager;
     boolean conectado;
-
+    private AlertDialog.Builder alertB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         //Inicializa o Parse
@@ -78,12 +80,12 @@ public class selectBaresA extends ActionBarActivity {
         getListView(bar);
     }
 
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Fun��o: getUser                        **
-     Funcionalidade: Verifica usu�rio       **
-     Data Cria��o: 05/05/2015               **
-     ******************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getUser                                       ****
+     * Funcionalidade: Bloqueia pagina sem login             ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void getUser()
     {
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -96,12 +98,12 @@ public class selectBaresA extends ActionBarActivity {
         }
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 28/04/2015                     ****
-     * Função: boolean VerificaConexao         ****
-     * Funcionalidade: Retorna status conexao  ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: verificaConexao                               ****
+     * Funcionalidade: Verifica status internet              ****
+     * Data Criacao: 28/04/2015                              ****
+     ***********************************************************/
     public  boolean verificaConexao()
     {
         conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -120,54 +122,66 @@ public class selectBaresA extends ActionBarActivity {
         return conectado;
     }
 
-    /*****************************************
-     Autores: Diego Cunha, Gabriel Cataneo  **
-     Função: getListView(String Bar)        **
-     Funcionalidade: Retorna busca          **
-     Data Criação: 05/05/2015               **
-     ******************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: getListView                                   ****
+     * Funcionalidade: Busca no Parse as informacoes         ****
+     * Data Criacao: 05/05/2015                              ****
+     ***********************************************************/
     protected void getListView(String Bar)
     {
         try
         {
+            //Inicializa ProgressDialog
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . .");
             mProgressDialog.setCancelable(true);
             mProgressDialog.setCanceledOnTouchOutside(true);
             mProgressDialog.show();
+
+            //Verifica se tem conexao com internet
             if(verificaConexao())
             {
+                //Verifica se tem conexao com GPS
                 if(MeuLugar.canGetLocation())
                 {
+                    //Busca latitude e longitude
                     Latitude = MeuLugar.getLatitude();
                     Longitude = MeuLugar.getLongitude();
 
+                    //Inicializa o Parse
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
                     query.whereEqualTo("NomeBar", Bar);
-
                     query.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> list, ParseException e) {
+                            //Se nao ha excecao
                             if(e == null)
                             {
-                                for(int i = 0; i <list.size();i++)
+                                //Se a lista esta vazia
+                                if(list.size() > 0)
                                 {
-                                    ParseObject pObject = list.get(i);
-                                    String strNomeBar = pObject.getString("NomeBar");
-                                    String strRuaBar = pObject.getString("RuaBar");
-                                    double parseLat = pObject.getDouble("Latitude");
-                                    double parseLng = pObject.getDouble("Longitude");
+                                    //Busca valores do Parse e adiciona a ListaBares
+                                    for(int i = 0; i <list.size();i++)
+                                    {
+                                        ParseObject pObject = list.get(i);
+                                        String strNomeBar = pObject.getString("NomeBar");
+                                        String strRuaBar = pObject.getString("RuaBar");
+                                        double parseLat = pObject.getDouble("Latitude");
+                                        double parseLng = pObject.getDouble("Longitude");
 
-                                    double dist = MeuLugar.calculaDistancia(Latitude, parseLat, Longitude, parseLng);
-                                    String strDist = String.format("%.2f", dist) + "km";
+                                        double dist = MeuLugar.calculaDistancia(Latitude, parseLat, Longitude, parseLng);
+                                        String strDist = String.format("%.2f", dist) + "km";
 
-                                    ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
+                                        ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
 
-                                    listaBares.add(i, item);
-                                    Collections.sort(listaBares);
+                                        listaBares.add(i, item);
+                                        Collections.sort(listaBares);
+                                    }
+                                    //Avisa ao adapter que houve modificacao nas informacoes
+                                    adapterList.notifyDataSetChanged();
+                                    mProgressDialog.dismiss();
                                 }
-                                adapterList.notifyDataSetChanged();
-                                mProgressDialog.dismiss();
                             }
                             else
                             {
@@ -180,26 +194,89 @@ public class selectBaresA extends ActionBarActivity {
                 else
                 {
                     mProgressDialog.dismiss();
-                    MeuLugar.AbreConfigGPS();
+                    OpenGPS();
                 }
             }
             else
             {
                 mProgressDialog.dismiss();
-               MeuLugar.AbreConfigNET();
+                OpenNet();
             }
         }
         catch (Exception ex)
         {
             mProgressDialog.dismiss();
             ex.printStackTrace();
-            Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
         finally
         {
             listView = (ListView)findViewById(R.id.listView);
             listView.setAdapter(adapterList);
         }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenGPS                                       ****
+     * Funcionalidade: Abre Config de GPS                    ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenGPS()
+    {
+        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("GPS desativado, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
     }
 
     @Override

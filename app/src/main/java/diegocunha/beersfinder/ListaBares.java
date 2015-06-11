@@ -3,12 +3,6 @@ package diegocunha.beersfinder;
 import java.util.ArrayList;
 import java.util.List;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Cria��o: 08/05/2015                   ****
- * Classe: ListaBares                    ****
- * Fun��o: Lista para bares              ****
- ********************************************/
 public class ListaBares implements Comparable<ListaBares>
 {
     //Variaveis Globais

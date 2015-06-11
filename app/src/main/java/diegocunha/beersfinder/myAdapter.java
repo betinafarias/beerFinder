@@ -12,12 +12,6 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Criação: 14/05/2015                   ****
- * Classe: myAdapter                     ****
- * Função: Adapter para Listview         ****
- ********************************************/
 public class myAdapter extends BaseAdapter {
 
     //Variaveis Globais
