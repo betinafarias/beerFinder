@@ -36,7 +36,7 @@ public class SelectedBarActivity extends ActionBarActivity {
     private TextView v1,v2, v3,v4,v5,v6,v7,v8,v9, v10,v11,v12;
     private double Lat, Lng;
     private ProgressDialog mProgressDialog;
-    private Calendar cal1, cal2, cal3;
+    private Calendar cal1, cal2, cal3, cal4;
     private ConnectivityManager conectivtyManager;
     private boolean conectado;
     private AlertDialog.Builder alertB;
@@ -169,12 +169,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         cal1 = Calendar.getInstance(); // Abertura
         cal2 = Calendar.getInstance(); // Fechamento
         cal3 = Calendar.getInstance(); // Atual
-
+        cal4 = Calendar.getInstance(); // Dia
         //Hora Atual
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         strHour = sdf.format(now);
-        day = now.getDay();
+        day = cal4.get(Calendar.DATE);
 
         if(verificaConexao())
         {
@@ -209,20 +209,20 @@ public class SelectedBarActivity extends ActionBarActivity {
                                     String[] parts = strAbertura.split(":");
                                     cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal1.set(Calendar.DAY_OF_MONTH, day);
+                                    cal1.set(Calendar.DATE, day);
 
                                     //Fechamento
                                     parts = strFechamento.split(":");
                                     cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal2.set(Calendar.DAY_OF_MONTH, day);
-                                    cal2.add(Calendar.DAY_OF_MONTH, 1);
+                                    cal2.set(Calendar.DATE, day);
+                                    cal2.add(Calendar.DATE, 1);
 
                                     //Hora atual
                                     parts = strHour.split(":");
                                     cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal3.set(Calendar.DAY_OF_MONTH, day);
+                                    cal3.set(Calendar.DATE, day);
 
                                     //Realiza verificacao do horario
                                     if(cal3.after(cal1) && cal3.before(cal2))
