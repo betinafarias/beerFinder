@@ -200,32 +200,28 @@ public class SelectedBarActivity extends ActionBarActivity {
                                     ParseObject pObject = list.get(i);
 
                                     strAbertura = pObject.getString("Abertura");
-                                    v11.setText(strAbertura);
+                                    v11.setText(strAbertura.replace(":", "h") +"min");
 
                                     strFechamento = pObject.getString("Fechamento");
-                                    v12.setText(strFechamento);
+                                    v12.setText(strFechamento.replace(":", "h") +"min");
 
                                     //Abertura
                                     String[] parts = strAbertura.split(":");
                                     cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal1.set(Calendar.DATE, day);
 
                                     //Fechamento
                                     parts = strFechamento.split(":");
                                     cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal2.set(Calendar.DATE, day);
-                                    cal2.add(Calendar.DATE, 1);
 
                                     //Hora atual
                                     parts = strHour.split(":");
                                     cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal3.set(Calendar.DATE, day);
 
                                     //Realiza verificacao do horario
-                                    if(cal3.after(cal1) && cal3.before(cal2))
+                                    if(cal3.after(cal1) || cal3.before(cal2))
                                     {
                                         v10.setTextColor(Color.GREEN);
                                         v10.setText("Aberto");
@@ -313,14 +309,16 @@ public class SelectedBarActivity extends ActionBarActivity {
                                 {
                                     //Adiciona infos das cervejas mais barata
                                     v4.setText(list.get(0).getString("NomeCerveja"));
-                                    v5.setText("R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ","));
+                                    v5.setText("R$ " + (String.format("%.2f",list.get(0).getDouble("Preco"))));
+
                                     v6.setText(list.get(1).getString("NomeCerveja"));
-                                    v7.setText("R$ " + String.valueOf(list.get(1).getDouble("Preco")).replace(".", ","));
+                                    v7.setText("R$ " + (String.format("%.2f", list.get(1).getDouble("Preco"))));
+
                                     v8.setText(list.get(2).getString("NomeCerveja"));
-                                    v9.setText("R$ " + String.valueOf(list.get(2).getDouble("Preco")).replace(".", ","));
+                                    v9.setText("R$ " + (String.format("%.2f", list.get(2).getDouble("Preco"))));
 
                                     strNomeCerveja = list.get(0).getString("NomeCerveja");
-                                    strPrecoCerveja = "R$ " + String.valueOf(list.get(0).getDouble("Preco")).replace(".", ",");
+                                    strPrecoCerveja = "R$ " + String.valueOf(String.format("%.2f", list.get(0).getDouble("Preco")));;
                                 }
 
                                 mProgressDialog.dismiss();

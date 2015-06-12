@@ -187,22 +187,18 @@ public class BaresOnMapActivity extends Activity {
                                       String[] parts = strAbertura.split(":");
                                       cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                       cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                      cal1.set(Calendar.DAY_OF_MONTH, day);
 
                                       //Fechamento
                                       parts = strFechamento.split(":");
                                       cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                       cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                      cal2.set(Calendar.DAY_OF_MONTH, day);
-                                      cal2.add(Calendar.DAY_OF_MONTH, 1);
 
                                       //Hora atual
                                       parts = strHour.split(":");
                                       cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                       cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                      cal3.set(Calendar.DAY_OF_MONTH, day);
 
-                                      if(cal3.after(cal1) && cal3.before(cal2))
+                                      if(cal3.after(cal1) || cal3.before(cal2))
                                       {
                                           resultado = "Aberto";
                                       }
