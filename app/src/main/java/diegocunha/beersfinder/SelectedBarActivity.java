@@ -40,6 +40,7 @@ public class SelectedBarActivity extends ActionBarActivity {
     private ConnectivityManager conectivtyManager;
     private boolean conectado;
     private AlertDialog.Builder alertB;
+    private int day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +174,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         strHour = sdf.format(now);
+        day = now.getDay();
 
         if(verificaConexao())
         {
@@ -207,17 +209,20 @@ public class SelectedBarActivity extends ActionBarActivity {
                                     String[] parts = strAbertura.split(":");
                                     cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal1.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                    cal1.set(Calendar.DAY_OF_MONTH, day);
 
                                     //Fechamento
                                     parts = strFechamento.split(":");
                                     cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal2.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                                    cal2.add(Calendar.DATE, 1);
+                                    cal2.set(Calendar.DAY_OF_MONTH, day);
+                                    cal2.add(Calendar.DAY_OF_MONTH, 1);
 
                                     //Hora atual
                                     parts = strHour.split(":");
                                     cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                     cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                                    cal3.set(Calendar.DAY_OF_MONTH, day);
 
                                     //Realiza verificacao do horario
                                     if(cal3.after(cal1) && cal3.before(cal2))
@@ -357,8 +362,8 @@ public class SelectedBarActivity extends ActionBarActivity {
      ***********************************************************/
     protected void OpenGPS()
     {
-        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
-        Intent intent2 = new Intent(this, secondActivity.class);
+        final Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
@@ -388,12 +393,12 @@ public class SelectedBarActivity extends ActionBarActivity {
      ***********************************************************/
     protected void OpenNet()
     {
-        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
-        Intent intent2 = new Intent(this, secondActivity.class);
+        final Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
-        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setMessage("Sem conexao com internet, deseja ativar?");
         alertB.setCancelable(false);
         alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

@@ -203,25 +203,55 @@ public class firstActivity extends ActionBarActivity
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenNet                                       ****
-     * Funcionalidade: Abre Config de internet               ****
+     * Funçao: OpenGPS                                       ****
+     * Funcionalidade: Abre Config de GPS                    ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
-    protected void OpenNet()
+    protected void OpenGPS()
     {
-        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
-        Intent intent2 = new Intent(this, secondActivity.class);
+        final Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
-        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setMessage("GPS desativado, deseja ativar?");
         alertB.setCancelable(false);
         alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 startActivity(intent);
             }
         });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
 
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        final Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com internet, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
         alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

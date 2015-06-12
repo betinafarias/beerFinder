@@ -213,8 +213,8 @@ public class BarForLocationActivity extends ActionBarActivity {
      ***********************************************************/
     protected void OpenGPS()
     {
-        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
-        Intent intent2 = new Intent(this, secondActivity.class);
+        final Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
@@ -244,19 +244,18 @@ public class BarForLocationActivity extends ActionBarActivity {
      ***********************************************************/
     protected void OpenNet()
     {
-        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
-        Intent intent2 = new Intent(this, secondActivity.class);
+        final Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
-        alertB.setMessage("Sem conexao com intenret, deseja ativar?");
+        alertB.setMessage("Sem conexao com internet, deseja ativar?");
         alertB.setCancelable(false);
         alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 startActivity(intent);
             }
         });
-
         alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
