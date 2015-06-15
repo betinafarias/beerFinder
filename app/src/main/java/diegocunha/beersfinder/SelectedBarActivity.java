@@ -422,6 +422,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         alert11.show();
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: load_fav                                      ****
+     * Funcionalidade: Carrega lista de favoritos            ****
+     * Data Criacao: 13/06/2015                              ****
+     ************************************************************/
     protected void load_fav()
     {
         SharedPreferences list_fav;
@@ -433,6 +439,16 @@ public class SelectedBarActivity extends ActionBarActivity {
 
         }
     }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: add_fav                                       ****
+     * Funcionalidade: Adiciona item aos favoritos           ****
+     * Data Criacao: 13/06/2015                              ****
+     ************************************************************/
+    protected void add_fav()
+    {}
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

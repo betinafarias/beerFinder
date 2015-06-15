@@ -32,7 +32,7 @@ import java.util.List;
 public class BaresOnMapActivity extends Activity {
 
     //Variaveis Globais
-    private String AppID, ClientID, resultado, strHour, strAbertura, strFechamento;
+    private String AppID, ClientID, resultado, strHour, strAbertura, strFechamento, strResultado, strCerveja, strPreco;
     private GoogleMap googleMAp;
     private LatLng lBar, lMeuLugar;
     private double Latitude, Longitude;
@@ -111,6 +111,64 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: load_cerveja                                  ****
+     * Funcionalidade: Verifica as cervejas mais baratas     ****
+     * Data Criacao: 09/06/2015                              ****
+     ***********************************************************/
+    protected void load_cerveja(String txNomeBar)
+    {
+        try
+        {
+            //Carrega informações do Parse
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
+            query.setLimit(1);
+            query.orderByAscending("Preco");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    //Se nao ha excecao
+                    if(e == null)
+                    {
+                        //Se a lista nao esta fazia
+                        if(list.size() > 0)
+                        {
+                            //Varre a lista
+                            for(int i =0; i < list.size(); i++)
+                            {
+                                //Adiciona infos das cervejas mais barata
+                                ParseObject pObbject = list.get(i);
+                                strCerveja = pObbject.getString("NomeCerveja");
+                                strPreco = "R$: " + String.format("%.2f",list.get(i).getDouble("Preco"));
+                                strResultado = strCerveja + " " + strPreco;
+                            }
+
+                            mProgressDialog.dismiss();
+                        }
+                        else
+                        {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            mProgressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+            ex.printStackTrace();
+        }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
      * Função: loadbares                                     ****
      * Funcionalidade: Mostra bares no maps                  ****
      * Criação: 04/06/2015                                   ****
@@ -177,6 +235,8 @@ public class BaresOnMapActivity extends Activity {
                                       String strNomeBar = pObject.getString("NomeBar");
                                       String strRuaBar = pObject.getString("RuaBar");
 
+                                      load_cerveja(strNomeBar);
+
                                       double parseLat = pObject.getDouble("Latitude");
                                       double parseLng = pObject.getDouble("Longitude");
 
@@ -210,7 +270,7 @@ public class BaresOnMapActivity extends Activity {
                                       lBar = new LatLng(parseLat, parseLng);
                                       barMarker = googleMAp.addMarker(new MarkerOptions()
                                               .title(strNomeBar)
-                                              .snippet(resultado)
+                                              .snippet(resultado + " - " + strResultado)
                                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
                                               .position(lBar));
                                   }
