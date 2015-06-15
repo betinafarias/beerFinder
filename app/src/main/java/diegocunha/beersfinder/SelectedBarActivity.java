@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.provider.Settings;
@@ -41,6 +42,8 @@ public class SelectedBarActivity extends ActionBarActivity {
     private boolean conectado;
     private AlertDialog.Builder alertB;
     private int day;
+    private FavoriteList favList;
+    private List<FavoriteList> favorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,10 @@ public class SelectedBarActivity extends ActionBarActivity {
 
         //Inicializa o Bundle
         Bundle extras = getIntent().getExtras();
+
+        //Inicializa a lista de favoritos
+
+        favorite = new ArrayList<FavoriteList>(5);
 
         //Se foi passado valores pelo ListViewClick
         if(extras != null)
@@ -170,12 +177,13 @@ public class SelectedBarActivity extends ActionBarActivity {
         cal2 = Calendar.getInstance(); // Fechamento
         cal3 = Calendar.getInstance(); // Atual
         cal4 = Calendar.getInstance(); // Dia
+
         //Hora Atual
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         strHour = sdf.format(now);
-        day = cal4.get(Calendar.DATE);
 
+        //Verifica Conexão com internet
         if(verificaConexao())
         {
             try
@@ -414,6 +422,17 @@ public class SelectedBarActivity extends ActionBarActivity {
         alert11.show();
     }
 
+    protected void load_fav()
+    {
+        SharedPreferences list_fav;
+        list_fav = getApplicationContext().getSharedPreferences("Favoritos", Context.MODE_PRIVATE);
+        if(list_fav.contains("myFavorites"))
+        {
+            String jfilho = list_fav.getString("myFavorites", null);
+            //Gson gson = new Gson();
+
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
