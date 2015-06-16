@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.provider.Settings;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.parse.FindCallback;
@@ -45,6 +48,8 @@ public class SelectedBarActivity extends ActionBarActivity {
     private int iNum;
     private FavoriteList favList;
     private List<FavoriteList> favorite;
+    private SQLiteDatabase myDataBase;
+    private Button btnFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         v10 = (TextView)findViewById(R.id.txtStatus);
         v11 = (TextView)findViewById(R.id.hAbertura);
         v12 = (TextView)findViewById(R.id.hFechamento);
+        btnFav = (Button)findViewById(R.id.btnFavorite);
 
         //Inicializa o ProgressDialog
         mProgressDialog = new ProgressDialog(this);
@@ -80,9 +86,6 @@ public class SelectedBarActivity extends ActionBarActivity {
         //Inicializa o Bundle
         Bundle extras = getIntent().getExtras();
 
-        //Inicializa a lista de favoritos
-
-        favorite = new ArrayList<FavoriteList>(5);
 
         //Se foi passado valores pelo ListViewClick
         if(extras != null)
@@ -112,6 +115,9 @@ public class SelectedBarActivity extends ActionBarActivity {
 
             //Verifica se o bar esta aberto
             load_status(nomedoBar);
+
+            //Verifica favoritos no SQLITE
+            load_fav(nomedoBar, ruadoBar);
 
             //Busca as cervejas mais baratas
             load_cerveja(nomedoBar);
@@ -430,15 +436,32 @@ public class SelectedBarActivity extends ActionBarActivity {
      * Funcionalidade: Carrega lista de favoritos            ****
      * Data Criacao: 13/06/2015                              ****
      ************************************************************/
-    protected void load_fav()
+    protected void load_fav(String txBar, String txRua)
     {
-        SharedPreferences list_fav;
-        list_fav = getApplicationContext().getSharedPreferences("Favoritos", Context.MODE_PRIVATE);
-        if(list_fav.contains("myFavorites"))
+        try
         {
-            String jfilho = list_fav.getString("myFavorites", null);
-            //Gson gson = new Gson();
+            myDataBase = this.openOrCreateDatabase("Banco", MODE_PRIVATE, null);
+            myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (BarID INTEGER PRIMARY KEY AUTOINCREMENT, NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
 
+            Cursor controler = myDataBase.rawQuery("SELECT *FROM Favorites WHERE NomeBar='"+txBar+"' AND RuaBar='"+txRua+"'", null);
+
+            if(controler == null)
+            {
+                btnFav.setBackgroundColor(Color.GREEN);
+                btnFav.setTextColor(Color.BLACK);
+                btnFav.setText("Adicionar");
+            }
+            else
+            {
+                btnFav.setBackgroundColor(Color.RED);
+                btnFav.setTextColor(Color.WHITE);
+                btnFav.setText("Remover");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -448,8 +471,22 @@ public class SelectedBarActivity extends ActionBarActivity {
      * Funcionalidade: Adiciona item aos favoritos           ****
      * Data Criacao: 13/06/2015                              ****
      ************************************************************/
-    protected void add_fav()
-    {}
+    public void add_fav(View View)
+    {
+        myDataBase = this.openOrCreateDatabase("Banco", MODE_PRIVATE, null);
+
+        if(btnFav.getText().toString().equals("Adicionar"))
+        {
+            myDataBase.execSQL("INSERT INTO Favorites (NomeBar, RuaBar, Latitude, Longitiude) VALUES ('"+nomedoBar+"','"+ruadoBar+"','"+Lat+"','"+Lng+"');");
+            btnFav.setBackgroundColor(Color.RED);
+            btnFav.setTextColor(Color.WHITE);
+            btnFav.setText("Remover");
+        }
+        else if(btnFav.getText().toString().equals("Remover"))
+        {
+
+        }
+    }
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****

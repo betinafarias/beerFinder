@@ -10,13 +10,7 @@
     tools:context=".firstActivity"
     android:background="#ffffffff">
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/faceBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,7 +81,8 @@
         android:layout_height="wrap_content"
         android:text="Esqueci minha senha"
         android:onClick="resetPass"
-        android:layout_above="@+id/faceBtn"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/txtLogin"
+        android:layout_toEndOf="@+id/txtLogin" />
 
 </RelativeLayout>

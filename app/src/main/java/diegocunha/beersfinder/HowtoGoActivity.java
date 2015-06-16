@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class HowtoGoActivity extends FragmentActivity{
 
     //Variaveis Globais
-    myLocation MeuLugar;
+    private myLocation MeuLugar;
     private double Latitude, Longitude, barLat, barLng;
     private String strNomeBar, strRuaBar, strNomeCerveja, strPrecoCerveja;
     private myIntineraire md;

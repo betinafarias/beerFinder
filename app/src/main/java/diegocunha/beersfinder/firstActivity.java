@@ -32,24 +32,19 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import org.w3c.dom.Text;
-import java.security.MessageDigest;
-import java.util.List;
 
 public class firstActivity extends ActionBarActivity
 {
 	//Variáveis Globais
-    private CallbackManager callbackManager;
     private EditText login, senha;
-    private String strLogin, strSenha, strUser, strPass, AppID, ClientID, strMD5Pass;
+    private String strLogin, strSenha, AppID, ClientID;
     private LocationManager locationManager;
-    private boolean conectado, load = false;
+    private boolean conectado;
     private ConnectivityManager conectivtyManager;
     private ProgressDialog mProgressDialog;
     private AlertDialog.Builder alertB;
@@ -59,10 +54,6 @@ public class firstActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        //Inicializa o sdk do facebook para aparecer o botão de login NÃO MEXER
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_first);
 
         //Pega infos dos EditText
@@ -73,7 +64,6 @@ public class firstActivity extends ActionBarActivity
         AppID = getString(R.string.AppID);
         ClientID = getString(R.string.ClientID);
         Parse.initialize(this, AppID, ClientID);
-        ParseFacebookUtils.initialize(getApplicationContext());
 
     }
 
