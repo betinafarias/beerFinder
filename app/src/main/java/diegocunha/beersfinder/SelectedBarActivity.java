@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class SelectedBarActivity extends ActionBarActivity {
 
@@ -41,7 +42,7 @@ public class SelectedBarActivity extends ActionBarActivity {
     private ConnectivityManager conectivtyManager;
     private boolean conectado;
     private AlertDialog.Builder alertB;
-    private int day;
+    private int iNum;
     private FavoriteList favList;
     private List<FavoriteList> favorite;
 
@@ -56,6 +57,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
         //Bloqueia pagina de usuario sem acesso
         getUser();
+        OpenConsientizacao();
         setContentView(R.layout.activity_selectedbar);
 
         //Seta os TextView
@@ -448,6 +450,42 @@ public class SelectedBarActivity extends ActionBarActivity {
      ************************************************************/
     protected void add_fav()
     {}
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenConsientizacao                            ****
+     * Funcionalidade: Abre Dialog de concientizacao         ****
+     * Data Criacao: 16/06/2015                              ****
+     ************************************************************/
+    protected void OpenConsientizacao()
+    {
+        Random randomGenerator = new Random();
+
+        iNum = randomGenerator.nextInt(3);
+
+        if(iNum == 2)
+        {
+            alertB = new AlertDialog.Builder(this);
+            alertB.setTitle("Aviso");
+            alertB.setMessage("Se beber não dirija!");
+            alertB.setCancelable(false);
+            alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                alertB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+            AlertDialog alert11 = alertB.create();
+            alert11.show();
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class BaresOnMapActivity extends Activity {
 
@@ -43,12 +44,13 @@ public class BaresOnMapActivity extends Activity {
     private boolean conectado;
     private ConnectivityManager conectivtyManager;
     private AlertDialog.Builder alertB;
-    private int day;
+    private int iNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getUser();
+        OpenConsientizacao();
         setContentView(R.layout.activity_baresonmap);
 
         //Direciona ID do Parse
@@ -202,8 +204,6 @@ public class BaresOnMapActivity extends Activity {
               Date now = new Date();
               SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
               strHour = sdf.format(now);
-              day = now.getDay();
-
 
               //Move camera para posicionamento do usuario
               googleMAp.moveCamera(CameraUpdateFactory.newLatLngZoom(lMeuLugar, 13));
@@ -370,6 +370,42 @@ public class BaresOnMapActivity extends Activity {
 
         AlertDialog alert11 = alertB.create();
         alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenConsientizacao                            ****
+     * Funcionalidade: Abre Dialog de concientizacao         ****
+     * Data Criacao: 16/06/2015                              ****
+     ************************************************************/
+    protected void OpenConsientizacao()
+    {
+        Random randomGenerator = new Random();
+
+        iNum = randomGenerator.nextInt(3);
+
+        if(iNum == 2)
+        {
+            alertB = new AlertDialog.Builder(this);
+            alertB.setTitle("Aviso");
+            alertB.setMessage("Se beber não dirija!");
+            alertB.setCancelable(false);
+            alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            alertB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alert11 = alertB.create();
+            alert11.show();
+        }
+
     }
 
     @Override
