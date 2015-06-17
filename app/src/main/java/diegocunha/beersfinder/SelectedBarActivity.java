@@ -441,21 +441,25 @@ public class SelectedBarActivity extends ActionBarActivity {
         try
         {
             myDataBase = this.openOrCreateDatabase("Banco", MODE_PRIVATE, null);
-            myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (BarID INTEGER PRIMARY KEY AUTOINCREMENT, NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
+            myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
 
-            Cursor controler = myDataBase.rawQuery("SELECT *FROM Favorites WHERE NomeBar='"+txBar+"' AND RuaBar='"+txRua+"'", null);
+            Cursor controler = myDataBase.rawQuery("SELECT COUNT(*) FROM Favorites WHERE NomeBar='"+txBar+"' AND RuaBar='"+txRua+"'", null);
 
-            if(controler == null)
-            {
-                btnFav.setBackgroundColor(Color.GREEN);
-                btnFav.setTextColor(Color.BLACK);
-                btnFav.setText("Adicionar");
-            }
-            else
+            controler.moveToFirst();
+
+            if(controler.getInt(0) > 0)
             {
                 btnFav.setBackgroundColor(Color.RED);
                 btnFav.setTextColor(Color.WHITE);
                 btnFav.setText("Remover");
+                myDataBase.close();
+            }
+            else
+            {
+                btnFav.setBackgroundColor(Color.GREEN);
+                btnFav.setTextColor(Color.BLACK);
+                btnFav.setText("Adicionar");
+                myDataBase.close();
             }
 
         }
