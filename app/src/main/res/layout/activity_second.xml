@@ -64,7 +64,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bares no Mapa"
+        android:text="Favoritos"
         android:id="@+id/btnFavoritos"
         android:onClick="abre_favs"
         android:layout_below="@+id/btnBarAllMaps"

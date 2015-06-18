@@ -53,17 +53,12 @@ public class BaresOnMapActivity extends Activity {
         OpenConsientizacao();
         setContentView(R.layout.activity_baresonmap);
 
-        //Direciona ID do Parse
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-
         //Instancia maps a variavel
         googleMAp = ((MapFragment) getFragmentManager().findFragmentById(R.id.map2))
                 .getMap();
         googleMAp.setMyLocationEnabled(true);
 
         //Inicializa informacoes
-        Parse.initialize(this, AppID, ClientID);
         mProgressDialog = new ProgressDialog(this);
         MeuLugar = new myLocation(this);
         loadbares();

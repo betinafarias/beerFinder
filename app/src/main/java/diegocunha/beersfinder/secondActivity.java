@@ -39,10 +39,6 @@ public class secondActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        //Parse Infos
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
 
         //Inicializa variaveis necessarias
         listaBares = new ArrayList<ListaBares>();

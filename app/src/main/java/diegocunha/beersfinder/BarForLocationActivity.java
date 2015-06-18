@@ -44,11 +44,6 @@ public class BarForLocationActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        //Inicializa o Parse
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
         getUser();
 
         //Inicializia variaveis

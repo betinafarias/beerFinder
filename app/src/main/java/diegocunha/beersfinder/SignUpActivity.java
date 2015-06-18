@@ -40,11 +40,6 @@ public class SignUpActivity extends ActionBarActivity {
         edLogin = (EditText)findViewById(R.id.edtUser);
         edPass  = (EditText)findViewById(R.id.edtPass);
         edMail  = (EditText)findViewById(R.id.edtMail);
-
-        //Parse Infos
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
     }
 
     /**********************************************

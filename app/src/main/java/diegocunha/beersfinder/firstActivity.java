@@ -59,12 +59,6 @@ public class firstActivity extends ActionBarActivity
         //Pega infos dos EditText
         login = (EditText)findViewById(R.id.edtLogin);
         senha = (EditText)findViewById(R.id.edtSenha);
-
-        //Parse Infos
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
-
     }
 
     /************************************************************

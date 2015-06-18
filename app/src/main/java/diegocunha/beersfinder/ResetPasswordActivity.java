@@ -24,12 +24,6 @@ public class ResetPasswordActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resetpassword);
-
-        //Inicializa o Parse
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
-        ParseFacebookUtils.initialize(getApplicationContext());
         
         mail = (EditText)findViewById(R.id.mail);
         confirm = (EditText)findViewById(R.id.ConfirmeEmail);

@@ -34,9 +34,6 @@ public class BaresActivity extends ActionBarActivity{
         setContentView(R.layout.activity_bares);
 
         //Inicializa o Parse
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
         getUser();
 
         //Preenche os Spinners

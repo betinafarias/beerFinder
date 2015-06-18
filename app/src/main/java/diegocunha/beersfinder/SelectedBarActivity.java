@@ -55,11 +55,6 @@ public class SelectedBarActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Inicializa o Parse
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
-
         //Bloqueia pagina de usuario sem acesso
         getUser();
         OpenConsientizacao();
@@ -440,7 +435,7 @@ public class SelectedBarActivity extends ActionBarActivity {
     {
         try
         {
-            myDataBase = this.openOrCreateDatabase("Banco", MODE_PRIVATE, null);
+            myDataBase = this.openOrCreateDatabase("Banco", SQLiteDatabase.CREATE_IF_NECESSARY, null);
             myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
 
             Cursor controler = myDataBase.rawQuery("SELECT COUNT(*) FROM Favorites WHERE NomeBar='"+txBar+"' AND RuaBar='"+txRua+"'", null);
@@ -477,7 +472,7 @@ public class SelectedBarActivity extends ActionBarActivity {
      ************************************************************/
     public void add_fav(View View)
     {
-        myDataBase = this.openOrCreateDatabase("Banco", MODE_PRIVATE, null);
+        myDataBase = this.openOrCreateDatabase("Banco", SQLiteDatabase.CREATE_IF_NECESSARY, null);
 
         if(btnFav.getText().toString().equals("Adicionar"))
         {
@@ -488,7 +483,9 @@ public class SelectedBarActivity extends ActionBarActivity {
         }
         else if(btnFav.getText().toString().equals("Remover"))
         {
-
+            btnFav.setBackgroundColor(Color.GREEN);
+            btnFav.setTextColor(Color.BLACK);
+            btnFav.setText("Adicionar");
         }
     }
 

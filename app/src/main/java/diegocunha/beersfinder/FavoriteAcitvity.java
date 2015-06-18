@@ -31,7 +31,7 @@ public class FavoriteAcitvity extends ActionBarActivity {
     FavoriteList favList2;
     List<FavoriteList> favList;
     protected String AppID, ClientID;
-    private SQLiteDatabase myDataBase;
+    private SQLiteDatabase myDataBase, myControlDB;
     private double mLat, mLng;
     FavoriteAdapter myAdpt;
     private ProgressDialog mProgressDialog;
@@ -42,13 +42,9 @@ public class FavoriteAcitvity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getUser();
         setContentView(R.layout.activity_favorite);
 
-        //Parse Infos
-        AppID = getString(R.string.AppID);
-        ClientID = getString(R.string.ClientID);
-        Parse.initialize(this, AppID, ClientID);
+        getUser();
 
         MeuLocal = new myLocation(this);
         favList = new ArrayList<FavoriteList>();
@@ -90,9 +86,11 @@ public class FavoriteAcitvity extends ActionBarActivity {
         try
         {
             //Abre Banco de dados
-            myDataBase = this.openOrCreateDatabase("Banco", MODE_PRIVATE, null);
+            myDataBase = this.openOrCreateDatabase("Banco", SQLiteDatabase.CREATE_IF_NECESSARY, null);
             myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
+
             Cursor controler = myDataBase.rawQuery("SELECT COUNT(*) FROM Favorites", null);
+            controler.moveToFirst();
 
             //Se Consegue buscar posicao
             if(MeuLocal.canGetLocation())
@@ -111,20 +109,19 @@ public class FavoriteAcitvity extends ActionBarActivity {
                         while(controler2.moveToNext())
                         {
                             //Adiciona as variaveis o resultado do banco
-                            String Nomebar = controler2.getString(0);
-                            String Ruabar = controler2.getString(1);
-                            double Lat = Double.valueOf(controler2.getString(2));
-                            double Lng = Double.valueOf(controler2.getString(3));
+                            String Nomebar = controler2.getString(1);
+                            String Ruabar = controler2.getString(2);
+                            double Lat = Double.valueOf(controler2.getString(3));
+                            double Lng = Double.valueOf(controler2.getString(4));
 
                             //Calcula distancia
-                            double dDist = MeuLocal.calculaDistancia(mLat, mLng, Lat, Lng);
+                            double dDist = MeuLocal.calculaDistancia(mLat, Lat, mLng, Lng);
                             String strDist = String.format("%.2f", dDist) + "km";
 
                             //Adiciona resultado a lista e ordena
                             FavoriteList item = new FavoriteList(Nomebar, Ruabar, strDist, dDist, Lat, Lng);
                             favList.add(item);
                             Collections.sort(favList);
-
                         }
 
                         MeuLocal.stopUsingGPS();
@@ -219,7 +216,7 @@ public class FavoriteAcitvity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_favorite_acitvity, menu);
+        getMenuInflater().inflate(R.menu.menu_bar_for_location, menu);
         return true;
     }
 
