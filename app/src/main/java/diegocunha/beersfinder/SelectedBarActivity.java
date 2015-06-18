@@ -128,7 +128,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: getUser                                       ****
+     * Funï¿½ao: getUser                                       ****
      * Funcionalidade: Bloqueia pagina sem login             ****
      * Data Criacao: 05/05/2015                              ****
      ***********************************************************/
@@ -145,7 +145,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: verificaConexao                               ****
+     * Funï¿½ao: verificaConexao                               ****
      * Funcionalidade: Verifica status internet              ****
      * Data Criacao: 28/04/2015                              ****
      ***********************************************************/
@@ -169,7 +169,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: load_status                                   ****
+     * Funï¿½ao: load_status                                   ****
      * Funcionalidade: Verifica se os bares esta aberto      ****
      * Data Criacao: 09/06/2015                              ****
      ***********************************************************/
@@ -186,12 +186,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         strHour = sdf.format(now);
 
-        //Verifica Conexão com internet
+        //Verifica Conexï¿½o com internet
         if(verificaConexao())
         {
             try
             {
-                //Carrega informações do Parse
+                //Carrega informaï¿½ï¿½es do Parse
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
                 query.whereEqualTo("NomeBar", nome);
                 query.setLimit(1);
@@ -274,7 +274,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: goDraw                                        ****
+     * Funï¿½ao: goDraw                                        ****
      * Funcionalidade: Abre activity do Maps                 ****
      * Data Criacao: 23/05/2015                              ****
      ***********************************************************/
@@ -292,7 +292,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: load_cerveja                                  ****
+     * Funï¿½ao: load_cerveja                                  ****
      * Funcionalidade: Verifica as cervejas mais baratas     ****
      * Data Criacao: 09/06/2015                              ****
      ***********************************************************/
@@ -302,7 +302,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         {
             try
             {
-                //Carrega informações do Parse
+                //Carrega informaï¿½ï¿½es do Parse
                 ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
                 query.setLimit(3);
                 query.orderByAscending("Preco");
@@ -365,7 +365,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenGPS                                       ****
+     * Funï¿½ao: OpenGPS                                       ****
      * Funcionalidade: Abre Config de GPS                    ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -383,7 +383,7 @@ public class SelectedBarActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Nï¿½o", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -396,7 +396,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenNet                                       ****
+     * Funï¿½ao: OpenNet                                       ****
      * Funcionalidade: Abre Config de internet               ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -414,7 +414,7 @@ public class SelectedBarActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Nï¿½o", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -427,7 +427,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: load_fav                                      ****
+     * Funï¿½ao: load_fav                                      ****
      * Funcionalidade: Carrega lista de favoritos            ****
      * Data Criacao: 13/06/2015                              ****
      ************************************************************/
@@ -435,13 +435,19 @@ public class SelectedBarActivity extends ActionBarActivity {
     {
         try
         {
+            //Abre o banco ou cria se nÃ£o existe
             myDataBase = this.openOrCreateDatabase("Banco", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+
+            //Cria tabela se nÃ£o existe
             myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
 
+            //Verifica se a tabela possui valores
             Cursor controler = myDataBase.rawQuery("SELECT COUNT(*) FROM Favorites WHERE NomeBar='"+txBar+"' AND RuaBar='"+txRua+"'", null);
 
+            //Move o resultado para a primeira linha
             controler.moveToFirst();
 
+            //Se a tabela possui o bar
             if(controler.getInt(0) > 0)
             {
                 btnFav.setBackgroundColor(Color.RED);
@@ -449,7 +455,7 @@ public class SelectedBarActivity extends ActionBarActivity {
                 btnFav.setText("Remover");
                 myDataBase.close();
             }
-            else
+            else //Se nÃ£o possui
             {
                 btnFav.setBackgroundColor(Color.GREEN);
                 btnFav.setTextColor(Color.BLACK);
@@ -466,7 +472,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: add_fav                                       ****
+     * Funï¿½ao: add_fav                                       ****
      * Funcionalidade: Adiciona item aos favoritos           ****
      * Data Criacao: 13/06/2015                              ****
      ************************************************************/
@@ -474,38 +480,44 @@ public class SelectedBarActivity extends ActionBarActivity {
     {
         myDataBase = this.openOrCreateDatabase("Banco", SQLiteDatabase.CREATE_IF_NECESSARY, null);
 
+        //Se nao encontrar o bar aparece a opcao para adicionar
         if(btnFav.getText().toString().equals("Adicionar"))
         {
             myDataBase.execSQL("INSERT INTO Favorites (NomeBar, RuaBar, Latitude, Longitiude) VALUES ('"+nomedoBar+"','"+ruadoBar+"','"+Lat+"','"+Lng+"');");
             btnFav.setBackgroundColor(Color.RED);
             btnFav.setTextColor(Color.WHITE);
             btnFav.setText("Remover");
+            Toast.makeText(getApplicationContext(), "Bar adicionado com sucesso", Toast.LENGTH_SHORT).show();
         }
-        else if(btnFav.getText().toString().equals("Remover"))
+        else if(btnFav.getText().toString().equals("Remover")) // Caso encontre o bar marque para remover
         {
+            myDataBase.delete("Favorites", "NomeBar='"+nomedoBar+"' AND Ruabar='"+ruadoBar+"'", null);
             btnFav.setBackgroundColor(Color.GREEN);
             btnFav.setTextColor(Color.BLACK);
             btnFav.setText("Adicionar");
+            Toast.makeText(getApplicationContext(), "Bar removido com sucesso", Toast.LENGTH_SHORT).show();
         }
     }
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenConsientizacao                            ****
+     * Funï¿½ao: OpenConsientizacao                            ****
      * Funcionalidade: Abre Dialog de concientizacao         ****
      * Data Criacao: 16/06/2015                              ****
      ************************************************************/
     protected void OpenConsientizacao()
     {
+        //Instancia classe para gerar numero aleatorio
         Random randomGenerator = new Random();
 
+        //Recebe o numero aleatorio
         iNum = randomGenerator.nextInt(3);
 
         if(iNum == 2)
         {
             alertB = new AlertDialog.Builder(this);
             alertB.setTitle("Aviso");
-            alertB.setMessage("Se beber não dirija!");
+            alertB.setMessage("Se beber nï¿½o dirija!");
             alertB.setCancelable(false);
             alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

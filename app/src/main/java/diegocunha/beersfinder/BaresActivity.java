@@ -1,21 +1,33 @@
 package diegocunha.beersfinder;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BaresActivity extends ActionBarActivity{
 
@@ -23,10 +35,18 @@ public class BaresActivity extends ActionBarActivity{
     Spinner mySpinner, spinerCerveja, spinnerTipoCeva;
     ProgressDialog mProgressDialog;
     ConnectivityManager conectivtyManager;
+    myLocation MeuLugar;
     boolean isOn;
     private String AppID, ClientID, nomedoBar, nomeCerveja, tipoCerveja;
-    private String nomeBar[], nomeCeva[], tamanhoCeva[];
-    int barPosition, cevaPosition, tipoCevaPosition;
+    String strNomeBar, strRuaBar, strDist;
+    private String nomeBar[];
+    private double Lat, Lng, parseLat, parseLng, dist;
+    ListaBares item;
+    List<ListaBares> lista2;
+    myAdapter adapter;
+    AlertDialog.Builder alertB;
+    ListView listView;
+    List<String> lista_ceva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +56,17 @@ public class BaresActivity extends ActionBarActivity{
         //Inicializa o Parse
         getUser();
 
-        //Preenche os Spinners
-        mySpinner = (Spinner)findViewById(R.id.meuSpinner);
-        spinerCerveja = (Spinner)findViewById(R.id.spinnerBebidas);
-        spinnerTipoCeva = (Spinner)findViewById(R.id.spinnerTipoCeva);
-        loadBares();
+        //Inicia o ProgressDialog
+        mProgressDialog = new ProgressDialog(this);
+
+        //Inicia a classe myLocation;
+        MeuLugar = new myLocation(this);
+
+        //Inicializa list
+        lista2 = new ArrayList<ListaBares>();
+        adapter = new myAdapter(this, lista2);
+        listView = (ListView)findViewById(R.id.myList);
+        lista_ceva = new ArrayList<String>();
     }
 
     /************************************************************
@@ -91,29 +117,42 @@ public class BaresActivity extends ActionBarActivity{
      * Função: void loadBares                  ****
      * Funcionalidade: Preenche os Spinners    ****
      **********************************************/
-   public void loadBares()
+   public void load_bar_proximo(View view)
    {
-       try
+       if(verificaConexao())
        {
-            //Adiciona os valores aos Spinners
-           this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub", "Tirol"};
-           this.nomeCeva = new String[]{"Escolha uma opcao", "Budweiser", "Heineken", "Stella", "Polar", "Skol"};
-           this.tamanhoCeva = new String[]{"Escolha uma opcao", "500ml","600ml", "Long Neck", "Artesanal", "Chopp"};
+           try
+           {
+               //Adiciona os valores aos Spinners
+               this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub", "Tirol"};
 
-           //Cria ArrayAdapter para os Spinner
-           ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeBar);
-           ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeCeva);
-           ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tamanhoCeva);
+               for(int i = 0; i < nomeBar.length -1; i++)
+               {
+                   String bar = nomeBar[i];
+                   ParseQuery<ParseObject> query = ParseQuery.getQuery(bar);
+                   query.orderByAscending("Preco");
+                   query.setLimit(1);
+                   query.findInBackground(new FindCallback<ParseObject>() {
+                       @Override
+                       public void done(List<ParseObject> list, ParseException e) {
 
-           //Carrega Spinner
-           mySpinner.setAdapter(adapter);
-           spinerCerveja.setAdapter(adapter2);
-           spinnerTipoCeva.setAdapter(adapter3);
+                       }
+                   });
+
+
+               }
+
+
+           }
+           catch (Exception ex)
+           {
+               ex.printStackTrace();
+               Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+           }
        }
-       catch (Exception ex)
+       else
        {
-           ex.printStackTrace();
-           Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+
        }
    }
 
@@ -123,56 +162,126 @@ public class BaresActivity extends ActionBarActivity{
      * Funcionalidade: Manda parametros para busca           ****
      * Data Criacao: 13/05/2015                              ****
      ***********************************************************/
-    public void sendBares(View view)
+    public void bar(View view)
     {
-        //Inicia o ProgressDialog
-        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setTitle("Carregando");
+        mProgressDialog.setMessage("Loading . . .");
 
-        try
+        if(verificaConexao())
         {
-            mProgressDialog.setCanceledOnTouchOutside(true);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setTitle("Carregando");
-            mProgressDialog.setMessage("Loading . . .");
+            try
+            {
+                Lat = MeuLugar.getLatitude();
+                Lng = MeuLugar.getLongitude();
 
-            nomedoBar = mySpinner.getSelectedItem().toString();
-            nomeCerveja = spinerCerveja.getSelectedItem().toString();
-            tipoCerveja = spinnerTipoCeva.getSelectedItem().toString();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                query.findInBackground(new FindCallback<ParseObject>()
+                {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e)
+                    {
+                        if(e == null)
+                        {
+                            if(list.size() > 0)
+                            {
+                                for(int i = 0; i < list.size(); i++)
+                                {
+                                    ParseObject parseObject = list.get(i);
+                                    strNomeBar = parseObject.getString("NomeBar");
+                                    strRuaBar = parseObject.getString("RuaBar");
+                                    parseLat = parseObject.getDouble("Latitude");
+                                    parseLng = parseObject.getDouble("Longitude");
 
-            barPosition = mySpinner.getSelectedItemPosition();
-            cevaPosition = spinerCerveja.getSelectedItemPosition();
-            tipoCevaPosition = spinnerTipoCeva.getSelectedItemPosition();
+                                    dist = MeuLugar.calculaDistancia(Lat, parseLat, Lng, parseLng);
+                                    strDist = String.format("%.2f", dist) + "km";
+                                    item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
 
-            //Manda informações para SelectedBaresActivity
-            if(barPosition == 0 && cevaPosition == 0 && tipoCevaPosition == 0)
-            {
-                mProgressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Escolha um parametro válido", Toast.LENGTH_SHORT).show();
+                                    lista2.add(item);
+                                    Collections.sort(lista2);
+                                }
+
+                                adapter.notifyDataSetChanged();
+                                mProgressDialog.dismiss();
+                            }
+                        }
+                    }
+                });
+
             }
-            else if(tipoCevaPosition == 0 && barPosition == 0 && cevaPosition != 0)
+            catch (Exception ex)
             {
-                Intent intent = new Intent(getApplicationContext(), selectBaresA.class);
-                intent.putExtra("strCeva", nomeCerveja);
-                startActivity(intent);
-                mProgressDialog.dismiss();
+                ex.printStackTrace();
+                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
-            else if(barPosition != 0 && cevaPosition == 0 && tipoCevaPosition == 0)
+            finally
             {
-                Intent intent = new Intent(getApplicationContext(), selectBaresA.class);
-                intent.putExtra("strBar", nomedoBar);
-                startActivity(intent);
-                mProgressDialog.dismiss();
-            }
-            else
-            {
-                mProgressDialog.dismiss();
+                listView.setAdapter(adapter);
             }
         }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenGPS                                       ****
+     * Funcionalidade: Abre Config de GPS                    ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenGPS()
+    {
+        final Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("GPS desativado, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        final Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com internet, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
     }
 
     @Override

@@ -106,9 +106,9 @@ public class secondActivity extends ActionBarActivity {
 
     /*********************************************************
      * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
-     * Criação: 08/05/2015                                  **
-     * Função: void BarProximo                              **
-     * Funcionalidade: Busca bares mais pertos              **
+     * Criação: 18/06/2015                                  **
+     * Função: void abre_favs                               **
+     * Funcionalidade: Mostra bares marcados como favs      **
      *********************************************************/
     public void abre_favs(View view)
     {
