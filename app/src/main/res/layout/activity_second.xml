@@ -61,5 +61,17 @@
         android:onClick="OpenFace"
         android:background="@null"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bares no Mapa"
+        android:id="@+id/btnFavoritos"
+        android:onClick="abre_favs"
+        android:layout_below="@+id/btnBarAllMaps"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btnBarAllMaps"
+        android:layout_alignEnd="@+id/btnBarAllMaps" />
+
 
 </RelativeLayout>

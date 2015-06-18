@@ -23,4 +23,5 @@
     <string name="google_maps_key">AIzaSyBqGEf-Rzn0d18bHA_vdNrTGU2xVNiuz8U</string>
     <string name="title_activity_bares_on_map">BaresOnMapActivity</string>
     <string name="title_activity_bar_for_beer_actyivity">BarForBeerActyivity</string>
+    <string name="title_activity_favorite_acitvity">BeersFinder</string>
 </resources>

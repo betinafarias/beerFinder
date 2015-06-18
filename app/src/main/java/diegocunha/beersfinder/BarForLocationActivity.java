@@ -117,8 +117,8 @@ public class BarForLocationActivity extends ActionBarActivity {
             //Inicializa o ProgressDialog
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . .");
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
 
             //Verifica GPS

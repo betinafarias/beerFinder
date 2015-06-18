@@ -110,6 +110,18 @@ public class secondActivity extends ActionBarActivity {
 
     /*********************************************************
      * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
+     * Criação: 08/05/2015                                  **
+     * Função: void BarProximo                              **
+     * Funcionalidade: Busca bares mais pertos              **
+     *********************************************************/
+    public void abre_favs(View view)
+    {
+        Intent intent = new Intent(this, FavoriteAcitvity.class);
+        startActivity(intent);
+    }
+
+    /*********************************************************
+     * Autores: Diego Cunha, Gabriel Cataneo Betina Farias  **
      * Criação: 06/06/2015                                  **
      * Função: void BarProximo                              **
      * Funcionalidade: Abre pagina para curtir              **

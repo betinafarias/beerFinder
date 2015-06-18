@@ -85,6 +85,10 @@
             android:name=".BaresOnMapActivity"
             android:label="@string/title_activity_bares_on_map" >
         </activity>
+        <activity
+            android:name=".FavoriteAcitvity"
+            android:label="@string/title_activity_favorite_acitvity" >
+        </activity>
     </application>
 
 </manifest>
