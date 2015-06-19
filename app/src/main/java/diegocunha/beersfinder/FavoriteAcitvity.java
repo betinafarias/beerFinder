@@ -117,14 +117,7 @@ public class FavoriteAcitvity extends ActionBarActivity {
                             //Calcula distancia
                             double dDist = MeuLocal.calculaDistancia(mLat, Lat, mLng, Lng);
 
-                            if(dDist < 1000)
-                            {
-                                strDist = String.valueOf(dDist)+"m";
-                            }
-                            else
-                            {
-                                strDist = String.format("%.2f", dDist) + "km";
-                            }
+                            strDist = String.format("%.2f", dDist) + "km";
 
                             //Adiciona resultado a lista e ordena
                             ListaBares item = new ListaBares(Nomebar, Ruabar, strDist, dDist, Lat, Lng);
