@@ -92,7 +92,7 @@ public class FavoriteList implements Comparable<FavoriteList>
     //Ordena Lista para mostrar bares mais perto primeiro
     @Override
     public int compareTo(FavoriteList another) {
-        if(getdDistBar() > another.dDistBar)
+        if(getdDistBar() > another.dDistBar && getdDistBar() > another.dPrecoCeva)
             return 1;
         else return -1;
     }

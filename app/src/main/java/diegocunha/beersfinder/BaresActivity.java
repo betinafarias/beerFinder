@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.facebook.internal.CollectionMapper;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -49,7 +50,6 @@ public class BaresActivity extends ActionBarActivity{
     myAdapter adapter;
     AlertDialog.Builder alertB;
     ListView listView;
-    List<String> lista_ceva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,6 @@ public class BaresActivity extends ActionBarActivity{
         favoriteAdapter = new FavoriteAdapter(this, fav_list);
         adapter = new myAdapter(this, lista2);
         listView = (ListView)findViewById(R.id.myList);
-        lista_ceva = new ArrayList<String>();
     }
 
     /************************************************************
@@ -124,33 +123,95 @@ public class BaresActivity extends ActionBarActivity{
      **********************************************/
    public void load_bar_proximo(View view)
    {
+       mProgressDialog.setCanceledOnTouchOutside(false);
+       mProgressDialog.setCancelable(false);
+       mProgressDialog.setTitle("Carregando");
+       mProgressDialog.setMessage("Loading . . .");
+       mProgressDialog.show();
+
+       if(lista2.size() > 0)
+       {
+           lista2.clear();
+       }
+       else if(fav_list.size() > 0)
+       {
+           fav_list.clear();
+       }
+
        if(verificaConexao())
        {
-           try
+           if(MeuLugar.canGetLocation())
            {
-               //Adiciona os valores aos Spinners
-               this.nomeBar = new String[]{"Dublin", "Mulligan", "Natalicio", "SoccerPoint", "Thomas", "Tirol", "MarquesBier"};
-
-               for(int i = 0; i < nomeBar.length; i++)
+               Lat = MeuLugar.getLatitude();
+               Lng = MeuLugar.getLongitude();
+               try
                {
-                   bar = nomeBar[i];
-               }
+                   ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                   query.findInBackground(new FindCallback<ParseObject>() {
+                       @Override
+                       public void done(List<ParseObject> list, ParseException e) {
+                           if(e == null)
+                           {
+                               if(list.size() > 0)
+                               {
+                                   for(int i = 0; i < list.size(); i++)
+                                   {
+                                       ParseObject parseObject = list.get(i);
 
-               favoriteAdapter.notifyDataSetChanged();
+                                       strNomeBar = parseObject.getString("NomeBar");
+                                       strRuaBar = parseObject.getString("RuaBar");
+                                       parseLat = parseObject.getDouble("Latitude");
+                                       parseLng = parseObject.getDouble("Longitude");
+                                       preco = parseObject.getDouble("Preco");
+
+                                       dist = MeuLugar.calculaDistancia(Lat, parseLat, Lng, parseLng);
+                                       strDist = String.format("%.2f", dist) + "km";
+
+                                       favoriteList = new FavoriteList(strNomeBar, strRuaBar, strDist, preco, dist, parseLat, parseLng);
+
+                                       fav_list.add(favoriteList);
+                                       Collections.sort(fav_list);
+                                   }
+
+                                   favoriteAdapter.notifyDataSetChanged();
+                                   mProgressDialog.dismiss();
+                               }
+                               else
+                               {
+                                   mProgressDialog.dismiss();
+                                   Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                               }
+                           }
+                           else
+                           {
+                               mProgressDialog.dismiss();
+                               Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                           }
+                       }
+                   });
+
+               }
+               catch (Exception ex)
+               {
+                   mProgressDialog.dismiss();
+                   ex.printStackTrace();
+                   Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+               }
+               finally
+               {
+                   listView.setAdapter(favoriteAdapter);
+               }
            }
-           catch (Exception ex)
+           else
            {
-               ex.printStackTrace();
-               Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
-           }
-           finally
-           {
-               listView.setAdapter(favoriteAdapter);
+               mProgressDialog.dismiss();
+               OpenGPS();
            }
        }
        else
        {
-
+           mProgressDialog.dismiss();
+           OpenNet();
        }
    }
 
@@ -166,6 +227,15 @@ public class BaresActivity extends ActionBarActivity{
         mProgressDialog.setCancelable(false);
         mProgressDialog.setTitle("Carregando");
         mProgressDialog.setMessage("Loading . . .");
+
+        if(lista2.size() > 0)
+        {
+            lista2.clear();
+        }
+        else if(fav_list.size() > 0)
+        {
+            fav_list.clear();
+        }
 
         if(verificaConexao())
         {
