@@ -487,6 +487,7 @@ public class SelectedBarActivity extends ActionBarActivity {
             btnFav.setBackgroundColor(Color.RED);
             btnFav.setTextColor(Color.WHITE);
             btnFav.setText("Remover");
+            myDataBase.close();
             Toast.makeText(getApplicationContext(), "Bar adicionado com sucesso", Toast.LENGTH_SHORT).show();
         }
         else if(btnFav.getText().toString().equals("Remover")) // Caso encontre o bar marque para remover
@@ -495,6 +496,7 @@ public class SelectedBarActivity extends ActionBarActivity {
             btnFav.setBackgroundColor(Color.GREEN);
             btnFav.setTextColor(Color.BLACK);
             btnFav.setText("Adicionar");
+            myDataBase.close();
             Toast.makeText(getApplicationContext(), "Bar removido com sucesso", Toast.LENGTH_SHORT).show();
         }
     }

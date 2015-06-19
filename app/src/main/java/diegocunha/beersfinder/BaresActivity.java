@@ -38,10 +38,13 @@ public class BaresActivity extends ActionBarActivity{
     myLocation MeuLugar;
     boolean isOn;
     private String AppID, ClientID, nomedoBar, nomeCerveja, tipoCerveja;
-    String strNomeBar, strRuaBar, strDist;
+    String strNomeBar, strRuaBar, strDist, bar;
     private String nomeBar[];
-    private double Lat, Lng, parseLat, parseLng, dist;
+    private double Lat, Lng, parseLat, parseLng, dist, preco;
     ListaBares item;
+    List<FavoriteList> fav_list;
+    FavoriteList favoriteList;
+    FavoriteAdapter favoriteAdapter;
     List<ListaBares> lista2;
     myAdapter adapter;
     AlertDialog.Builder alertB;
@@ -64,6 +67,8 @@ public class BaresActivity extends ActionBarActivity{
 
         //Inicializa list
         lista2 = new ArrayList<ListaBares>();
+        fav_list = new ArrayList<FavoriteList>();
+        favoriteAdapter = new FavoriteAdapter(this, fav_list);
         adapter = new myAdapter(this, lista2);
         listView = (ListView)findViewById(R.id.myList);
         lista_ceva = new ArrayList<String>();
@@ -124,30 +129,23 @@ public class BaresActivity extends ActionBarActivity{
            try
            {
                //Adiciona os valores aos Spinners
-               this.nomeBar = new String[]{"Escolha uma opcao", "Dublin", "Mulligan", "Natalicio", "Soccer Point", "Thomas Pub", "Tirol"};
+               this.nomeBar = new String[]{"Dublin", "Mulligan", "Natalicio", "SoccerPoint", "Thomas", "Tirol", "MarquesBier"};
 
-               for(int i = 0; i < nomeBar.length -1; i++)
+               for(int i = 0; i < nomeBar.length; i++)
                {
-                   String bar = nomeBar[i];
-                   ParseQuery<ParseObject> query = ParseQuery.getQuery(bar);
-                   query.orderByAscending("Preco");
-                   query.setLimit(1);
-                   query.findInBackground(new FindCallback<ParseObject>() {
-                       @Override
-                       public void done(List<ParseObject> list, ParseException e) {
-
-                       }
-                   });
-
-
+                   bar = nomeBar[i];
                }
 
-
+               favoriteAdapter.notifyDataSetChanged();
            }
            catch (Exception ex)
            {
                ex.printStackTrace();
                Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+           }
+           finally
+           {
+               listView.setAdapter(favoriteAdapter);
            }
        }
        else

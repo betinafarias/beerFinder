@@ -29,15 +29,15 @@ public class FavoriteAcitvity extends ActionBarActivity {
     boolean isOn;
     ConnectivityManager conectivtyManager;
     FavoriteList favList2;
-    List<FavoriteList> favList;
+    List<ListaBares> listaBares;
     protected String AppID, ClientID;
     private SQLiteDatabase myDataBase, myControlDB;
     private double mLat, mLng;
-    FavoriteAdapter myAdpt;
+    myAdapter adapter;
     private ProgressDialog mProgressDialog;
     private AlertDialog.Builder alertB;
     ListView listView;
-
+    String strDist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,8 @@ public class FavoriteAcitvity extends ActionBarActivity {
         getUser();
 
         MeuLocal = new myLocation(this);
-        favList = new ArrayList<FavoriteList>();
-        myAdpt = new FavoriteAdapter(this, favList);
+        listaBares = new ArrayList<ListaBares>();
+        adapter = new myAdapter(this, listaBares);
         MeuLocal = new myLocation(this);
         mProgressDialog = new ProgressDialog(this);
 
@@ -116,18 +116,26 @@ public class FavoriteAcitvity extends ActionBarActivity {
 
                             //Calcula distancia
                             double dDist = MeuLocal.calculaDistancia(mLat, Lat, mLng, Lng);
-                            String strDist = String.format("%.2f", dDist) + "km";
+
+                            if(dDist < 1000)
+                            {
+                                strDist = String.valueOf(dDist)+"m";
+                            }
+                            else
+                            {
+                                strDist = String.format("%.2f", dDist) + "km";
+                            }
 
                             //Adiciona resultado a lista e ordena
-                            FavoriteList item = new FavoriteList(Nomebar, Ruabar, strDist, dDist, Lat, Lng);
-                            favList.add(item);
-                            Collections.sort(favList);
+                            ListaBares item = new ListaBares(Nomebar, Ruabar, strDist, dDist, Lat, Lng);
+                            listaBares.add(item);
+                            Collections.sort(listaBares);
                         }
 
+                        myDataBase.close();
                         MeuLocal.stopUsingGPS();
                         mProgressDialog.dismiss();
-                        myAdpt.notifyDataSetChanged();
-
+                        adapter.notifyDataSetChanged();
                     }
                 }
                 else
@@ -141,13 +149,14 @@ public class FavoriteAcitvity extends ActionBarActivity {
         }
         catch (Exception ex)
         {
+            myDataBase.close();
             mProgressDialog.dismiss();
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
         finally
         {
             listView = (ListView)findViewById(R.id.favListView);
-            listView.setAdapter(myAdpt);
+            listView.setAdapter(adapter);
         }
     }
 
@@ -216,7 +225,7 @@ public class FavoriteAcitvity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bar_for_location, menu);
+        getMenuInflater().inflate(R.menu.menu_favorite_acitvity, menu);
         return true;
     }
 

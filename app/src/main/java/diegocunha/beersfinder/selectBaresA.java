@@ -37,7 +37,7 @@ public class selectBaresA extends ActionBarActivity {
 
     //Variaveis Globais
     ListView listView;
-    String bar, ceva;
+    String bar, ceva, strDist;
     private String AppID, ClientID;
     ProgressDialog mProgressDialog;
     List<ListaBares> listaBares = null;
@@ -167,7 +167,15 @@ public class selectBaresA extends ActionBarActivity {
                                         double parseLng = pObject.getDouble("Longitude");
 
                                         double dist = MeuLugar.calculaDistancia(Latitude, parseLat, Longitude, parseLng);
-                                        String strDist = String.format("%.2f", dist) + "km";
+
+                                        if(dist < 1000)
+                                        {
+                                            strDist = String.valueOf(dist) + "m";
+                                        }
+                                        else
+                                        {
+                                            strDist = String.format("%.2f", dist) + "km";
+                                        }
 
                                         ListaBares item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
 

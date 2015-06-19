@@ -2,20 +2,17 @@ package diegocunha.beersfinder;
 
 public class FavoriteList implements Comparable<FavoriteList>
 {
-    private String ruaBar;
-    private String nomeBar;
-    private double latBar;
-    private double lngBar;
-    private String distBar;
-    private Double dDistBar;
+    private String nomeBar, ruaBar, distBar;
+    private double dPrecoCeva, dDistBar, latBar, lngBar;
 
     public FavoriteList(){}
 
-    public FavoriteList(String nomeBar, String ruaBar, String distBar, double dDistBar, double latBar, double lngBar)
+    public FavoriteList(String nomeBar, String ruaBar, String distBar, double dPrecoCeva, double dDistBar, double latBar, double lngBar)
     {
         this.nomeBar = nomeBar;
         this.ruaBar = ruaBar;
         this.distBar = distBar;
+        this.dPrecoCeva = dPrecoCeva;
         this.dDistBar = dDistBar;
         this.latBar = latBar;
         this.lngBar = lngBar;
@@ -81,6 +78,16 @@ public class FavoriteList implements Comparable<FavoriteList>
         return dDistBar;
     }
 
+    //Preco da cerveja
+    public double getPrecoCeva()
+    {
+        return dPrecoCeva;
+    }
+
+    public void setdPrecoCeva(Double dPrecoCeva)
+    {
+        this.dPrecoCeva = dPrecoCeva;
+    }
 
     //Ordena Lista para mostrar bares mais perto primeiro
     @Override
