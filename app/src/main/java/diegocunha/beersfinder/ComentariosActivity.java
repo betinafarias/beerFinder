@@ -22,6 +22,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class ComentariosActivity extends ActionBarActivity
@@ -38,6 +39,7 @@ public class ComentariosActivity extends ActionBarActivity
     List<ComentariosList> list_coments;
     private ListView listView;
     private ComentsAdapter adapter;
+    private int iNum;
 
 
     @Override
@@ -48,6 +50,7 @@ public class ComentariosActivity extends ActionBarActivity
         //Bloqueia a pagina caso nao tenha login
         getUser();
 
+        //Inicializa classes necessarias
         mProgressDialog = new ProgressDialog(this);
         Bundle extras = getIntent().getExtras();
         MeuLugar = new myLocation(this);
@@ -55,6 +58,7 @@ public class ComentariosActivity extends ActionBarActivity
         listView = (ListView)findViewById(R.id.comentList);
         adapter = new ComentsAdapter(this, list_coments);
 
+        //Verifica se algum parametro foi passado
         if(extras != null)
         {
             //Inicializa o ProgressDialog
@@ -64,10 +68,12 @@ public class ComentariosActivity extends ActionBarActivity
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
 
+            //Busca as informacoes pas
             ex_nome = extras.getString("NomeBar");
             ex_rua = extras.getString("RuaBar");
 
             load_coments(ex_nome, ex_rua);
+            OpenConsientizacao();
         }
     }
 
@@ -175,14 +181,23 @@ public class ComentariosActivity extends ActionBarActivity
         alert11.show();
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: load_coments                                  ****
+     * Funcionalidade: Carrega os comentarios                ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
     protected void load_coments(String bar, String rua)
     {
+        //Verifica se tem conexao com internet
         if(verificaConexao())
         {
+            //Verifica se consegue pegar posicao do GPS
             if(MeuLugar.canGetLocation())
             {
                 try
                 {
+                    //Inicializa o Parse
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Comentarios");
                     query.whereEqualTo("NomeBar", bar);
                     query.whereEqualTo("RuaBar", rua);
@@ -190,10 +205,13 @@ public class ComentariosActivity extends ActionBarActivity
                     query.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> list, ParseException e) {
+                            //Se nao ha excecao
                             if(e == null)
                             {
+                                //Se tem valores na lista
                                 if(list.size() > 0)
                                 {
+                                    //Varre a lista para adicionar os valores
                                     for(int i = 0; i < list.size(); i++)
                                     {
                                         ParseObject parseObject = list.get(i);
@@ -202,16 +220,18 @@ public class ComentariosActivity extends ActionBarActivity
                                         strUser = parseObject.getString("Username");
                                         strComent = parseObject.getString("Comentario");
 
+                                        //Adiciona os itens na lista
                                         item = new ComentariosList(strNomeBar, strRuaBar, strUser, strComent);
                                         list_coments.add(item);
                                     }
+                                    //Notifica o adapter que os dados foram alterados
                                     adapter.notifyDataSetChanged();
                                     mProgressDialog.dismiss();
                                 }
                                 else
                                 {
                                     mProgressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Não há comentarios neste bar", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             else
@@ -243,6 +263,44 @@ public class ComentariosActivity extends ActionBarActivity
             mProgressDialog.dismiss();
             OpenNet();
         }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Fun?ao: OpenConsientizacao                            ****
+     * Funcionalidade: Abre Dialog de concientizacao         ****
+     * Data Criacao: 16/06/2015                              ****
+     ************************************************************/
+    protected void OpenConsientizacao()
+    {
+        //Instancia classe para gerar numero aleatorio
+        Random randomGenerator = new Random();
+
+        //Recebe o numero aleatorio
+        iNum = randomGenerator.nextInt(3);
+
+        if(iNum == 2)
+        {
+            alertB = new AlertDialog.Builder(this);
+            alertB.setTitle("Aviso");
+            alertB.setMessage("Se beber não dirija!");
+            alertB.setCancelable(false);
+            alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            alertB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alert11 = alertB.create();
+            alert11.show();
+        }
+
     }
 
     @Override

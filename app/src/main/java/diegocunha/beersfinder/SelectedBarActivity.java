@@ -519,7 +519,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         {
             alertB = new AlertDialog.Builder(this);
             alertB.setTitle("Aviso");
-            alertB.setMessage("Se beber n�o dirija!");
+            alertB.setMessage("Se beber não dirija!");
             alertB.setCancelable(false);
             alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

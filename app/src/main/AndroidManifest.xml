@@ -93,6 +93,10 @@
             android:name=".ComentariosActivity"
             android:label="@string/title_activity_comentarios" >
         </activity>
+        <activity
+            android:name=".AddComentariosActivity"
+            android:label="@string/title_activity_add_comentarios" >
+        </activity>
     </application>
 
 </manifest>

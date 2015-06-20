@@ -25,4 +25,5 @@
     <string name="title_activity_bar_for_beer_actyivity">BarForBeerActyivity</string>
     <string name="title_activity_favorite_acitvity">BeersFinder</string>
     <string name="title_activity_comentarios">BeersFinder</string>
+    <string name="title_activity_add_comentarios">BeersFinder</string>
 </resources>
