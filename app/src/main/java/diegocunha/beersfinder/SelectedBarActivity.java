@@ -88,8 +88,8 @@ public class SelectedBarActivity extends ActionBarActivity {
             //Inicializa o ProgressDialog
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . .");
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
 
             //Nome do Bar
@@ -537,6 +537,14 @@ public class SelectedBarActivity extends ActionBarActivity {
             alert11.show();
         }
 
+    }
+
+    public void open_coments(View view)
+    {
+        Intent intent = new Intent(this, ComentariosActivity.class);
+        intent.putExtra("NomeBar", nomedoBar);
+        intent.putExtra("RuaBar", ruadoBar);
+        startActivity(intent);
     }
 
     @Override

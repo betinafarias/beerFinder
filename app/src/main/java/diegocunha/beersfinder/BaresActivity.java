@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,23 +35,23 @@ import java.util.List;
 public class BaresActivity extends ActionBarActivity{
 
     //Variaveis Globais
-    Spinner mySpinner, spinerCerveja, spinnerTipoCeva;
-    ProgressDialog mProgressDialog;
-    ConnectivityManager conectivtyManager;
-    myLocation MeuLugar;
+    private ProgressDialog mProgressDialog;
+    private ConnectivityManager conectivtyManager;
+    private myLocation MeuLugar;
     boolean isOn;
-    private String AppID, ClientID, nomedoBar, nomeCerveja, tipoCerveja;
-    String strNomeBar, strRuaBar, strDist, bar;
+    private String strBarOptions, nomedoBar, nomeCerveja, tipoCerveja;
+    private String strNomeBar, strRuaBar, strDist, bar;
     private String nomeBar[];
     private double Lat, Lng, parseLat, parseLng, dist, preco;
-    ListaBares item;
-    List<FavoriteList> fav_list;
-    FavoriteList favoriteList;
-    FavoriteAdapter favoriteAdapter;
-    List<ListaBares> lista2;
-    myAdapter adapter;
-    AlertDialog.Builder alertB;
-    ListView listView;
+    private ListaBares item;
+    private List<FavoriteList> fav_list;
+    private FavoriteList favoriteList;
+    private FavoriteAdapter favoriteAdapter;
+    private List<ListaBares> lista2;
+    private myAdapter adapter;
+    private AlertDialog.Builder alertB;
+    private ListView listView;
+    private Button btnLoc, btnBeer, btnSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +70,16 @@ public class BaresActivity extends ActionBarActivity{
         //Inicializa list
         lista2 = new ArrayList<ListaBares>();
         fav_list = new ArrayList<FavoriteList>();
+
+        //Inicializa os adapters
         favoriteAdapter = new FavoriteAdapter(this, fav_list);
         adapter = new myAdapter(this, lista2);
+
+        //Inicializa views
         listView = (ListView)findViewById(R.id.myList);
+        btnBeer = (Button)findViewById(R.id.maisb);
+        btnLoc = (Button)findViewById(R.id.btnBusca);
+        btnSearch = (Button)findViewById(R.id.button4);
     }
 
     /************************************************************
@@ -115,20 +124,22 @@ public class BaresActivity extends ActionBarActivity{
         return isOn;
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criação: 13/05/2015                     ****
-     * Função: void loadBares                  ****
-     * Funcionalidade: Preenche os Spinners    ****
-     **********************************************/
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: load_bar_proximo                              ****
+     * Funcionalidade: Busca bar com cerveja mais barata     ****
+     * Data Criacao: 13/05/2015                              ****
+     ***********************************************************/
    public void load_bar_proximo(View view)
    {
+       //Inicializa o ProgressDialog
        mProgressDialog.setCanceledOnTouchOutside(false);
        mProgressDialog.setCancelable(false);
        mProgressDialog.setTitle("Carregando");
        mProgressDialog.setMessage("Loading . . .");
        mProgressDialog.show();
 
+       //Se as listas estao cheias, elas sao limpadas
        if(lista2.size() > 0)
        {
            lista2.clear();
@@ -138,41 +149,57 @@ public class BaresActivity extends ActionBarActivity{
            fav_list.clear();
        }
 
+       //Se ha conexao com internet
        if(verificaConexao())
        {
+           //Se consegue pegar posicao
            if(MeuLugar.canGetLocation())
            {
+               //Adiciona latitude e longitude
                Lat = MeuLugar.getLatitude();
                Lng = MeuLugar.getLongitude();
+
                try
                {
+                   //Inicializa o Parse
                    ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-                   query.findInBackground(new FindCallback<ParseObject>() {
+                   query.findInBackground(new FindCallback<ParseObject>()
+                   {
                        @Override
-                       public void done(List<ParseObject> list, ParseException e) {
+                       public void done(List<ParseObject> list, ParseException e)
+                       {
+                           //Se nao a excecao
                            if(e == null)
                            {
+                               //Se a lista nao esta vazia
                                if(list.size() > 0)
                                {
+                                   //Varre a lista para adicionar os elementos
                                    for(int i = 0; i < list.size(); i++)
                                    {
+                                       //Pega os valores da lista para adicionar na lista
                                        ParseObject parseObject = list.get(i);
-
                                        strNomeBar = parseObject.getString("NomeBar");
                                        strRuaBar = parseObject.getString("RuaBar");
                                        parseLat = parseObject.getDouble("Latitude");
                                        parseLng = parseObject.getDouble("Longitude");
                                        preco = parseObject.getDouble("Preco");
 
+                                       //Calcula distancia
                                        dist = MeuLugar.calculaDistancia(Lat, parseLat, Lng, parseLng);
                                        strDist = String.format("%.2f", dist) + "km";
 
+                                       //Adiciona os valores ao FavoriteList
                                        favoriteList = new FavoriteList(strNomeBar, strRuaBar, strDist, preco, dist, parseLat, parseLng);
 
+                                       //Adiciona valores na lista
                                        fav_list.add(favoriteList);
+
+                                       //Ordena Lista
                                        Collections.sort(fav_list);
                                    }
 
+                                   //Notifica ao adapter que os dados foram modificados
                                    favoriteAdapter.notifyDataSetChanged();
                                    mProgressDialog.dismiss();
                                }
@@ -195,7 +222,7 @@ public class BaresActivity extends ActionBarActivity{
                {
                    mProgressDialog.dismiss();
                    ex.printStackTrace();
-                   Toast.makeText(getApplicationContext(), ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                }
                finally
                {
@@ -217,16 +244,18 @@ public class BaresActivity extends ActionBarActivity{
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: sendBares                                     ****
-     * Funcionalidade: Manda parametros para busca           ****
+     * Funçao: bar                                           ****
+     * Funcionalidade: Busca bares mais perto                ****
      * Data Criacao: 13/05/2015                              ****
      ***********************************************************/
     public void bar(View view)
     {
+        //Inicializa o ProgressDialog
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setTitle("Carregando");
         mProgressDialog.setMessage("Loading . . .");
+        mProgressDialog.show();
 
         if(lista2.size() > 0)
         {
@@ -239,55 +268,201 @@ public class BaresActivity extends ActionBarActivity{
 
         if(verificaConexao())
         {
-            try
+           if(MeuLugar.canGetLocation())
+           {
+               try
+               {
+                   Lat = MeuLugar.getLatitude();
+                   Lng = MeuLugar.getLongitude();
+
+                   ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                   query.findInBackground(new FindCallback<ParseObject>()
+                   {
+                       @Override
+                       public void done(List<ParseObject> list, ParseException e)
+                       {
+                           if(e == null)
+                           {
+                               if(list.size() > 0)
+                               {
+                                   for(int i = 0; i < list.size(); i++)
+                                   {
+                                       ParseObject parseObject = list.get(i);
+                                       strNomeBar = parseObject.getString("NomeBar");
+                                       strRuaBar = parseObject.getString("RuaBar");
+                                       parseLat = parseObject.getDouble("Latitude");
+                                       parseLng = parseObject.getDouble("Longitude");
+
+                                       dist = MeuLugar.calculaDistancia(Lat, parseLat, Lng, parseLng);
+                                       strDist = String.format("%.2f", dist) + "km";
+                                       item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
+
+                                       lista2.add(item);
+                                       Collections.sort(lista2);
+
+                                   }
+                                   adapter.notifyDataSetChanged();
+                                   mProgressDialog.dismiss();
+                               }
+                           }
+                       }
+                   });
+
+               }
+               catch (Exception ex)
+               {
+                   mProgressDialog.dismiss();
+                   ex.printStackTrace();
+                   Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+               }
+               finally
+               {
+                   listView.setAdapter(adapter);
+               }
+           }
+           else
+           {
+               mProgressDialog.dismiss();
+               OpenGPS();
+           }
+        }
+        else
+        {
+            mProgressDialog.dismiss();
+            OpenNet();
+        }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funçao: OpenSelections                                ****
+     * Funcionalidade: busca bar por opcao                   ****
+     * Data Criacao: 19/06/2015                              ****
+     ***********************************************************/
+    public void OpenSelections(View view)
+    {
+        //Verifica se tem algo salvo nas listas
+        if(lista2.size() > 0)
+        {
+            lista2.clear();
+        }
+        else if(fav_list.size() > 0)
+        {
+            fav_list.clear();
+        }
+
+        //Adiciona os valores ao Alert Dialog
+        nomeBar = new String[]{"Dublin", "MarquesBier", "Mulligan", "Natalicio", "SoccerPoint", "Thomas", "Tirol"};
+        final AlertDialog.Builder options = new AlertDialog.Builder(this);
+        options.setTitle("Selecione o bar");
+
+        options.setItems(nomeBar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
             {
-                Lat = MeuLugar.getLatitude();
-                Lng = MeuLugar.getLongitude();
+                //Retorna valor do item selecionado
+                strBarOptions = nomeBar[which];
 
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-                query.findInBackground(new FindCallback<ParseObject>()
+                //Inicializa o ProgressDialog
+                mProgressDialog.setCanceledOnTouchOutside(false);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setTitle("Carregando");
+                mProgressDialog.setMessage("Loading . . .");
+                mProgressDialog.show();
+
+                //Se tem conexao com internet
+                if (verificaConexao())
                 {
-                    @Override
-                    public void done(List<ParseObject> list, ParseException e)
+                    //Se consegue pegar posicao do GPS
+                    if (MeuLugar.canGetLocation())
                     {
-                        if(e == null)
+                        //Adiciona valores de latitude e longitude
+                        Lat = MeuLugar.getLatitude();
+                        Lng = MeuLugar.getLongitude();
+
+                        try
                         {
-                            if(list.size() > 0)
-                            {
-                                for(int i = 0; i < list.size(); i++)
-                                {
-                                    ParseObject parseObject = list.get(i);
-                                    strNomeBar = parseObject.getString("NomeBar");
-                                    strRuaBar = parseObject.getString("RuaBar");
-                                    parseLat = parseObject.getDouble("Latitude");
-                                    parseLng = parseObject.getDouble("Longitude");
+                            //Busca valores no parse
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
+                            query.whereEqualTo("NomeBar", strBarOptions);
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> list, ParseException e) {
+                                    //Se nao houve execao
+                                    if (e == null)
+                                    {
+                                        //Se a lista possui valores
+                                        if (list.size() > 0)
+                                        {
+                                            //Varre a lista atras dos valores
+                                            for (int i = 0; i < list.size(); i++)
+                                            {
+                                                //Pega item a item da lista
+                                                ParseObject parseObject = list.get(i);
+                                                strNomeBar = parseObject.getString("NomeBar");
+                                                strRuaBar = parseObject.getString("RuaBar");
+                                                parseLat = parseObject.getDouble("Latitude");
+                                                parseLng = parseObject.getDouble("Longitude");
 
-                                    dist = MeuLugar.calculaDistancia(Lat, parseLat, Lng, parseLng);
-                                    strDist = String.format("%.2f", dist) + "km";
-                                    item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
+                                                //Calcula distancia
+                                                dist = MeuLugar.calculaDistancia(Lat, parseLat, Lng, parseLng);
+                                                strDist = String.format("%.2f", dist) + "km";
 
-                                    lista2.add(item);
-                                    Collections.sort(lista2);
+                                                //Adiciona valores ao ListaBares
+                                                item = new ListaBares(strNomeBar, strRuaBar, strDist, dist, parseLat, parseLng);
+
+                                                //Adiciona os itens a lista
+                                                lista2.add(item);
+
+                                                //Ordena a lista
+                                                Collections.sort(lista2);
+                                            }
+
+                                            //Notifica o adapter que os valores foram modificados
+                                            adapter.notifyDataSetChanged();
+
+                                            //Encerra o ProgressDialog
+                                            mProgressDialog.dismiss();
+                                        }
+                                        else
+                                        {
+                                            mProgressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mProgressDialog.dismiss();
+                                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-
-                                adapter.notifyDataSetChanged();
-                                mProgressDialog.dismiss();
-                            }
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        } finally
+                        {
+                            listView.setAdapter(adapter);
                         }
                     }
-                });
+                    else
+                    {
+                        mProgressDialog.dismiss();
+                        OpenGPS();
+                    }
+                }
+                else
+                {
+                    mProgressDialog.dismiss();
+                    OpenNet();
+                }
+            }
+        });
 
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-            finally
-            {
-                listView.setAdapter(adapter);
-            }
-        }
+        AlertDialog alert11 = options.create();
+        alert11.show();
     }
 
     /************************************************************

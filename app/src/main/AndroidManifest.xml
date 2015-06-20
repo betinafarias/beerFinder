@@ -89,6 +89,10 @@
             android:name=".FavoriteAcitvity"
             android:label="@string/title_activity_favorite_acitvity" >
         </activity>
+        <activity
+            android:name=".ComentariosActivity"
+            android:label="@string/title_activity_comentarios" >
+        </activity>
     </application>
 
 </manifest>

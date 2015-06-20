@@ -4,6 +4,7 @@ public class FavoriteList implements Comparable<FavoriteList>
 {
     private String nomeBar, ruaBar, distBar;
     private double dPrecoCeva, dDistBar, latBar, lngBar;
+    private int d;
 
     public FavoriteList(){}
 
@@ -91,9 +92,21 @@ public class FavoriteList implements Comparable<FavoriteList>
 
     //Ordena Lista para mostrar bares mais perto primeiro
     @Override
-    public int compareTo(FavoriteList another) {
-        if(getdDistBar() > another.dDistBar && getdDistBar() > another.dPrecoCeva)
-            return 1;
-        else return -1;
+    public int compareTo(FavoriteList another)
+    {
+        if(getdDistBar() > another.dDistBar )
+        {
+            if(getPrecoCeva() > another.dPrecoCeva)
+            {
+                d = 1;
+            }
+        }
+
+        else
+        {
+            d = -1;
+        }
+
+        return d;
     }
 }

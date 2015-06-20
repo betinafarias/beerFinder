@@ -44,7 +44,7 @@
         android:text="Cervejas"
         android:textSize="30dp"
         android:layout_below="@+id/btnTraceRoute"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_centerInParent="true"/>
 
     <TextView
@@ -145,5 +145,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="add_fav"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comentarios"
+        android:onClick="open_coments"
+        android:id="@+id/btnComents"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/hAbertura"
+        android:layout_toEndOf="@+id/hAbertura" />
 
 </RelativeLayout>
