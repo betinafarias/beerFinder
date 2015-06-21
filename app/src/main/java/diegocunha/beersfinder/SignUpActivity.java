@@ -93,15 +93,15 @@ public class SignUpActivity extends ActionBarActivity {
 
                 if(login == null || login.equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "Username inv�lido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Username invalido", Toast.LENGTH_SHORT).show();
                 }
                 else if(login.length() < 6)
                 {
-                    Toast.makeText(getApplicationContext(), "Usu�rio deve possu�r ao menos 6 caracteres", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Usuario deve possuir ao menos 6 caracteres", Toast.LENGTH_SHORT).show();
                 }
                 else if(pass == null || pass.equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "Senha inv�lida", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Senha invalida", Toast.LENGTH_SHORT).show();
                 }
                 else if(pass.length() < 6 || pass.length() > 8)
                 {
@@ -109,7 +109,7 @@ public class SignUpActivity extends ActionBarActivity {
                 }
                 else if(mail == null || mail.equals(""))
                 {
-                    Toast.makeText(getApplicationContext(), "E-mail inv�lido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "E-mail invalido", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {

@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -300,7 +301,14 @@ public class ComentariosActivity extends ActionBarActivity
             AlertDialog alert11 = alertB.create();
             alert11.show();
         }
+    }
 
+    public void goComents(View view)
+    {
+        Intent intent = new Intent(this, AddComentariosActivity.class);
+        intent.putExtra("NomeBar", ex_nome);
+        intent.putExtra("RuaBar", ex_rua);
+        startActivity(intent);
     }
 
     @Override
