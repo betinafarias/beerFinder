@@ -67,7 +67,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: getUser                                       ****
+     * Funï¿½ao: getUser                                       ****
      * Funcionalidade: Bloqueia pagina sem login             ****
      * Data Criacao: 05/05/2015                              ****
      ***********************************************************/
@@ -84,7 +84,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: verificaConexao                               ****
+     * Funï¿½ao: verificaConexao                               ****
      * Funcionalidade: Verifica status internet              ****
      * Data Criacao: 28/04/2015                              ****
      ***********************************************************/
@@ -108,67 +108,9 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: load_cerveja                                  ****
-     * Funcionalidade: Verifica as cervejas mais baratas     ****
-     * Data Criacao: 09/06/2015                              ****
-     ***********************************************************/
-    protected void load_cerveja(String txNomeBar)
-    {
-        try
-        {
-            //Carrega informações do Parse
-            ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
-            query.setLimit(1);
-            query.orderByAscending("Preco");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    //Se nao ha excecao
-                    if(e == null)
-                    {
-                        //Se a lista nao esta fazia
-                        if(list.size() > 0)
-                        {
-                            //Varre a lista
-                            for(int i =0; i < list.size(); i++)
-                            {
-                                //Adiciona infos das cervejas mais barata
-                                ParseObject pObbject = list.get(i);
-                                strCerveja = pObbject.getString("NomeCerveja");
-                                strPreco = "R$: " + String.format("%.2f",list.get(i).getDouble("Preco"));
-                                strResultado = strCerveja + " " + strPreco;
-                            }
-
-                            mProgressDialog.dismiss();
-                        }
-                        else
-                        {
-                            mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Lista vazia", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else
-                    {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            mProgressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-            ex.printStackTrace();
-        }
-    }
-
-    /************************************************************
-     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Função: loadbares                                     ****
+     * Funï¿½ï¿½o: loadbares                                     ****
      * Funcionalidade: Mostra bares no maps                  ****
-     * Criação: 04/06/2015                                   ****
+     * Criaï¿½ï¿½o: 04/06/2015                                   ****
      ************************************************************/
     protected void loadbares()
     {
@@ -211,7 +153,7 @@ public class BaresOnMapActivity extends Activity {
 
               try
               {
-                  //Carrega informações do Parse
+                  //Carrega informaï¿½ï¿½es do Parse
                   ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
                   query.findInBackground(new FindCallback<ParseObject>() {
                       @Override
@@ -230,13 +172,16 @@ public class BaresOnMapActivity extends Activity {
                                       String strNomeBar = pObject.getString("NomeBar");
                                       String strRuaBar = pObject.getString("RuaBar");
 
-                                      load_cerveja(strNomeBar);
+                                      strCerveja = pObject.getString("NomeCerveja");
+                                      strPreco = "R$: " + String.format("%.2f",list.get(i).getDouble("Preco"));
 
                                       double parseLat = pObject.getDouble("Latitude");
                                       double parseLng = pObject.getDouble("Longitude");
 
                                       strAbertura = pObject.getString("Abertura");
                                       strFechamento = pObject.getString("Fechamento");
+
+                                      strResultado = strRuaBar + System.getProperty("line.separator") + strCerveja + " - " + strPreco ;
 
                                       //Abertura
                                       String[] parts = strAbertura.split(":");
@@ -265,7 +210,7 @@ public class BaresOnMapActivity extends Activity {
                                       lBar = new LatLng(parseLat, parseLng);
                                       barMarker = googleMAp.addMarker(new MarkerOptions()
                                               .title(strNomeBar)
-                                              .snippet(resultado + " - " + strResultado)
+                                              .snippet(strResultado)
                                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar_ico))
                                               .position(lBar));
                                   }
@@ -307,7 +252,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenGPS                                       ****
+     * Funï¿½ao: OpenGPS                                       ****
      * Funcionalidade: Abre Config de GPS                    ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -325,7 +270,7 @@ public class BaresOnMapActivity extends Activity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Nï¿½o", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -338,7 +283,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenNet                                       ****
+     * Funï¿½ao: OpenNet                                       ****
      * Funcionalidade: Abre Config de internet               ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -356,7 +301,7 @@ public class BaresOnMapActivity extends Activity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Nï¿½o", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -369,7 +314,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: OpenConsientizacao                            ****
+     * Funï¿½ao: OpenConsientizacao                            ****
      * Funcionalidade: Abre Dialog de concientizacao         ****
      * Data Criacao: 16/06/2015                              ****
      ************************************************************/
@@ -383,7 +328,7 @@ public class BaresOnMapActivity extends Activity {
         {
             alertB = new AlertDialog.Builder(this);
             alertB.setTitle("Aviso");
-            alertB.setMessage("Se beber não dirija!");
+            alertB.setMessage("Se beber nï¿½o dirija!");
             alertB.setCancelable(false);
             alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
