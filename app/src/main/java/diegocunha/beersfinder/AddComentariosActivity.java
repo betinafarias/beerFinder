@@ -1,9 +1,13 @@
 package diegocunha.beersfinder;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +28,9 @@ public class AddComentariosActivity extends ActionBarActivity {
     private myLocation MeuLugar;
     private String strUser, strNomeBar, strRuaBar, strText;
     private EditText eTexto;
+    private AlertDialog.Builder alertB;
+    private ProgressDialog mProgressDialog;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +40,18 @@ public class AddComentariosActivity extends ActionBarActivity {
 
         MeuLugar = new myLocation(this);
         Bundle extras = getIntent().getExtras();
+        mProgressDialog = new ProgressDialog(this);
         eTexto = (EditText)findViewById(R.id.txtSave);
 
         if(extras != null)
         {
             strNomeBar = extras.getString("NomeBar");
             strRuaBar = extras.getString("RuaBar");
+
+            intent = new Intent(this, ComentariosActivity.class);
+            intent.putExtra("NomeBar", strNomeBar);
+            intent.putExtra("RuaBar", strRuaBar);
+
         }
 
 
@@ -46,7 +59,7 @@ public class AddComentariosActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: getUser                                       ****
+     * Funcao: getUser                                       ****
      * Funcionalidade: Bloqueia pagina sem login             ****
      * Data Criacao: 05/05/2015                              ****
      ***********************************************************/
@@ -64,7 +77,7 @@ public class AddComentariosActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funçao: verificaConexao                               ****
+     * Funï¿½ao: verificaConexao                               ****
      * Funcionalidade: Verifica status internet              ****
      * Data Criacao: 28/04/2015                              ****
      ***********************************************************/
@@ -89,37 +102,82 @@ public class AddComentariosActivity extends ActionBarActivity {
 
     public void addComent(View view)
     {
-        try
+        //Inicializa o ProgressDialog
+        mProgressDialog.setTitle("Carregando");
+        mProgressDialog.setMessage("Loading. . .");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+
+        //Verifica se tem conexao
+        if(verificaConexao())
         {
-            SharedPreferences sp1=this.getSharedPreferences("Login", 0);
-            strUser = sp1.getString("Unm", null);
+            try
+            {
+                SharedPreferences sp1=this.getSharedPreferences("Login", 0);
+                strUser = sp1.getString("Unm", null);
 
-            strText = eTexto.getText().toString();
+                strText = eTexto.getText().toString();
 
-            ParseObject query = new ParseObject("Comentarios");
-            query.put("NomeBar", strNomeBar);
-            query.put("RuaBar", strRuaBar);
-            query.put("Username", strUser);
-            query.put("Comentario", strText);
-            query.saveInBackground();
+                //Salva o comentario no Parse
+                ParseObject query = new ParseObject("Comentarios");
+                query.put("NomeBar", strNomeBar);
+                query.put("RuaBar", strRuaBar);
+                query.put("Username", strUser);
+                query.put("Comentario", strText);
+                query.save();
 
-            Toast.makeText(getApplication(), "Comentario adicionado com sucesso", Toast.LENGTH_LONG);
-            Intent intent = new Intent(this, ComentariosActivity.class);
-            intent.putExtra("NomeBar", strNomeBar);
-            intent.putExtra("RuaBar", strRuaBar);
-            startActivity(intent);
+                mProgressDialog.dismiss();
+                Toast.makeText(getApplication(), "Comentario adicionado com sucesso", Toast.LENGTH_LONG);
+                startActivity(intent);
+            }
+            catch (Exception ex)
+            {
+                mProgressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                startActivity(intent);
+            }
         }
-        catch (Exception ex)
+        else
         {
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+            mProgressDialog.dismiss();
+            OpenNet();
         }
+    }
+
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * FunÃ§ao: OpenNet                                       ****
+     * Funcionalidade: Abre Config de internet               ****
+     * Data Criacao: 11/06/2015                              ****
+     ***********************************************************/
+    protected void OpenNet()
+    {
+        final Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        final Intent intent2 = new Intent(this, secondActivity.class);
+
+        alertB = new AlertDialog.Builder(this);
+        alertB.setTitle("Aviso");
+        alertB.setMessage("Sem conexao com internet, deseja ativar?");
+        alertB.setCancelable(false);
+        alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(intent);
+            }
+        });
+        alertB.setNegativeButton("NÃ£o", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent2);
+            }
+        });
+
+        AlertDialog alert11 = alertB.create();
+        alert11.show();
     }
 
     public void cancelComent(View view)
     {
-        Intent intent = new Intent(this, ComentariosActivity.class);
-        intent.putExtra("NomeBar", strNomeBar);
-        intent.putExtra("RuaBar", strRuaBar);
         startActivity(intent);
     }
 
