@@ -53,7 +53,7 @@ public class AddComentariosActivity extends ActionBarActivity {
         eTexto.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         textCount = (TextView)findViewById(R.id.txtCount);
 
-        //Cria o Live Counter para atualizar o maximo e caracteres disponíveis
+        //Cria o Live Counter para atualizar o maximo e caracteres disponiveis
         textCount.setText(String.valueOf(size));
         eTexto.addTextChangedListener(new TextWatcher() {
             @Override
