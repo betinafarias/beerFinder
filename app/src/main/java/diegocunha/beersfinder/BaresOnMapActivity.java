@@ -67,7 +67,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: getUser                                       ****
+     * Funcao: getUser                                       ****
      * Funcionalidade: Bloqueia pagina sem login             ****
      * Data Criacao: 05/05/2015                              ****
      ***********************************************************/
@@ -108,9 +108,9 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun��o: loadbares                                     ****
+     * Funcao: loadbares                                     ****
      * Funcionalidade: Mostra bares no maps                  ****
-     * Cria��o: 04/06/2015                                   ****
+     * Criacao: 04/06/2015                                   ****
      ************************************************************/
     protected void loadbares()
     {
@@ -153,7 +153,7 @@ public class BaresOnMapActivity extends Activity {
 
               try
               {
-                  //Carrega informa��es do Parse
+                  //Carrega informacoes do Parse
                   ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
                   query.findInBackground(new FindCallback<ParseObject>() {
                       @Override
@@ -252,7 +252,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: OpenGPS                                       ****
+     * Funcao: OpenGPS                                       ****
      * Funcionalidade: Abre Config de GPS                    ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -270,7 +270,7 @@ public class BaresOnMapActivity extends Activity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("N�o", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -283,7 +283,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: OpenNet                                       ****
+     * Funcao: OpenNet                                       ****
      * Funcionalidade: Abre Config de internet               ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -301,7 +301,7 @@ public class BaresOnMapActivity extends Activity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("N�o", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -314,7 +314,7 @@ public class BaresOnMapActivity extends Activity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: OpenConsientizacao                            ****
+     * Funcao: OpenConsientizacao                            ****
      * Funcionalidade: Abre Dialog de concientizacao         ****
      * Data Criacao: 16/06/2015                              ****
      ************************************************************/
@@ -328,7 +328,7 @@ public class BaresOnMapActivity extends Activity {
         {
             alertB = new AlertDialog.Builder(this);
             alertB.setTitle("Aviso");
-            alertB.setMessage("Se beber n�o dirija!");
+            alertB.setMessage("Se beber não dirija!");
             alertB.setCancelable(false);
             alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -354,4 +354,6 @@ public class BaresOnMapActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_bares_on_map, menu);
         return true;
     }
+
+
 }

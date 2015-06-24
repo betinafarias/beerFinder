@@ -128,7 +128,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: getUser                                       ****
+     * Funcao: getUser                                       ****
      * Funcionalidade: Bloqueia pagina sem login             ****
      * Data Criacao: 05/05/2015                              ****
      ***********************************************************/
@@ -145,7 +145,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: verificaConexao                               ****
+     * Funcao: verificaConexao                               ****
      * Funcionalidade: Verifica status internet              ****
      * Data Criacao: 28/04/2015                              ****
      ***********************************************************/
@@ -169,7 +169,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: load_status                                   ****
+     * Funcao: load_status                                   ****
      * Funcionalidade: Verifica se os bares esta aberto      ****
      * Data Criacao: 09/06/2015                              ****
      ***********************************************************/
@@ -186,12 +186,12 @@ public class SelectedBarActivity extends ActionBarActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         strHour = sdf.format(now);
 
-        //Verifica Conex�o com internet
+        //Verifica Conexco com internet
         if(verificaConexao())
         {
             try
             {
-                //Carrega informa��es do Parse
+                //Carrega informacoes do Parse
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
                 query.whereEqualTo("NomeBar", nome);
                 query.setLimit(1);
@@ -274,7 +274,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: goDraw                                        ****
+     * Funcao: goDraw                                        ****
      * Funcionalidade: Abre activity do Maps                 ****
      * Data Criacao: 23/05/2015                              ****
      ***********************************************************/
@@ -292,7 +292,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: load_cerveja                                  ****
+     * Funcao: load_cerveja                                  ****
      * Funcionalidade: Verifica as cervejas mais baratas     ****
      * Data Criacao: 09/06/2015                              ****
      ***********************************************************/
@@ -302,7 +302,7 @@ public class SelectedBarActivity extends ActionBarActivity {
         {
             try
             {
-                //Carrega informa��es do Parse
+                //Carrega informacoes do Parse
                 ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
                 query.setLimit(3);
                 query.orderByAscending("Preco");
@@ -383,7 +383,7 @@ public class SelectedBarActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("N�o", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Nao", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -396,7 +396,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: OpenNet                                       ****
+     * Funcao: OpenNet                                       ****
      * Funcionalidade: Abre Config de internet               ****
      * Data Criacao: 11/06/2015                              ****
      ***********************************************************/
@@ -414,7 +414,7 @@ public class SelectedBarActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("N�o", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -427,7 +427,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: load_fav                                      ****
+     * Funcao: load_fav                                      ****
      * Funcionalidade: Carrega lista de favoritos            ****
      * Data Criacao: 13/06/2015                              ****
      ************************************************************/
@@ -472,7 +472,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Fun�ao: add_fav                                       ****
+     * Funcao: add_fav                                       ****
      * Funcionalidade: Adiciona item aos favoritos           ****
      * Data Criacao: 13/06/2015                              ****
      ************************************************************/
@@ -503,7 +503,7 @@ public class SelectedBarActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funcao: OpenConsientizacao                            ****
+     * Fun?ao: OpenConsientizacao                            ****
      * Funcionalidade: Abre Dialog de concientizacao         ****
      * Data Criacao: 16/06/2015                              ****
      ************************************************************/
@@ -519,19 +519,19 @@ public class SelectedBarActivity extends ActionBarActivity {
         {
             alertB = new AlertDialog.Builder(this);
             alertB.setTitle("Aviso");
-            alertB.setMessage("Se beber não dirija!");
+            alertB.setMessage("Se beber n�o dirija!");
             alertB.setCancelable(false);
             alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                alertB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            alertB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
 
             AlertDialog alert11 = alertB.create();
             alert11.show();

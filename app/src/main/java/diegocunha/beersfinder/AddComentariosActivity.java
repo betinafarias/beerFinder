@@ -50,7 +50,7 @@ public class AddComentariosActivity extends ActionBarActivity {
 
         //Inicializa os TextView e EditView
         eTexto = (EditText)findViewById(R.id.txtSave);
-        eTexto.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        eTexto.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         textCount = (TextView)findViewById(R.id.txtCount);
 
         //Cria o Live Counter para atualizar o maximo e caracteres disponiveis
