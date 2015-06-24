@@ -77,6 +77,7 @@ public class BaresActivity extends ActionBarActivity{
 
         //Inicializa views
         listView = (ListView)findViewById(R.id.myList);
+        listView.setAdapter(favoriteAdapter);
         btnBeer = (Button)findViewById(R.id.maisb);
         btnLoc = (Button)findViewById(R.id.btnBusca);
         btnSearch = (Button)findViewById(R.id.button4);
@@ -224,10 +225,6 @@ public class BaresActivity extends ActionBarActivity{
                    ex.printStackTrace();
                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                }
-               finally
-               {
-                   listView.setAdapter(favoriteAdapter);
-               }
            }
            else
            {
@@ -257,6 +254,7 @@ public class BaresActivity extends ActionBarActivity{
         mProgressDialog.setMessage("Loading . . .");
         mProgressDialog.show();
 
+        //Limpa listas caso estejam populadas
         if(lista2.size() > 0)
         {
             lista2.clear();

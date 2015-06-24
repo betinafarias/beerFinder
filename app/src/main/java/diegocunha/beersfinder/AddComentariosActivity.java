@@ -10,12 +10,15 @@ import android.net.ConnectivityManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -31,6 +34,8 @@ public class AddComentariosActivity extends ActionBarActivity {
     private AlertDialog.Builder alertB;
     private ProgressDialog mProgressDialog;
     private Intent intent;
+    private TextView textCount;
+    private int size = 140;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +43,35 @@ public class AddComentariosActivity extends ActionBarActivity {
         setContentView(R.layout.activity_addcomentarios);
         getUser();
 
+        //Inicializa as classes necessarias
         MeuLugar = new myLocation(this);
         Bundle extras = getIntent().getExtras();
         mProgressDialog = new ProgressDialog(this);
-        eTexto = (EditText)findViewById(R.id.txtSave);
 
+        //Inicializa os TextView e EditView
+        eTexto = (EditText)findViewById(R.id.txtSave);
+        eTexto.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        textCount = (TextView)findViewById(R.id.txtCount);
+
+        //Cria o Live Counter para atualizar o maximo e caracteres disponíveis
+        textCount.setText(String.valueOf(size));
+        eTexto.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textCount.setText(String.valueOf(size - s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //Se recebeu valores pelo Intent
         if(extras != null)
         {
             strNomeBar = extras.getString("NomeBar");
@@ -53,8 +82,6 @@ public class AddComentariosActivity extends ActionBarActivity {
             intent.putExtra("RuaBar", strRuaBar);
 
         }
-
-
     }
 
     /************************************************************
@@ -65,8 +92,10 @@ public class AddComentariosActivity extends ActionBarActivity {
      ***********************************************************/
     protected void getUser()
     {
+        //Busca do parse o current user
         ParseUser currentUser = ParseUser.getCurrentUser();
 
+        //Se nao a usuario selecionado manda para a tela de login
         if(currentUser == null)
         {
             Intent intent = new Intent(this, firstActivity.class);
@@ -77,7 +106,7 @@ public class AddComentariosActivity extends ActionBarActivity {
 
     /************************************************************
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
-     * Funï¿½ao: verificaConexao                               ****
+     * Funcao: verificaConexao                               ****
      * Funcionalidade: Verifica status internet              ****
      * Data Criacao: 28/04/2015                              ****
      ***********************************************************/
@@ -99,7 +128,12 @@ public class AddComentariosActivity extends ActionBarActivity {
         return isOn;
     }
 
-
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Funcao: addComent                                     ****
+     * Funcionalidade: Adiciona comentario                   ****
+     * Data Criacao: 21/09/2015                              ****
+     ***********************************************************/
     public void addComent(View view)
     {
         //Inicializa o ProgressDialog
@@ -114,9 +148,11 @@ public class AddComentariosActivity extends ActionBarActivity {
         {
             try
             {
+                //Busca username salvo nas preferencias
                 SharedPreferences sp1=this.getSharedPreferences("Login", 0);
                 strUser = sp1.getString("Unm", null);
 
+                //Recebe texto do EditText
                 strText = eTexto.getText().toString();
 
                 //Salva o comentario no Parse

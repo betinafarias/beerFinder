@@ -64,6 +64,7 @@ public class ComentsAdapter extends BaseAdapter
         itemHolder.user.setText(item.getStrUser());
         itemHolder.comentario.setText(item.getStrComentario());
 
+        /*Funcao para selecionar comentarios
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +75,7 @@ public class ComentsAdapter extends BaseAdapter
                 intent.putExtra("RuaBar", comentariosLists.get(position).getStrRuaBar());
                 context.startActivity(intent);
             }
-        });
+        });*/
         return convertView;
     }
 

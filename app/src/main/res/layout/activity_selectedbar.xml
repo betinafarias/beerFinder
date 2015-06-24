@@ -152,6 +152,7 @@
         android:text="Comentarios"
         android:onClick="open_coments"
         android:id="@+id/btnComents"
+        android:layout_below="@+id/btnFavorite"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/hAbertura"
         android:layout_toEndOf="@+id/hAbertura" />
