@@ -33,6 +33,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias    ****
+ * Funçao: selectBaresA                                   ****
+ * Funcionalidade: Mostra bares mais proximos             ****
+ * Data Criacao: 05/05/2015                               ****
+ *************************************************************/
 public class selectBaresA extends ActionBarActivity {
 
     //Variaveis Globais
@@ -131,8 +137,8 @@ public class selectBaresA extends ActionBarActivity {
             //Inicializa ProgressDialog
             mProgressDialog.setTitle("Carregando");
             mProgressDialog.setMessage("Loading. . .");
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setCanceledOnTouchOutside(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
 
             //Verifica se tem conexao com internet

@@ -11,12 +11,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Classe: FavoriteAdapter                               ****
+ * Funcionalidade: Adapter para mostrar bares favoritos  ****
+ * Data Criacao: 22/06/2015                              ****
+ ***********************************************************/
 public class FavoriteAdapter extends BaseAdapter {
 
+    //Variaveis Globais
     private LayoutInflater mInflater;
     private List<FavoriteList> lista_fav;
     Context context;
 
+    //Recebe valores para adicionar ao adapter
     public FavoriteAdapter(Context context, List<FavoriteList> lista_fav)
     {
         this.lista_fav = lista_fav;
@@ -24,29 +32,31 @@ public class FavoriteAdapter extends BaseAdapter {
         this.context = context;
     }
 
-
+    //Conta quantos itens tem na lista
     @Override
     public int getCount() {
         return lista_fav.size();
     }
 
+    //Conta em qual posiciao esta o item
     @Override
     public FavoriteList getItem(int position)
     {
         return lista_fav.get(position);
     }
 
+    //Pega endereco de memoria do item
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /********************************************
-     * Autores: Diego Cunha Gabriel Cataneo  ****
-     * Criação: 14/05/2015                   ****
-     * Função: View getView                  ****
-     * Funcionalidade: Preenche o ListView   ****
-     *******************************************/
+    /*********************************************************
+     * Autores: Diego Cunha Betina FariasGabriel Cataneo  ****
+     * Criação: 14/05/2015                                ****
+     * Função: View getView                               ****
+     * Funcionalidade: Preenche o ListView                ****
+     ********************************************************/
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ItemSuporte itemHolder;

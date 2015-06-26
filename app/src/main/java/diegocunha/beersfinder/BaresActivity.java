@@ -32,6 +32,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Funcao: BaresActivity                                 ****
+ * Funcionalidade: Search de bares                       ****
+ * Data Criacao: 13/05/2015                              ****
+ ***********************************************************/
 public class BaresActivity extends ActionBarActivity{
 
     //Variaveis Globais
@@ -145,7 +151,9 @@ public class BaresActivity extends ActionBarActivity{
        {
            lista2.clear();
        }
-       else if(fav_list.size() > 0)
+
+
+       if(fav_list.size() > 0)
        {
            fav_list.clear();
        }
@@ -225,6 +233,10 @@ public class BaresActivity extends ActionBarActivity{
                    ex.printStackTrace();
                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                }
+               finally
+               {
+                   listView.setAdapter(favoriteAdapter);
+               }
            }
            else
            {
@@ -259,7 +271,8 @@ public class BaresActivity extends ActionBarActivity{
         {
             lista2.clear();
         }
-        else if(fav_list.size() > 0)
+
+        if(fav_list.size() > 0)
         {
             fav_list.clear();
         }
@@ -344,7 +357,8 @@ public class BaresActivity extends ActionBarActivity{
         {
             lista2.clear();
         }
-        else if(fav_list.size() > 0)
+
+        if(fav_list.size() > 0)
         {
             fav_list.clear();
         }

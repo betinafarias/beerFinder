@@ -21,6 +21,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.w3c.dom.Document;
 import java.util.ArrayList;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Classe: HowtoGoActivity                               ****
+ * Funcionalidade: Traca a rota de como chegar           ****
+ * Data Criacao: 16/06/2015                              ****
+ ***********************************************************/
 public class HowtoGoActivity extends FragmentActivity{
 
     //Variaveis Globais

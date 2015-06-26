@@ -30,6 +30,12 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Funçao: myIntineraire                                 ****
+ * Funcionalidade: Recebe infos para Web Service         ****
+ * Data Criacao: 28/05/2015                              ****
+ ***********************************************************/
 public class myIntineraire {
 
     //Variaveis Globais
@@ -38,8 +44,6 @@ public class myIntineraire {
     private double myLat, myLng, parseLat, parseLng;
     private List<LatLng> list;
     private long distance;
-
-
     public myIntineraire(){}
     public final static String MODE_DRIVING = "driving";
 

@@ -15,20 +15,34 @@ import com.parse.RequestPasswordResetCallback;
 
 import java.text.ParseException;
 
-
+/**********************************************************
+ * Autores: Diego Cunha Gabriel Cataneo Betina Farias  ****
+ * Criação: 28/04/2015                  			   ****
+ * Classe: ResetPasswordActivity                       ****
+ * Função: Recupera senha                              ****
+ *********************************************************/
 public class ResetPasswordActivity extends ActionBarActivity {
 
+    //Variaveis Globais
     EditText mail, confirm;
     String strMail, strConfirm, AppID, ClientID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resetpassword);
-        
+
+        //Inicializa os view
         mail = (EditText)findViewById(R.id.mail);
         confirm = (EditText)findViewById(R.id.ConfirmeEmail);
     }
 
+    /***********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+     * Criação: 28/04/2015                  			    ****
+     * Classe: resetMail                                    ****
+     * Função: Verifica informaceos e manda para o Parse    ****
+     ***********************************************************/
     public void resetMail(View view)
     {
         try

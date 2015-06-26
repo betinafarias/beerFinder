@@ -12,12 +12,20 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Classe: ComentsAdapter                                ****
+ * Funcionalidade: Adapter para mostrar comentarios      ****
+ * Data Criacao: 21/06/2015                              ****
+ ***********************************************************/
 public class ComentsAdapter extends BaseAdapter
 {
+    //Variaveis Globais
     private LayoutInflater mInflater;
     private List<ComentariosList> comentariosLists;
     Context context;
 
+    //Recebe itens para serem adicionados
     public ComentsAdapter (Context context, List<ComentariosList> comentariosLists)
     {
         this.comentariosLists = comentariosLists;
@@ -25,27 +33,33 @@ public class ComentsAdapter extends BaseAdapter
         this.context = context;
     }
 
+    //Conta quantos elementos tem na lista
     @Override
     public int getCount() {
         return comentariosLists.size();
     }
 
+    //Busca item pela posição
     @Override
     public ComentariosList getItem(int position)
     {
         return comentariosLists.get(position);
     }
 
+    //ID do item na memoria
     @Override
     public long getItemId(int position) {
         return 0;
     }
 
+    //Carrega o View
     @Override
     public View getView(final int position, View convertView, ViewGroup parent)
     {
+        //Classe para receber itens
         ItemSuporte itemHolder;
 
+        //Se a visualização nao foi iniciada
         if(convertView == null)
         {
             convertView = mInflater.inflate(R.layout.com_list, null);
@@ -60,25 +74,25 @@ public class ComentsAdapter extends BaseAdapter
             itemHolder = (ItemSuporte) convertView.getTag();
         }
 
+        //Itens para serem exibidos
         ComentariosList item = comentariosLists.get(position);
         itemHolder.user.setText(item.getStrUser());
         itemHolder.comentario.setText(item.getStrComentario());
 
-        /*Funcao para selecionar comentarios
+        //Funcao no comentario selecionado
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, HowtoGoActivity.class);
+                Intent intent = new Intent(context, SelectedComentarioActivity.class);
                 intent.putExtra("Usuario", comentariosLists.get(position).getStrUser());
                 intent.putExtra("Comentario", comentariosLists.get(position).getStrComentario());
-                intent.putExtra("NomeBar", comentariosLists.get(position).getStrNomeBar());
-                intent.putExtra("RuaBar", comentariosLists.get(position).getStrRuaBar());
                 context.startActivity(intent);
             }
-        });*/
+        });
         return convertView;
     }
 
+    //Classe para exibir itens
     private class ItemSuporte
     {
         TextView user;

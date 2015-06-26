@@ -21,6 +21,13 @@ import com.parse.ParseUser;
 
 import java.util.Timer;
 
+
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Funçao: MainActivity                                  ****
+ * Funcionalidade: Inicia o SplashScreen                 ****
+ * Data Criacao: 14/05/2015                              ****
+ ***********************************************************/
 public class MainActivity extends ActionBarActivity {
 
     //Variaveis Globais

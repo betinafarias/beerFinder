@@ -16,12 +16,12 @@ import android.widget.Toast;;
 import com.parse.Parse;
 import com.parse.ParseCrashReporting;
 
-/*******************************************
- * Autores: Diego Cunha Gabriel Cataneo ****
- * Criação: 28/04/2015                  ****
- * Classe: myLocation                   ****
- * Função: Recebe informações do GPS    ****
- ******************************************/
+/**********************************************************
+ * Autores: Diego Cunha Gabriel Cataneo Betina Farias  ****
+ * Criação: 28/04/2015                  			   ****
+ * Classe: myLocation                                  ****
+ * Função: Recebe informações do GPS                   ****
+ *********************************************************/
 public class myLocation extends Service implements LocationListener
 {
 	//Variáveis Globais
@@ -39,13 +39,13 @@ public class myLocation extends Service implements LocationListener
 		getLocation();
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: Location getLocation            ****
-	 * Funcionalidade: Recebe infos GPS        ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: Location getLocation            				****
+	 * Funcionalidade: Recebe infos GPS        				****
+	 * OBS: Não mexer					       				****
+	 **********************************************************/
 	public Location getLocation()
 	{
 		try
@@ -109,13 +109,13 @@ public class myLocation extends Service implements LocationListener
 		return location;
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: void stopUsingGPS               ****
-	 * Funcionalidade: Encerra uso GPS         ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: void stopUsingGPS               				****
+	 * Funcionalidade: Encerra uso GPS         				****
+	 * OBS: Não mexer					       				****
+	 **********************************************************/
 	public void stopUsingGPS()
 	{
 		if (locationManager != null)
@@ -124,13 +124,13 @@ public class myLocation extends Service implements LocationListener
 		}
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: double getLatitude              ****
-	 * Funcionalidade: Retorna valor latitude  ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: double getLatitude              				****
+	 * Funcionalidade: Retorna valor latitude  				****
+	 * OBS: Não mexer					       				****
+	 **********************************************************/
 	public double getLatitude()
 	{
 		if(location != null)
@@ -140,13 +140,13 @@ public class myLocation extends Service implements LocationListener
 		return latitude;
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: double getLongitude             ****
-	 * Funcionalidade: Retorna valor longitude ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: double getLongitude             				****
+	 * Funcionalidade: Retorna valor longitude 				****
+	 * OBS: Não mexer					       				****
+	 **********************************************************/
 	public double getLongitude()
 	{
 		if(location != null)
@@ -156,14 +156,12 @@ public class myLocation extends Service implements LocationListener
 		return longitude;
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 05/05/2015                     ****
-	 * Função: double calculaDistancia         ****
-	 * Funcionalidade: Realiza cálculo dist.   ****
-	 * Correção: 22/05/2015 - Diego Cunha
-	 *
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 05/05/2015                     				****
+	 * Função: double calculaDistancia         				****
+	 * Funcionalidade: Realiza cálculo dist.   				****
+	 ***********************************************************/
 	public double calculaDistancia(double lat1, double lat2, double lng1, double lng2)
 	{
 		try
@@ -183,73 +181,73 @@ public class myLocation extends Service implements LocationListener
 		return dist;
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 05/05/2015                     ****
-	 * Função: double deg2rad                  ****
-	 * Funcionalidade: Realiza calculo dist.   ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 05/05/2015                     				****
+	 * Função: double deg2rad                  				****
+	 * Funcionalidade: Realiza calculo dist.   				****
+	 * OBS: Não mexer					       				****
+	 ***********************************************************/
 	private double deg2rad(double deg)
 	{
 		return (deg * Math.PI / 180.0);
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 05/05/2015                     ****
-	 * Função: double rad2deg                  ****
-	 * Funcionalidade: Realiza calculo dist.   ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 05/05/2015                     				****
+	 * Função: double rad2deg                  				****
+	 * Funcionalidade: Realiza calculo dist.   				****
+	 * OBS: Não mexer					       				****
+	 ***********************************************************/
 	private double rad2deg(double rad)
 	{
 		return (rad * 180.0 / Math.PI);
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: boolean canGetLocation          ****
-	 * Funcionalidade: Retorna se tem GPS      ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: boolean canGetLocation          				****
+	 * Funcionalidade: Retorna se tem GPS      				****
+	 * OBS: Não mexer					       				****
+	 ***********************************************************/
 	public boolean canGetLocation()
 	{
 		return this.haveLocation;
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: void AbreConfigGPS              ****
-	 * Funcionalidade: Abre tela GPS           ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: void AbreConfigGPS              				****
+	 * Funcionalidade: Abre tela GPS           				****
+	 ***********************************************************/
 	public void AbreConfigGPS()
 	{
 		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		mcontext.startActivity(intent);
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: void AbreConfigNET              ****
-	 * Funcionalidade: Abre tela WIFI          ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     				****
+	 * Função: void AbreConfigNET              				****
+	 * Funcionalidade: Abre tela WIFI          				****
+	 ***********************************************************/
 	public void AbreConfigNET()
 	{
 		Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
 		mcontext.startActivity(intent);
 	}
 
-	/**********************************************
-	 * Autores: Diego Cunha Gabriel Cataneo    ****
-	 * Criação: 28/04/2015                     ****
-	 * Função: void onLocationChanged          ****
-	 * Funcionalidade: Atualiza info GPS       ****
-	 * OBS: Não mexer					       ****
-	 **********************************************/
+	/***********************************************************
+	 * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+	 * Criação: 28/04/2015                     			    ****
+	 * Função: void onLocationChanged          				****
+	 * Funcionalidade: Atualiza info GPS       				****
+	 * OBS: Não mexer					       				****
+	 ***********************************************************/
 	@Override
 	public void onLocationChanged(Location location)
 	{

@@ -97,6 +97,10 @@
             android:name=".AddComentariosActivity"
             android:label="@string/title_activity_add_comentarios" >
         </activity>
+        <activity
+            android:name=".SelectedComentarioActivity"
+            android:label="@string/title_activity_selected_comentario" >
+        </activity>
     </application>
 
 </manifest>

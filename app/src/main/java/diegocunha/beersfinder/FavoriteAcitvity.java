@@ -22,9 +22,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Classe: FavoriteAcitvity                              ****
+ * Funcionalidade: Mostra bares favoritos                ****
+ * Data Criacao: 22/06/2015                              ****
+ ***********************************************************/
 public class FavoriteAcitvity extends ActionBarActivity {
 
+    //Variaveis Globais
     myLocation MeuLocal;
     boolean isOn;
     ConnectivityManager conectivtyManager;
@@ -44,16 +50,18 @@ public class FavoriteAcitvity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
+        //Bloqueia acesso sem login
         getUser();
 
+        //Instancia classes e funcionalidades necessarias
         MeuLocal = new myLocation(this);
         listaBares = new ArrayList<ListaBares>();
         adapter = new myAdapter(this, listaBares);
         MeuLocal = new myLocation(this);
         mProgressDialog = new ProgressDialog(this);
 
+        //Carrega favoritos
         load_favorites();
-
     }
 
     /*********************************************************
@@ -74,6 +82,12 @@ public class FavoriteAcitvity extends ActionBarActivity {
         }
     }
 
+    /************************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+     * Classe: load_favorites                                ****
+     * Funcionalidade: Mostra bares favoritos                ****
+     * Data Criacao: 22/06/2015                              ****
+     ***********************************************************/
     protected void load_favorites()
     {
         //Inicializa o ProgressDialog
@@ -85,7 +99,7 @@ public class FavoriteAcitvity extends ActionBarActivity {
 
         try
         {
-            //Abre Banco de dados
+            //Abre Banco de dados e cria se necessario
             myDataBase = this.openOrCreateDatabase("Banco", SQLiteDatabase.CREATE_IF_NECESSARY, null);
             myDataBase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (NomeBar VARCHAR(255), RuaBar VARCHAR(255), Latitude VARCHAR(255), Longitiude VARCHAR(255));");
 
@@ -104,8 +118,10 @@ public class FavoriteAcitvity extends ActionBarActivity {
                     //Busca todos os valores do banco
                     Cursor controler2 = myDataBase.query(false, "Favorites", null, null, null, null, null, null, null);
 
+                    //Se buscaa tem valores
                     if(controler2 != null)
                     {
+                        //Enquanto haver membros na lista
                         while(controler2.moveToNext())
                         {
                             //Adiciona as variaveis o resultado do banco
@@ -125,8 +141,12 @@ public class FavoriteAcitvity extends ActionBarActivity {
                             Collections.sort(listaBares);
                         }
 
+                        //Fecha banco de dados
                         myDataBase.close();
+
+                        //Para uso do GPS
                         MeuLocal.stopUsingGPS();
+
                         mProgressDialog.dismiss();
                         adapter.notifyDataSetChanged();
                     }

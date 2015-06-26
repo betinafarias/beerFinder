@@ -19,12 +19,12 @@ public class myAdapter extends BaseAdapter {
     private List<ListaBares> listaBares;
     Context context;
 
-    /*******************************************
-     * Autores: Diego Cunha Gabriel Cataneo ****
-     * Criação: 14/05/2015                  ****
-     * Função: public myAdapter             ****
-     * Funcionalidade: inicia o Adapter     ****
-     *******************************************/
+    /***********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias   ****
+     * Criação: 14/05/2015                                  ****
+     * Função: public myAdapter                             ****
+     * Funcionalidade: inicia o Adapter                     ****
+     **********************************************************/
     public myAdapter(Context context, List<ListaBares> listaBares)
     {
         this.listaBares = listaBares;
@@ -32,45 +32,45 @@ public class myAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    /*******************************************
-     * Autores: Diego Cunha Gabriel Cataneo ****
-     * Criação: 14/05/2015                  ****
-     * Função: int getCount                  ****
-     * Funcionalidade: inicia o Adapter     ****
-     *******************************************/
+    /**********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias  ****
+     * Criação: 14/05/2015                                 ****
+     * Função: int getCount                                ****
+     * Funcionalidade: inicia o Adapter                    ****
+     **********************************************************/
     @Override
     public int getCount() {
         return listaBares.size();
     }
 
-    /********************************************
-     * Autores: Diego Cunha Gabriel Cataneo  ****
-     * Criação: 14/05/2015                   ****
-     * Função: ListaBares getItem            ****
-     * Funcionalidade: Retorna item da lista ****
-     *******************************************/
+    /**********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias  ****
+     * Criação: 14/05/2015                                 ****
+     * Função: ListaBares getItem                          ****
+     * Funcionalidade: Retorna item da lista               ****
+     **********************************************************/
     public ListaBares getItem(int position)
     {
         return listaBares.get(position);
     }
 
-    /********************************************
-     * Autores: Diego Cunha Gabriel Cataneo  ****
-     * Criação: 14/05/2015                   ****
-     * Função: long getItemId                ****
-     * Funcionalidade: Retorna id do item    ****
-     *******************************************/
+    /*********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias ****
+     * Criação: 14/05/2015                                ****
+     * Função: long getItemId                             ****
+     * Funcionalidade: Retorna id do item                 ****
+     ********************************************************/
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /********************************************
-     * Autores: Diego Cunha Gabriel Cataneo  ****
-     * Criação: 14/05/2015                   ****
-     * Função: View getView                  ****
-     * Funcionalidade: Preenche o ListView   ****
-     *******************************************/
+    /*********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias ****
+     * Criação: 14/05/2015                                ****
+     * Função: View getView                               ****
+     * Funcionalidade: Preenche o ListView                ****
+     *********************************************************/
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ItemSuporte itemHolder;
@@ -113,12 +113,12 @@ public class myAdapter extends BaseAdapter {
         return convertView;
     }
 
-    /********************************************
-     * Autores: Diego Cunha Gabriel Cataneo  ****
-     * Criação: 14/05/2015                   ****
-     * Classe: ItemSuporte                   ****
-     * Funcionalidade: Declara os TextView   ****
-     *******************************************/
+    /**********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo  Betina Farias ****
+     * Criação: 14/05/2015                                 ****
+     * Classe: ItemSuporte                                 ****
+     * Funcionalidade: Declara os TextView                 ****
+     *********************************************************/
     private class ItemSuporte {
         TextView txtNomeBar;
         TextView txtRuaBar;

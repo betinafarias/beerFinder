@@ -23,9 +23,15 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Classe: AddComentariosActivity                        ****
+ * Funcionalidade: Adiciona comentario                   ****
+ * Data Criacao: 21/06/2015                              ****
+ ***********************************************************/
 public class AddComentariosActivity extends ActionBarActivity {
 
+    //Variaveis Globais
     private ConnectivityManager conectivtyManager;
     private boolean isOn;
     private myLocation MeuLugar;
@@ -41,6 +47,8 @@ public class AddComentariosActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addcomentarios);
+
+        //Bloqueia acesso sem login
         getUser();
 
         //Inicializa as classes necessarias
@@ -74,9 +82,11 @@ public class AddComentariosActivity extends ActionBarActivity {
         //Se recebeu valores pelo Intent
         if(extras != null)
         {
+            //Recebe valores do Bundle
             strNomeBar = extras.getString("NomeBar");
             strRuaBar = extras.getString("RuaBar");
 
+            //Cria intent caso necessário sair da página
             intent = new Intent(this, ComentariosActivity.class);
             intent.putExtra("NomeBar", strNomeBar);
             intent.putExtra("RuaBar", strRuaBar);
@@ -132,7 +142,7 @@ public class AddComentariosActivity extends ActionBarActivity {
      * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
      * Funcao: addComent                                     ****
      * Funcionalidade: Adiciona comentario                   ****
-     * Data Criacao: 21/09/2015                              ****
+     * Data Criacao: 21/06/2015                              ****
      ***********************************************************/
     public void addComent(View view)
     {

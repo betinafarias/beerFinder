@@ -73,7 +73,10 @@ public class ComentariosActivity extends ActionBarActivity
             ex_nome = extras.getString("NomeBar");
             ex_rua = extras.getString("RuaBar");
 
+            //Carrega comentarios
             load_coments(ex_nome, ex_rua);
+
+            //Abre conscientização
             OpenConsientizacao();
         }
     }
@@ -86,8 +89,10 @@ public class ComentariosActivity extends ActionBarActivity
      ***********************************************************/
     protected void getUser()
     {
+        //Seleciona usuário atual do parse
         ParseUser currentUser = ParseUser.getCurrentUser();
 
+        //Verifica se existe usuario atual
         if(currentUser == null)
         {
             Intent intent = new Intent(this, firstActivity.class);
@@ -164,7 +169,7 @@ public class ComentariosActivity extends ActionBarActivity
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
-        alertB.setMessage("Sem conexao com internet, deseja ativar?");
+        alertB.setMessage("Sem conexão com internet, deseja ativar?");
         alertB.setCancelable(false);
         alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

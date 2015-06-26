@@ -3,6 +3,12 @@ package diegocunha.beersfinder;
 import java.util.ArrayList;
 import java.util.List;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Funçao: ListaBares                                    ****
+ * Funcionalidade: Classe para bares                     ****
+ * Data Criacao: 28/04/2015                              ****
+ ***********************************************************/
 public class ListaBares implements Comparable<ListaBares>
 {
     //Variaveis Globais

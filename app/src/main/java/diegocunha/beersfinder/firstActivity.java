@@ -38,6 +38,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Funçao: firstActivity                                 ****
+ * Funcionalidade: Login                                 ****
+ * Data Criacao: 28/04/2015                              ****
+ ***********************************************************/
 public class firstActivity extends ActionBarActivity
 {
 	//Variáveis Globais

@@ -30,6 +30,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+/************************************************************
+ * Autores: Diego Cunha Gabriel Cataneo  Betina Farias   ****
+ * Funcao: BaresOnMapActivity                            ****
+ * Funcionalidade: Mostra bares no mapa                  ****
+ * Data Criacao: 04/06/2015                              ****
+ ***********************************************************/
 public class BaresOnMapActivity extends Activity {
 
     //Variaveis Globais
@@ -49,7 +55,10 @@ public class BaresOnMapActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Bloqueia sem login
         getUser();
+
+        //Abre conscientização
         OpenConsientizacao();
         setContentView(R.layout.activity_baresonmap);
 
@@ -61,6 +70,8 @@ public class BaresOnMapActivity extends Activity {
         //Inicializa informacoes
         mProgressDialog = new ProgressDialog(this);
         MeuLugar = new myLocation(this);
+
+        //Carrrega bares no mapa
         loadbares();
 
     }
@@ -73,8 +84,10 @@ public class BaresOnMapActivity extends Activity {
      ***********************************************************/
     protected void getUser()
     {
+        //Busca usuario atual do Parse
         ParseUser currentUser = ParseUser.getCurrentUser();
 
+        //Verifica se existe usuario logado
         if(currentUser == null)
         {
             Intent intent = new Intent(this, firstActivity.class);
@@ -168,19 +181,18 @@ public class BaresOnMapActivity extends Activity {
                                   //Adiciona valores do Parse as variaveis
                                   for (int i = 0; i < list.size(); i++)
                                   {
+                                      //Busca itens da lista
                                       ParseObject pObject = list.get(i);
                                       String strNomeBar = pObject.getString("NomeBar");
                                       String strRuaBar = pObject.getString("RuaBar");
-
                                       strCerveja = pObject.getString("NomeCerveja");
                                       strPreco = "R$: " + String.format("%.2f",list.get(i).getDouble("Preco"));
-
                                       double parseLat = pObject.getDouble("Latitude");
                                       double parseLng = pObject.getDouble("Longitude");
-
                                       strAbertura = pObject.getString("Abertura");
                                       strFechamento = pObject.getString("Fechamento");
 
+                                      //Cria informação para ser adicionado no Snipet
                                       strResultado = strRuaBar + System.getProperty("line.separator") + strCerveja + " - " + strPreco ;
 
                                       //Abertura
@@ -198,6 +210,8 @@ public class BaresOnMapActivity extends Activity {
                                       cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                                       cal3.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
 
+
+                                      //Verifica se o bar esta aberto
                                       if(cal3.after(cal1) || cal3.before(cal2))
                                       {
                                           resultado = "Aberto";
@@ -207,6 +221,7 @@ public class BaresOnMapActivity extends Activity {
                                           resultado = "Fechado";
                                       }
 
+                                      //Adiciona marker no bar
                                       lBar = new LatLng(parseLat, parseLng);
                                       barMarker = googleMAp.addMarker(new MarkerOptions()
                                               .title(strNomeBar)
@@ -270,7 +285,7 @@ public class BaresOnMapActivity extends Activity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("NÃ£o", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -294,7 +309,7 @@ public class BaresOnMapActivity extends Activity {
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
-        alertB.setMessage("Sem conexao com internet, deseja ativar?");
+        alertB.setMessage("Sem conexão com internet, deseja ativar?");
         alertB.setCancelable(false);
         alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -328,7 +343,7 @@ public class BaresOnMapActivity extends Activity {
         {
             alertB = new AlertDialog.Builder(this);
             alertB.setTitle("Aviso");
-            alertB.setMessage("Se beber nÃ£o dirija!");
+            alertB.setMessage("Se beber não dirija!");
             alertB.setCancelable(false);
             alertB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {

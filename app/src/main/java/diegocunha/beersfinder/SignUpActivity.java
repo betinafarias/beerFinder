@@ -15,15 +15,15 @@ import com.parse.ParseCrashReporting;
 import com.parse.ParseUser;
 import java.security.MessageDigest;
 
-/********************************************
- * Autores: Diego Cunha Gabriel Cataneo  ****
- * Criaï¿½ï¿½o: 28/04/2015                   ****
- * Classe: SignUpActivity                ****
- * Funï¿½ï¿½o: Cria cadastro usuï¿½rio         ****
- ********************************************/
+/*********************************************************
+ * Autores: Diego Cunha Gabriel Cataneo Betina Farias ****
+ * Criação: 28/04/2015                                ****
+ * Classe: SignUpActivity                             ****
+ * Função: Cria cadastro usuario                      ****
+ *********************************************************/
 public class SignUpActivity extends ActionBarActivity {
 
-    //Variï¿½veis Globais
+    //Variavveis Globais
     private EditText edLogin, edPass, edMail;
     private String login, pass, mail, AppID, ClientID;
     private boolean conectado;
@@ -42,12 +42,12 @@ public class SignUpActivity extends ActionBarActivity {
         edMail  = (EditText)findViewById(R.id.edtMail);
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criaï¿½ï¿½o: 28/04/2015                     ****
-     * Funï¿½ï¿½o: boolean VerificaConexao         ****
-     * Funcionalidade: Retorna status conexao  ****
-     **********************************************/
+    /*********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias ****
+     * Criação: 28/04/2015                                ****
+     * Funçao: verificaConexao                            ****
+     * Funcionalidade: Verifica status de conexao         ****
+     *********************************************************/
     public  boolean verificaConexao()
     {
         ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -66,13 +66,12 @@ public class SignUpActivity extends ActionBarActivity {
         return conectado;
     }
 
-    /**********************************************
-     * Autores: Diego Cunha Gabriel Cataneo    ****
-     * Criaï¿½ï¿½o: 28/04/2015                     ****
-     * Funï¿½ï¿½o: void sig                        ****
-     * Funcionalidade: Realiza cadastro Parse  ****
-     * OBS: Utilizar no OnClick do bt Login    ****
-     **********************************************/
+    /*********************************************************
+     * Autores: Diego Cunha Gabriel Cataneo Betina Farias ****
+     * Criação: 28/04/2015                                ****
+     * Funçao: sig                                        ****
+     * Funcionalidade: Realiza cadastro                   ****
+     *********************************************************/
     public void sig(View view)
     {
         try

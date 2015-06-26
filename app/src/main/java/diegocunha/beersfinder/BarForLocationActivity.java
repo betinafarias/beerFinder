@@ -244,7 +244,7 @@ public class BarForLocationActivity extends ActionBarActivity {
 
         alertB = new AlertDialog.Builder(this);
         alertB.setTitle("Aviso");
-        alertB.setMessage("Sem conexao com internet, deseja ativar?");
+        alertB.setMessage("Sem conexão com internet, deseja ativar?");
         alertB.setCancelable(false);
         alertB.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
