@@ -44,7 +44,7 @@
         android:text="Cervejas"
         android:textSize="30dp"
         android:layout_below="@+id/btnTraceRoute"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:layout_centerInParent="true"/>
 
     <TextView
@@ -59,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPrecoCeva1"
+        android:layout_alignParentRight="true"
         android:layout_alignBaseline="@+id/txtCeva1"
         android:layout_marginLeft="180dp"/>
 
@@ -75,6 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPrecoCeva2"
+        android:layout_alignParentRight="true"
         android:layout_alignBaseline="@+id/txtCeva2"
         android:layout_marginLeft="180dp"/>
 
@@ -90,6 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPrecoCeva3"
+        android:layout_alignParentRight="true"
         android:layout_alignBaseline="@id/txtCeva3"
         android:layout_marginLeft="180dp"/>
 
@@ -150,11 +153,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Comentarios"
+        android:layout_marginTop="10dp"
         android:onClick="open_coments"
         android:id="@+id/btnComents"
         android:layout_below="@+id/btnFavorite"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/hAbertura"
-        android:layout_toEndOf="@+id/hAbertura" />
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
