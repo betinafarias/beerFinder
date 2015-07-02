@@ -4,9 +4,11 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#4B748E"
     tools:context="diegocunha.beersfinder.BaresActivity">
 
     <Button
+        android:background="#fffeee86"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+ Proximo"
@@ -18,6 +20,7 @@
         android:layout_alignParentStart="true" />
 
     <Button
+        android:background="#fffeee86"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+ Barata"
@@ -27,6 +30,7 @@
         android:layout_marginLeft="105dp"/>
 
     <Button
+        android:background="#fffeee86"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Buscar"
