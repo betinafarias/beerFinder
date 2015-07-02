@@ -23,8 +23,8 @@
         android:text="+ Barata"
         android:id="@+id/maisb"
         android:onClick="load_bar_proximo"
-        android:layout_alignBottom="@+id/btnBusca"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/myList"
+        android:layout_marginLeft="105dp"/>
 
     <Button
         android:layout_width="wrap_content"
