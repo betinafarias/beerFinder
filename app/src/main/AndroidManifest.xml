@@ -101,6 +101,10 @@
             android:name=".SelectedComentarioActivity"
             android:label="@string/title_activity_selected_comentario" >
         </activity>
+        <activity
+            android:name=".CardapioActivity"
+            android:label="@string/title_activity_cardapio" >
+        </activity>
     </application>
 
 </manifest>

@@ -4,13 +4,13 @@
     android:oneshot="false" >
 
     <item
-        android:drawable="@drawable/frame0"
+        android:drawable="@drawable/frame2"
         android:duration="500"/>
     <item
         android:drawable="@drawable/frame1"
         android:duration="500"/>
     <item
-        android:drawable="@drawable/frame2"
+        android:drawable="@drawable/frame0"
         android:duration="500"/>
 
 </animation-list>

@@ -201,7 +201,7 @@ public class SelectedBarActivity extends Activity {
             {
                 //Carrega informaï¿½ï¿½es do Parse
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-                query.whereEqualTo("NomeBar", nome);
+                query.whereEqualTo("NomeBar", nome.replace(" ", "_"));
                 query.setLimit(1);
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
@@ -311,7 +311,7 @@ public class SelectedBarActivity extends Activity {
             try
             {
                 //Carrega informacoes do Parse
-                ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(txNomeBar.replace(" ", "_"));
                 query.setLimit(3);
                 query.orderByAscending("Preco");
                 query.findInBackground(new FindCallback<ParseObject>() {
@@ -391,7 +391,7 @@ public class SelectedBarActivity extends Activity {
                 startActivity(intent);
             }
         });
-        alertB.setNegativeButton("Nï¿½o", new DialogInterface.OnClickListener() {
+        alertB.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(intent2);
@@ -553,5 +553,34 @@ public class SelectedBarActivity extends Activity {
         intent.putExtra("NomeBar", nomedoBar);
         intent.putExtra("RuaBar", ruadoBar);
         startActivity(intent);
+    }
+
+    public void OpenCardapio(View view)
+    {
+        Intent intent = new Intent(this, CardapioActivity.class);
+        intent.putExtra("NomeBar", nomedoBar);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_selected_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

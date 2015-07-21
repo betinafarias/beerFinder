@@ -163,4 +163,16 @@
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"/>
 
+    <Button
+        android:background="#fffeee86"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menu Completo"
+        android:id="@+id/btnMenu"
+        android:layout_below="@+id/txtCeva3"
+        android:layout_alignRight="@+id/btnFavorite"
+        android:layout_alignEnd="@+id/btnFavorite"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

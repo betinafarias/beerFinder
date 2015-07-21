@@ -153,7 +153,7 @@ public class selectBaresA extends ActionBarActivity {
 
                     //Inicializa o Parse
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("BaresLocal");
-                    query.whereEqualTo("NomeBar", Bar);
+                    query.whereEqualTo("NomeBar", Bar.replace(" ", "_"));
                     query.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> list, ParseException e) {
@@ -167,7 +167,7 @@ public class selectBaresA extends ActionBarActivity {
                                     for(int i = 0; i <list.size();i++)
                                     {
                                         ParseObject pObject = list.get(i);
-                                        String strNomeBar = pObject.getString("NomeBar");
+                                        String strNomeBar = pObject.getString("NomeBar").replace("_", " ");
                                         String strRuaBar = pObject.getString("RuaBar");
                                         double parseLat = pObject.getDouble("Latitude");
                                         double parseLng = pObject.getDouble("Longitude");

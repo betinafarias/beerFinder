@@ -183,7 +183,7 @@ public class BaresOnMapActivity extends Activity {
                                   {
                                       //Busca itens da lista
                                       ParseObject pObject = list.get(i);
-                                      String strNomeBar = pObject.getString("NomeBar");
+                                      String strNomeBar = pObject.getString("NomeBar").replace("_", " ");
                                       String strRuaBar = pObject.getString("RuaBar");
                                       strCerveja = pObject.getString("NomeCerveja");
                                       strPreco = "R$: " + String.format("%.2f",list.get(i).getDouble("Preco"));

@@ -145,7 +145,7 @@ public class BarForLocationActivity extends Activity {
                                     for(int i = 0; i <list.size();i++)
                                     {
                                         ParseObject pObject = list.get(i);
-                                        String strNomeBar = pObject.getString("NomeBar");
+                                        String strNomeBar = pObject.getString("NomeBar").replace("_", " ");
                                         String strRuaBar = pObject.getString("RuaBar");
                                         double parseLat = pObject.getDouble("Latitude");
                                         double parseLng = pObject.getDouble("Longitude");

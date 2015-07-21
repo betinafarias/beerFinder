@@ -69,7 +69,7 @@ public class BaresActivity extends Activity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_bares);
 
-        //Inicializa o Parse
+        //Bloqueia acesso sem login
         getUser();
 
         //Inicia o ProgressDialog
@@ -193,7 +193,7 @@ public class BaresActivity extends Activity{
                                    {
                                        //Pega os valores da lista para adicionar na lista
                                        ParseObject parseObject = list.get(i);
-                                       strNomeBar = parseObject.getString("NomeBar");
+                                       strNomeBar = parseObject.getString("NomeBar").replace("_", " ");
                                        strRuaBar = parseObject.getString("RuaBar");
                                        parseLat = parseObject.getDouble("Latitude");
                                        parseLng = parseObject.getDouble("Longitude");
@@ -304,7 +304,7 @@ public class BaresActivity extends Activity{
                                    for(int i = 0; i < list.size(); i++)
                                    {
                                        ParseObject parseObject = list.get(i);
-                                       strNomeBar = parseObject.getString("NomeBar");
+                                       strNomeBar = parseObject.getString("NomeBar").replace("_", " ");
                                        strRuaBar = parseObject.getString("RuaBar");
                                        parseLat = parseObject.getDouble("Latitude");
                                        parseLng = parseObject.getDouble("Longitude");
@@ -369,7 +369,7 @@ public class BaresActivity extends Activity{
         }
 
         //Adiciona os valores ao Alert Dialog
-        nomeBar = new String[]{"Dublin", "MarquesBier", "Mulligan", "Natalicio", "SoccerPoint", "Thomas", "Tirol"};
+        nomeBar = new String[]{"Boteco do Joaquim", "Dublin", "Marques Bier", "Mulligan", "Natalicio", "Soccer Point", "Thomas", "Tirol"};
         final AlertDialog.Builder options = new AlertDialog.Builder(this);
         options.setTitle("Selecione o bar");
 
@@ -378,7 +378,7 @@ public class BaresActivity extends Activity{
             public void onClick(DialogInterface dialog, int which)
             {
                 //Retorna valor do item selecionado
-                strBarOptions = nomeBar[which];
+                strBarOptions = nomeBar[which].replace(" ", "_");
 
                 //Inicializa o ProgressDialog
                 mProgressDialog.setCanceledOnTouchOutside(false);
@@ -416,7 +416,7 @@ public class BaresActivity extends Activity{
                                             {
                                                 //Pega item a item da lista
                                                 ParseObject parseObject = list.get(i);
-                                                strNomeBar = parseObject.getString("NomeBar");
+                                                strNomeBar = parseObject.getString("NomeBar").replace("_", " ");
                                                 strRuaBar = parseObject.getString("RuaBar");
                                                 parseLat = parseObject.getDouble("Latitude");
                                                 parseLng = parseObject.getDouble("Longitude");
